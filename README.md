@@ -22,6 +22,7 @@ Basic usage is:
       }
     }
 
+
 3. Inject your mappers in your beans using the Mapper annotation
 
 
@@ -34,6 +35,7 @@ Basic usage is:
         .....
       }
     }
+
 
 each method call will use an isolated session. But if you want to enclose many method calls in a transaction, mark the method with @Transactional
 
