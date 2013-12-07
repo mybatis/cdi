@@ -5,8 +5,8 @@ MyBatis CDI Extension
 
 Basic usage is:
 
-1. Put the mybatis-cdi.jar it your .war applications (duh)
-2. Create a singleton or application scoped bean to provide your Session Manager
+Put the mybatis-cdi.jar it your .war applications (duh)
+Create a singleton or application scoped bean to provide your Session Manager
 
 	@ApplicationScoped
 	public class SessionManagerProvider {
@@ -21,7 +21,7 @@ Basic usage is:
 		}
 	}
 
-3. Inject your mappers in your beans using the Mapper annotation
+Inject your mappers in your beans using the Mapper annotation
 
      @RequestScoped
      public class MyController {
@@ -33,7 +33,7 @@ Basic usage is:
        }
      }
 
-each method call will use an isolated session. But if you want to enclose many method calls in a transaction, mark the method with @Transactional
+Each method call will use an isolated session. But if you want to enclose many method calls in a transaction, mark the method with @Transactional
 
     @Transactional
     public void doSomeTransaction() {
