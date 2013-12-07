@@ -8,18 +8,18 @@ Basic usage is:
 1. Put the mybatis-cdi.jar it your .war applications (duh)
 2. Create a singleton or application scoped bean to provide your Session Manager
 
-     @ApplicationScoped
-     public class SessionManagerProvider {
-       private SqlSessionManager manager;
-       @PostConstruct
-       public void init() {
-         manager = build the SqlSessionManager ....
-       }
-       @Produces
-       public SqlSessionManager getManager() {
-         return manager;
-       }
-     }
+	@ApplicationScoped
+	public class SessionManagerProvider {
+		private SqlSessionManager manager;
+		@PostConstruct
+		public void init() {
+			manager = build the SqlSessionManager ....
+		}
+		@Produces
+		public SqlSessionManager getManager() {
+			return manager;
+		}
+	}
 
 3. Inject your mappers in your beans using the Mapper annotation
 
