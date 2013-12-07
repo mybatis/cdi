@@ -8,30 +8,30 @@ Basic usage is:
 1. Put the mybatis-cdi.jar it your .war applications (duh)
 2. Create a singleton or application scoped bean to provide your Session Manager
 
-    @ApplicationScoped
-    public class SessionManagerProvider {
-      private SqlSessionManager manager;
-      @PostConstruct
-      public void init() {
-        manager = build the SqlSessionManager ....
-      }
-      @Produces
-      public SqlSessionManager getManager() {
-        return manager;
-      }
-    }
+     @ApplicationScoped
+     public class SessionManagerProvider {
+       private SqlSessionManager manager;
+       @PostConstruct
+       public void init() {
+         manager = build the SqlSessionManager ....
+       }
+       @Produces
+       public SqlSessionManager getManager() {
+         return manager;
+       }
+     }
 
 3. Inject your mappers in your beans using the Mapper annotation
 
-    @RequestScoped
-    public class MyController {
-      @Inject @Mapper
-      MyMapperInterface mapper;
-      public void doSomething() {
-        mapper.myMethod(.....);
-        .....
-      }
-    }
+     @RequestScoped
+     public class MyController {
+       @Inject @Mapper
+       MyMapperInterface mapper;
+       public void doSomething() {
+         mapper.myMethod(.....);
+         .....
+       }
+     }
 
 each method call will use an isolated session. But if you want to enclose many method calls in a transaction, mark the method with @Transactional
 
