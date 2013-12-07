@@ -8,6 +8,7 @@ Basic usage is:
 1. Put the mybatis-cdi.jar it your .war applications (duh)
 2. Create a singleton or application scoped bean to provide your Session Manager:
 
+
     @ApplicationScoped
     public class SessionManagerProvider {
       private SqlSessionManager manager;
@@ -22,6 +23,7 @@ Basic usage is:
     }
 
 3. Inject your mappers in your beans using the Mapper annotation
+
 
     @RequestScoped
     public class MyController {
