@@ -35,20 +35,25 @@ public class TransactionalInterceptor {
   public Object invoke(InvocationContext ctx) throws Exception {
     Transactional t = ctx.getMethod().getAnnotation(Transactional.class);
     SqlSessionManager manager = findSqlSessionManager(t.manager());
-    manager.startManagedSession(t.executor(), t.level());
-    Object result = null;
-    try {
-      result = ctx.getMethod().invoke(ctx.getTarget(), ctx.getParameters());
-      manager.commit();
+    if (manager.isManagedSessionStarted()) {
+      return ctx.getMethod().invoke(ctx.getTarget(), ctx.getParameters());
     }
-    catch (Throwable ex) {
-      manager.rollback();
-      throw new RuntimeException(ExceptionUtil.unwrapThrowable(ex));
+    else {
+      manager.startManagedSession(t.executor(), t.level());
+      Object result = null;
+      try {
+        result = ctx.getMethod().invoke(ctx.getTarget(), ctx.getParameters());
+        manager.commit();
+      }
+      catch (Throwable ex) {
+        manager.rollback();
+        throw new RuntimeException(ExceptionUtil.unwrapThrowable(ex));
+      }
+      finally {
+        manager.close();
+      }
+      return result;    
     }
-    finally {
-      manager.close();
-    }
-    return result;    
   }
   
   private SqlSessionManager findSqlSessionManager(String name) {
