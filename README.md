@@ -1,37 +1,44 @@
-cdi
-===
-
 MyBatis CDI Extension
+=====================
+
+This CDI extension allows direct injection of Mybatis Mappers into CDI Beans.
 
 Basic usage is:
 
-Put the mybatis-cdi.jar it your .war applications (duh)
+Put the mybatis-cdi.jar it your .war applications
 Create a singleton or application scoped bean to provide your Session Manager
 
 	@ApplicationScoped
 	public class SessionManagerProvider {
+	
 		private SqlSessionManager manager;
+	
 		@PostConstruct
 		public void init() {
 			manager = build the SqlSessionManager ....
 		}
+	
 		@Produces
 		public SqlSessionManager getManager() {
 			return manager;
 		}
+	
 	}
 
 Inject your mappers in your beans using the Mapper annotation
 
-     @RequestScoped
-     public class MyController {
-       @Inject @Mapper
-       MyMapperInterface mapper;
-       public void doSomething() {
-         mapper.myMethod(.....);
-         .....
-       }
-     }
+	@RequestScoped
+	public class MyController {
+	
+		@Inject @Mapper
+		MyMapperInterface mapper;
+	
+		public void doSomething() {
+			mapper.myMethod(.....);
+			.....
+		}
+	
+	}
 
 Each method call will use an isolated session. But if you want to enclose many method calls in a transaction, mark the method with @Transactional
 
