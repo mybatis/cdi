@@ -34,6 +34,9 @@ public class TransactionalInterceptor {
   @AroundInvoke
   public Object invoke(InvocationContext ctx) throws Exception {
     Transactional t = ctx.getMethod().getAnnotation(Transactional.class);
+    if (t == null) {
+      t = ctx.getMethod().getDeclaringClass().getAnnotation(Transactional.class);
+    }
     SqlSessionManager manager = findSqlSessionManager(t.manager());
     if (manager.isManagedSessionStarted()) {
       return ctx.getMethod().invoke(ctx.getTarget(), ctx.getParameters());
