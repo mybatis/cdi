@@ -116,7 +116,10 @@ public class MapperBean implements Bean {
 
   @Override
   public int hashCode() {
-    return mapperClass.hashCode();
+    int hash = 3;
+    hash = 19 * hash + (this.mapperClass != null ? this.mapperClass.hashCode() : 0);
+    hash = 19 * hash + (this.sessionManagerName != null ? this.sessionManagerName.hashCode() : 0);
+    return hash;
   }
 
   @Override
@@ -128,7 +131,10 @@ public class MapperBean implements Bean {
       return false;
     }
     final MapperBean other = (MapperBean) obj;
-    return mapperClass.equals(other.mapperClass);
+    if (this.mapperClass != other.mapperClass && (this.mapperClass == null || !this.mapperClass.equals(other.mapperClass))) {
+      return false;
+    }
+    return !((this.sessionManagerName == null) ? (other.sessionManagerName != null) : !this.sessionManagerName.equals(other.sessionManagerName));
   }
 
 }
