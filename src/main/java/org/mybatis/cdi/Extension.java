@@ -29,17 +29,18 @@ import javax.enterprise.inject.spi.ProcessInjectionTarget;
 
 public class Extension implements javax.enterprise.inject.spi.Extension {
 
-  private final Map<Class, MapperBean> mappers = new HashMap<Class, MapperBean>();
+  private final Map<String, MapperBean> mappers = new HashMap<String, MapperBean>();
 
   public <X> void processAnnotatedType(@Observes ProcessInjectionTarget<X> event, BeanManager beanManager) {
-    InjectionTarget<X> it = event.getInjectionTarget();
-    for (InjectionPoint ip : it.getInjectionPoints()) {
-      Mapper annotation = ip.getAnnotated().getAnnotation(Mapper.class);
+    final InjectionTarget<X> it = event.getInjectionTarget();
+    for (final InjectionPoint ip : it.getInjectionPoints()) {
+      final Mapper annotation = ip.getAnnotated().getAnnotation(Mapper.class);
       if (annotation != null) {
-        Class cls = (Class) ip.getAnnotated().getBaseType();
-        if (!mappers.containsKey(cls)) {
-          String sessionName = "".equals(annotation.manager()) ? null : annotation.manager();
-          mappers.put(cls, new MapperBean(cls, sessionName, beanManager));
+        final String sessionName = annotation.manager();
+        final Class cls = (Class) ip.getAnnotated().getBaseType();
+        final String key = sessionName + "/" + cls.getName();
+        if (!mappers.containsKey(key)) {
+          mappers.put(key, new MapperBean(cls, sessionName, beanManager));
         }
       }
     }

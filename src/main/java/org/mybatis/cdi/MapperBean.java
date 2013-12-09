@@ -39,7 +39,7 @@ public class MapperBean implements Bean {
 
   public MapperBean(Class mapperClass, String sessionManagerName, BeanManager beanManager) {
     this.mapperClass = mapperClass;
-    this.sessionManagerName = sessionManagerName;
+    this.sessionManagerName = "".equals(sessionManagerName) ? null : sessionManagerName;
     this.beanManager = beanManager;
   }
 
@@ -63,7 +63,12 @@ public class MapperBean implements Bean {
   }
 
   public String getName() {
-    return mapperClass.getName();
+    if (sessionManagerName == null) {
+      return mapperClass.getName();
+    }
+    else {
+      return mapperClass.getName() + "_" + sessionManagerName;
+    }
   }
 
   public Set getStereotypes() {
