@@ -20,6 +20,7 @@ import java.io.Reader;
 import java.sql.Connection;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 
 import org.apache.ibatis.io.Resources;
@@ -47,4 +48,9 @@ public class ManagerProducers {
     
     return manager;
   }
+  
+  public void disposes(@Disposes SqlSessionManager m) {
+    assert m.isManagedSessionStarted() == false : "Leaked SqlSession";
+  }
+  
 }
