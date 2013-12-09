@@ -17,13 +17,10 @@ package org.mybatis.cdi;
 
 import javax.inject.Inject;
 
+@Transactional
 public class FooService {
 
   private @Inject @Mapper UserMapper userMapper;
-
-  public void setUserDao(UserMapper userMapper) {
-    this.userMapper = userMapper;
-  }
 
   public User doSomeBusinessStuff(int userId) {
     return this.userMapper.getUser(userId);
