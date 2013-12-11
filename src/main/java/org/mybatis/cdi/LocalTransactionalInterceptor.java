@@ -26,7 +26,7 @@ import org.apache.ibatis.session.SqlSessionManager;
 
 @Transactional
 @Interceptor
-public class TransactionalInterceptor {
+public class LocalTransactionalInterceptor {
   
   @Inject
   BeanManager beanManager;
@@ -39,13 +39,13 @@ public class TransactionalInterceptor {
     }
     SqlSessionManager manager = findSqlSessionManager(t.manager());
     if (manager.isManagedSessionStarted()) {
-      return ctx.getMethod().invoke(ctx.getTarget(), ctx.getParameters());
+      return ctx.proceed();
     }
     else {
       manager.startManagedSession(t.executor(), t.level());
       Object result = null;
       try {
-        result = ctx.getMethod().invoke(ctx.getTarget(), ctx.getParameters());
+        result = ctx.proceed();
         manager.commit();
       }
       catch (Throwable ex) {
