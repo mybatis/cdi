@@ -59,7 +59,7 @@ To support this kind of transactional behaviour, you need to activate the interc
           http://java.sun.com/xml/ns/javaee
           http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
        <interceptors>
-          <class>org.mybatis.cdi.TransactionalInterceptor</class>
+          <class>org.mybatis.cdi.LocalTransactionalInterceptor</class>
        </interceptors>
     </beans>
 
