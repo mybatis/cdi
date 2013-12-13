@@ -21,8 +21,11 @@ import javax.inject.Inject;
 public class FooService {
 
   private @Inject @Mapper UserMapper userMapper;
+  
+  private @Inject @Mapper UserMapper userMapper2;
 
   public User doSomeBusinessStuff(int userId) {
+    User dummy = userMapper2.getUser(userId);
     return this.userMapper.getUser(userId);
   }
 
