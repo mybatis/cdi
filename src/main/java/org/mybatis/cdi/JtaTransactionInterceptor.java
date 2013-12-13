@@ -16,7 +16,9 @@
 package org.mybatis.cdi;
 
 import javax.annotation.Resource;
+import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
+import javax.interceptor.InvocationContext;
 import javax.transaction.Status;
 import javax.transaction.UserTransaction;
 
@@ -27,26 +29,23 @@ import javax.transaction.UserTransaction;
  */
 @Transactional
 @Interceptor
-public class JtaTransactionInterceptor extends AbstractTransactionInterceptor {
+public class JtaTransactionInterceptor {
 
   @Resource
   private UserTransaction transaction;
-
-  @Override
-  protected void start() throws Exception {
-    if (transaction.getStatus() != Status.STATUS_ACTIVE) {
-      transaction.begin();
-    }
-  }
-
-  @Override
-  protected void commit() throws Exception {
-    transaction.commit();    
-  }
-
-  @Override
-  protected void rollback() throws Exception {
-    transaction.rollback();
+  
+  @AroundInvoke
+  public Object invoke(InvocationContext ctx) throws Throwable {
+    boolean nested = transaction.getStatus() == Status.STATUS_ACTIVE;
+    if (!nested) transaction.begin();
+    Object result = null;
+    try {
+      result = ctx.proceed();
+      if (!nested) transaction.commit();
+    } catch (Throwable ex) {
+      if (!nested) transaction.rollback();
+    } 
+    return result;
   }
 
 }
