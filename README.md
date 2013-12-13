@@ -11,13 +11,6 @@ Create a singleton or application scoped bean to provide your Session Manager
 	@ApplicationScoped
 	public class SessionManagerProvider {
 	
-		private SqlSessionManager manager;
-	
-		@PostConstruct
-		public void init() {
-			manager = build the SqlSessionManager ....
-		}
-	
 		@Produces
 		public SqlSessionManager getManager() {
 			return manager;
@@ -59,7 +52,7 @@ To support this kind of transactional behaviour, you need to activate the interc
           http://java.sun.com/xml/ns/javaee
           http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
        <interceptors>
-          <class>org.mybatis.cdi.LocalTransactionalInterceptor</class>
+          <class>org.mybatis.cdi.LocalTransactionInterceptor</class>
        </interceptors>
     </beans>
 
