@@ -23,6 +23,7 @@ public class FooService {
 
   @Inject
   @Mapper
+  @Named("manager1")
   private UserMapper userMapper;
   
   @Inject
@@ -32,7 +33,7 @@ public class FooService {
   
   @Inject
   @Mapper
-  //@Named("manager2.UserMapper")
+  @Named("manager2")
   private UserMapper userMapper2;
 
   public User doSomeBusinessStuff(int userId) {

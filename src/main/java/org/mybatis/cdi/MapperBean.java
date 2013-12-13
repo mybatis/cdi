@@ -27,6 +27,7 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
+import javax.inject.Named;
 import org.apache.ibatis.session.SqlSessionManager;
 
 /**
@@ -56,10 +57,13 @@ public class MapperBean implements Bean {
 
   public Set getQualifiers() {
     Set<Annotation> qualifiers = new HashSet<Annotation>();
-    qualifiers.add(new AnnotationLiteral<Default>() {
-    });
-    qualifiers.add(new AnnotationLiteral<Any>() {
-    });
+    if (managerAnnotation != null) {
+      qualifiers.add(managerAnnotation);
+    }
+    else {
+      qualifiers.add(new AnnotationLiteral<Default>() {});
+      qualifiers.add(new AnnotationLiteral<Any>() {});
+    }
     return qualifiers;
   }
 
@@ -68,8 +72,18 @@ public class MapperBean implements Bean {
   }
 
   public String getName() {
-    // TODO add the manager name
-    return mapperClass.getName();
+    if (managerAnnotation == null) {
+      return mapperClass.getName();
+    }
+    else {
+      if (managerAnnotation instanceof Named) {
+        Named name = (Named) managerAnnotation;
+        return name.value() + "." + mapperClass.getName();
+      }
+      else {
+        return managerAnnotation.getClass().getName() + "." + mapperClass.getName();
+      }
+    }
   }
 
   public Set getStereotypes() {
@@ -106,14 +120,45 @@ public class MapperBean implements Bean {
     Set<Bean<?>> beans;
     if (managerAnnotation == null) {
       beans = beanManager.getBeans(SqlSessionManager.class);
-    } else {
+    } 
+    else if (managerAnnotation instanceof Named) {
+      beans = beanManager.getBeans(((Named)managerAnnotation).value());
+    }
+    else {
       beans = beanManager.getBeans(SqlSessionManager.class, managerAnnotation);
     }
-    if (beans.size() == 1) {
-      return beanManager.resolve(beans);
-    } else {
+    Bean bean = beanManager.resolve(beans);    
+    if (bean == null) {
       throw new MybatisCdiConfigurationException("There are no SqlSessionManager producers properly configured.");
     }
+    return bean;
   }
 
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    hash = 61 * hash + (this.mapperClass != null ? this.mapperClass.hashCode() : 0);
+    hash = 61 * hash + (this.managerAnnotation != null ? this.managerAnnotation.hashCode() : 0);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final MapperBean other = (MapperBean) obj;
+    if (this.mapperClass != other.mapperClass && (this.mapperClass == null || !this.mapperClass.equals(other.mapperClass))) {
+      return false;
+    }
+    if (this.managerAnnotation != other.managerAnnotation && (this.managerAnnotation == null || !this.managerAnnotation.equals(other.managerAnnotation))) {
+      return false;
+    }
+    return true;
+  }
+
+  
 }

@@ -49,6 +49,7 @@ public class ManagerProducers {
     return manager;
   }
   
+  @Named("manager1")
   @Produces
   public SqlSessionManager createManager1() throws IOException {    
     return createSessionManager();
