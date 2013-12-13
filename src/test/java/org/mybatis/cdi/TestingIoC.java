@@ -37,23 +37,23 @@ public class TestingIoC {
   @Test
   public void shouldInsertAUserAndCommit() {
     User user = new User();
-    user.setId(2);
-    user.setName("User2");
+    user.setId(20);
+    user.setName("User20");
     fooService.insertUser(user, false);
-    Assert.assertEquals("User2", fooService.getUser(2).getName());
+    Assert.assertEquals("User20", fooService.getUser(20).getName());
   }
 
   @Test
   public void shouldInsertAUserAndRollItBack() {
     User user = new User();
-    user.setId(3);
-    user.setName("User3");
+    user.setId(30);
+    user.setName("User30");
     try {
       fooService.insertUser(user, true);
     } catch (Exception ignore) {
       // ignored
     }
-    Assert.assertNull(fooService.getUser(3));
+    Assert.assertNull(fooService.getUser(30));
   }
 
 }
