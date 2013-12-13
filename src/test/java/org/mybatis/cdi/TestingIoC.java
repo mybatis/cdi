@@ -29,9 +29,9 @@ public class TestingIoC {
 
   @Test
   public void shouldGetAUser() {
-    Assert.assertEquals("User1", fooService.doSomeBusinessStuff(1).getName());
-    Assert.assertEquals("User2", fooService.doSomeBusinessStuff2(2).getName());
-    Assert.assertEquals("User3", fooService.doSomeBusinessStuff3(3).getName());
+    Assert.assertEquals("1-User1", fooService.doSomeBusinessStuff(1).getName());
+    Assert.assertEquals("2-User2", fooService.doSomeBusinessStuff2(2).getName());
+    Assert.assertEquals("3-User3", fooService.doSomeBusinessStuff3(3).getName());
   }
 
 

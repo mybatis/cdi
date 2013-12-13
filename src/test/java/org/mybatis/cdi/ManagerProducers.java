@@ -32,14 +32,14 @@ import org.apache.ibatis.session.SqlSessionManager;
 @ApplicationScoped
 public class ManagerProducers {
 
-  private SqlSessionManager createSessionManager() throws IOException {
-    Reader reader = Resources.getResourceAsReader("org/mybatis/cdi/mybatis-config.xml");    
+  private SqlSessionManager createSessionManager(int n) throws IOException {
+    Reader reader = Resources.getResourceAsReader("org/mybatis/cdi/mybatis-config_" + n + ".xml");    
     SqlSessionManager manager = SqlSessionManager.newInstance(reader);
     reader.close();
     
     SqlSession session = manager.openSession();
     Connection conn = session.getConnection();
-    reader = Resources.getResourceAsReader("org/mybatis/cdi/CreateDB.sql");
+    reader = Resources.getResourceAsReader("org/mybatis/cdi/CreateDB_" + n + ".sql");
     ScriptRunner runner = new ScriptRunner(conn);
     runner.setLogWriter(null);
     runner.runScript(reader);
@@ -52,19 +52,19 @@ public class ManagerProducers {
   @Named("manager1")
   @Produces
   public SqlSessionManager createManager1() throws IOException {    
-    return createSessionManager();
+    return createSessionManager(1);
   }
   
   @Named("manager2")
   @Produces
   public SqlSessionManager createManager2() throws IOException {    
-    return createSessionManager();
+    return createSessionManager(2);
   }  
   
   @Produces
   @MySpecialManager
   public SqlSessionManager createManager3() throws IOException {    
-    return createSessionManager();
+    return createSessionManager(3);
   }
   
   public void disposes(@Disposes SqlSessionManager m) {

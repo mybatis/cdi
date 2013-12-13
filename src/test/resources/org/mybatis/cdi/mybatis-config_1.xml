@@ -27,7 +27,7 @@
 			</transactionManager>
 			<dataSource type="UNPOOLED">
 				<property name="driver" value="org.hsqldb.jdbcDriver" />
-				<property name="url" value="jdbc:hsqldb:mem:cdi" />
+				<property name="url" value="jdbc:hsqldb:mem:cdi1" />
 				<property name="username" value="sa" />
 			</dataSource>
 		</environment>
