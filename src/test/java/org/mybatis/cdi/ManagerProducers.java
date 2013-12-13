@@ -60,6 +60,12 @@ public class ManagerProducers {
     return createSessionManager();
   }  
   
+  @Produces
+  @MySpecialManager
+  public SqlSessionManager createManager3() throws IOException {    
+    return createSessionManager();
+  }
+  
   public void disposes(@Disposes SqlSessionManager m) {
     assert m.isManagedSessionStarted() == false : "Leaked SqlSession";
   }

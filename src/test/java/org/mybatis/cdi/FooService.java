@@ -27,6 +27,11 @@ public class FooService {
   
   @Inject
   @Mapper
+  @MySpecialManager
+  private UserMapper userMapper3;
+  
+  @Inject
+  @Mapper
   //@Named("manager2.UserMapper")
   private UserMapper userMapper2;
 
@@ -36,6 +41,10 @@ public class FooService {
 
   public User doSomeBusinessStuff2(int userId) {
     return this.userMapper2.getUser(userId);
+  }
+
+  public User doSomeBusinessStuff3(int userId) {
+    return this.userMapper3.getUser(userId);
   }
 
 }
