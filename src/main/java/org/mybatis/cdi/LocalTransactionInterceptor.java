@@ -26,6 +26,7 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
 import org.apache.ibatis.reflection.ExceptionUtil;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionManager;
 
 /**
@@ -77,7 +78,7 @@ public class LocalTransactionInterceptor {
     Set<SqlSessionManager> managers = new HashSet<SqlSessionManager>();
     for (Bean bean : beans) {
       SqlSessionManager manager = (SqlSessionManager) beanManager.getReference(
-          bean, SqlSessionManager.class,
+          bean, SqlSession.class,
           beanManager.createCreationalContext(bean));
       managers.add(manager);
     }

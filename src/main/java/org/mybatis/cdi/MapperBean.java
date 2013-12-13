@@ -20,6 +20,7 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.Any;
@@ -28,6 +29,8 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Named;
+
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionManager;
 
 /**
@@ -108,7 +111,7 @@ public class MapperBean implements Bean {
 
   public Object create(CreationalContext creationalContext) {
     Bean managerBean = findSqlSessionManagerBean();
-    SqlSessionManager manager = (SqlSessionManager) beanManager.getReference(managerBean, SqlSessionManager.class, creationalContext);
+    SqlSession manager = (SqlSession) beanManager.getReference(managerBean, SqlSession.class, beanManager.createCreationalContext(managerBean));
     return manager.getMapper(mapperClass);
   }
 
@@ -119,13 +122,13 @@ public class MapperBean implements Bean {
   private Bean findSqlSessionManagerBean() {
     Set<Bean<?>> beans;
     if (managerAnnotation == null) {
-      beans = beanManager.getBeans(SqlSessionManager.class);
+      beans = beanManager.getBeans(SqlSession.class);
     } 
     else if (managerAnnotation instanceof Named) {
       beans = beanManager.getBeans(((Named)managerAnnotation).value());
     }
     else {
-      beans = beanManager.getBeans(SqlSessionManager.class, managerAnnotation);
+      beans = beanManager.getBeans(SqlSession.class, managerAnnotation);
     }
     Bean bean = beanManager.resolve(beans);    
     if (bean == null) {

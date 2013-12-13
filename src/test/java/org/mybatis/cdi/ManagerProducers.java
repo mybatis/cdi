@@ -18,10 +18,8 @@ package org.mybatis.cdi;
 import java.io.IOException;
 import java.io.Reader;
 import java.sql.Connection;
-import javax.annotation.PostConstruct;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Named;
 
@@ -33,20 +31,7 @@ import org.apache.ibatis.session.SqlSessionManager;
 @ApplicationScoped
 public class ManagerProducers {
 
-  private SqlSessionManager manager1;
-
-  private SqlSessionManager manager2;
-
-  private SqlSessionManager manager3;
-
-  @PostConstruct
-  public void init() throws IOException {
-    manager1 = createSessionManager(1);
-    manager2 = createSessionManager(2);
-    manager3 = createSessionManager(3);
-  }
-
-  private SqlSessionManager createSessionManager(int n) throws IOException {
+  private SqlSession createSessionManager(int n) throws IOException {
     Reader reader = Resources.getResourceAsReader("org/mybatis/cdi/mybatis-config_" + n + ".xml");
     SqlSessionManager manager = SqlSessionManager.newInstance(reader);
     reader.close();
@@ -65,24 +50,27 @@ public class ManagerProducers {
 
   @Named("manager1")
   @Produces
-  public SqlSessionManager createManager1() throws IOException {
-    return manager1;
+  @ApplicationScoped
+  public SqlSession createManager1() throws IOException {
+    return createSessionManager(1);
   }
 
   @Named("manager2")
   @Produces
-  public SqlSessionManager createManager2() throws IOException {
-    return manager2;
+  @ApplicationScoped
+  public SqlSession createManager2() throws IOException {
+    return createSessionManager(2);
   }
 
   @Produces
   @MySpecialManager
-  public SqlSessionManager createManager3() throws IOException {
-    return manager3;
+  @ApplicationScoped
+  public SqlSession createManager3() throws IOException {
+    return createSessionManager(3);
   }
 
-  public void disposes(@Disposes SqlSessionManager m) {
-    assert m.isManagedSessionStarted() == false : "Leaked SqlSession";
-  }
+//  public void disposes(@Disposes SqlSessionManager m) {
+//    assert m.isManagedSessionStarted() == false : "Leaked SqlSession";
+//  }
 
 }
