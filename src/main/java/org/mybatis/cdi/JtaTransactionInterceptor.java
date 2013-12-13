@@ -23,7 +23,15 @@ import javax.transaction.Status;
 import javax.transaction.UserTransaction;
 
 /**
- * Interceptor for JTA transactions
+ * Interceptor for JTA transactions. Must be used in combination with the @link {@link LocalTransactionInterceptor}
+ * this order:
+ * <pre>
+ *  <interceptors>
+ *    <class>org.mybatis.cdi.JtaTransactionInterceptor</class>
+ *    <class>org.mybatis.cdi.LocalTransactionInterceptor</class>
+ *  </interceptors>
+ * </pre>
+ * MyBatis should be configured to use the {@code MANAGED} transaction manager.
  * 
  * @author Frank David Martínez
  */

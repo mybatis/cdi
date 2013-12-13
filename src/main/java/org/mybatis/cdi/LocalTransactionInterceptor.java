@@ -30,6 +30,11 @@ import org.apache.ibatis.session.SqlSessionManager;
 
 /**
  * Best-effort interceptor for local transactions.
+ * It locates all the instances of {@code SqlSssionManager} and starts transactions on all them.
+ * It cannot guarantee atomiticy if there is more than one {@code SqlSssionManager}. 
+ * Use XA drivers, a JTA container and the {@link JtaTransactionInterceptor} in that case.
+ * 
+ * @see JtaTransactionInterceptor
  * 
  * @author Frank David Martínez
  */
