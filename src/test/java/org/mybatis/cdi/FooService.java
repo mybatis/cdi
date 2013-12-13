@@ -36,16 +36,21 @@ public class FooService {
   @Named("manager2")
   private UserMapper userMapper2;
 
-  public User doSomeBusinessStuff(int userId) {
+  public User getUser(int userId) {
     return this.userMapper.getUser(userId);
   }
 
-  public User doSomeBusinessStuff2(int userId) {
+  public User getUser2(int userId) {
     return this.userMapper2.getUser(userId);
   }
 
-  public User doSomeBusinessStuff3(int userId) {
+  public User getUser3(int userId) {
     return this.userMapper3.getUser(userId);
   }
 
+  public void insertUser(User user, boolean fail) {
+    this.userMapper.insertUser(user);
+    if (fail) throw new RuntimeException("fail");
+  }
+  
 }

@@ -29,10 +29,31 @@ public class TestingIoC {
 
   @Test
   public void shouldGetAUser() {
-    Assert.assertEquals("1-User1", fooService.doSomeBusinessStuff(1).getName());
-    Assert.assertEquals("2-User2", fooService.doSomeBusinessStuff2(2).getName());
-    Assert.assertEquals("3-User3", fooService.doSomeBusinessStuff3(3).getName());
+    Assert.assertEquals("1-User1", fooService.getUser(1).getName());
+    Assert.assertEquals("2-User2", fooService.getUser2(2).getName());
+    Assert.assertEquals("3-User3", fooService.getUser3(3).getName());
   }
 
+  @Test
+  public void shouldInsertAUserAndCommit() {
+    User user = new User();
+    user.setId(2);
+    user.setName("User2");
+    fooService.insertUser(user, false);
+    Assert.assertEquals("User2", fooService.getUser(2).getName());
+  }
+
+  @Test
+  public void shouldInsertAUserAndRollItBack() {
+    User user = new User();
+    user.setId(3);
+    user.setName("User3");
+    try {
+      fooService.insertUser(user, true);
+    } catch (Exception ignore) {
+      // ignored
+    }
+    Assert.assertNull(fooService.getUser(3));
+  }
 
 }
