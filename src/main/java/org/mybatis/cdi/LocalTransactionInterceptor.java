@@ -15,15 +15,27 @@
  */
 package org.mybatis.cdi;
 
-/**
- * Generic exception
- * 
- * @author Frank David Martínez
- */
-public class MybatisCdiConfigurationException extends RuntimeException {
+import javax.interceptor.Interceptor;
 
-  public MybatisCdiConfigurationException(String message) {
-    super(message);
+/**
+ * Best-effort interceptor for local transactions.
+ * 
+ * @author Frank David Martínez 
+ */
+@Transactional
+@Interceptor
+public class LocalTransactionInterceptor extends AbstractTransactionInterceptor {
+
+  @Override
+  protected void start() throws Exception {
   }
-  
+
+  @Override
+  protected void commit() throws Exception {
+  }
+
+  @Override
+  protected void rollback() throws Exception {
+  }
+
 }

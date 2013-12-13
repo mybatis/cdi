@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 MyBatis.org.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,26 +19,54 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 import javax.enterprise.util.Nonbinding;
 import javax.interceptor.InterceptorBinding;
+
 import org.apache.ibatis.session.ExecutorType;
-import org.apache.ibatis.session.TransactionIsolationLevel;
 
 /**
  * Adds transaction demarcation to the annotated method.
+ * 
+ * @author Frank David Martínez
  */
 @InterceptorBinding
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Transactional {
 
+  /**
+   * Returns the constant indicating the myBatis executor type.
+   *
+   * @return the constant indicating the myBatis executor type.
+   */
   @Nonbinding
-  ExecutorType executor() default ExecutorType.SIMPLE;
+  ExecutorType executorType() default ExecutorType.SIMPLE;
 
+  /**
+   * Returns the constant indicating the transaction isolation level.
+   *
+   * @return the constant indicating the transaction isolation level.
+   */
   @Nonbinding
-  TransactionIsolationLevel level() default TransactionIsolationLevel.NONE;
+  Isolation isolation() default Isolation.DEFAULT;
+
+  /**
+   * Flag to indicate that myBatis has to force the transaction {@code commit().}
+   *
+   * @return false by default, user defined otherwise.
+   */
+  @Nonbinding
+  boolean force() default false;
+
+  /**
+   * If true, the transaction will never committed but rather rolled back, useful for testing purposes.
+   *
+   * This parameter is false by default.
+   *
+   * @return if true, the transaction will never committed but rather rolled back, useful for testing purposes.
+   */
+  @Nonbinding
+  boolean rollbackOnly() default false;
   
-  @Nonbinding
-  String manager() default "";
-
 }

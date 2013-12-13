@@ -15,15 +15,38 @@
  */
 package org.mybatis.cdi;
 
+import javax.annotation.Resource;
+import javax.interceptor.Interceptor;
+import javax.transaction.Status;
+import javax.transaction.UserTransaction;
+
 /**
- * Generic exception
+ * Interceptor for JTA transactions
  * 
  * @author Frank David Martínez
  */
-public class MybatisCdiConfigurationException extends RuntimeException {
+@Transactional
+@Interceptor
+public class JtaTransactionInterceptor extends AbstractTransactionInterceptor {
 
-  public MybatisCdiConfigurationException(String message) {
-    super(message);
+  @Resource
+  private UserTransaction transaction;
+
+  @Override
+  protected void start() throws Exception {
+    if (transaction.getStatus() != Status.STATUS_ACTIVE) {
+      transaction.begin();
+    }
   }
-  
+
+  @Override
+  protected void commit() throws Exception {
+    transaction.commit();    
+  }
+
+  @Override
+  protected void rollback() throws Exception {
+    transaction.rollback();
+  }
+
 }

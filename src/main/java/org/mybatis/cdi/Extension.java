@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 MyBatis.org.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,43 +15,59 @@
  */
 package org.mybatis.cdi;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.annotation.Annotation;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
-import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.InjectionTarget;
 import javax.enterprise.inject.spi.ProcessInjectionTarget;
+import javax.inject.Inject;
 
+/**
+ * MyBatis CDI extension
+ * 
+ * @author Frank David Martínez
+ */
 public class Extension implements javax.enterprise.inject.spi.Extension {
 
-  private final Map<String, MapperBean> mappers = new HashMap<String, MapperBean>();
+  private final Logger logger = Logger.getLogger(getClass().getName());
+  private final Set<MapperBean> mappers = new HashSet<MapperBean>();
 
   public <X> void processAnnotatedType(@Observes ProcessInjectionTarget<X> event, BeanManager beanManager) {
     final InjectionTarget<X> it = event.getInjectionTarget();
     for (final InjectionPoint ip : it.getInjectionPoints()) {
-      final Mapper annotation = ip.getAnnotated().getAnnotation(Mapper.class);
-      if (annotation != null) {
-        final String sessionName = annotation.manager();
-        final Class cls = (Class) ip.getAnnotated().getBaseType();
-        final String key = sessionName + "/" + cls.getName();
-        if (!mappers.containsKey(key)) {
-          mappers.put(key, new MapperBean(cls, sessionName, beanManager));
-        }
+      if (ip.getAnnotated().isAnnotationPresent(Mapper.class)) {
+        Annotation managerAnnotation = getManagerAnnotation(ip.getAnnotated().getAnnotations());
+        mappers.add(new MapperBean((Class<?>) ip.getAnnotated().getBaseType(), managerAnnotation, beanManager));
       }
     }
   }
+  
+  private Annotation getManagerAnnotation(Set<Annotation> annotations) {
+    Annotation managerAnnotation = null;
+    for (Annotation annotation : annotations) {
+      if (!annotation.annotationType().equals(Mapper.class) && !annotation.annotationType().equals(Inject.class)) {
+        if (managerAnnotation != null) {
+          throw new MybatisCdiConfigurationException("Cannot use more than one qualifier for a mapper");
+        } else {
+          managerAnnotation = annotation;
+        }
+      }
+    }
+    return managerAnnotation;
+  }
 
   public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd) {
-    final Logger logger = Logger.getLogger(getClass().getName());
     logger.log(Level.INFO, "MyBatis CDI Module - Activated");
-    for (Bean bean : mappers.values()) {
-      logger.log(Level.INFO, "MyBatis CDI Module - Mapper dependency discovered: {0}", bean.getName());
-      abd.addBean(bean);
+    for (MapperBean mapperBean : mappers) {
+      logger.log(Level.INFO, "MyBatis CDI Module - Mapper dependency discovered: {0}", mapperBean.getName());
+      abd.addBean(mapperBean);
     }
     mappers.clear();
   }

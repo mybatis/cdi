@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 MyBatis.org.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +19,22 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
-import javax.xml.ws.BindingType;
 
+import javax.interceptor.InterceptorBinding;
+
+/**
+ * Marker interface for MyBatis mappers
+ * 
+ * @author Frank David Martínez
+ */
 @Inherited
-@BindingType
+@InterceptorBinding
 @Retention(RUNTIME)
 @Target({TYPE, METHOD, FIELD, PARAMETER})
 public @interface Mapper {
-  String manager() default "";
 }

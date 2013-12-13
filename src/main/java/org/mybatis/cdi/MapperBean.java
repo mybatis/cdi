@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 MyBatis.org.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,17 +29,22 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
 import org.apache.ibatis.session.SqlSessionManager;
 
+/**
+ * Internal CDI medatata for a mapper bean
+ * 
+ * @author Frank David Martínez
+ */
 public class MapperBean implements Bean {
-  
+
   final Class mapperClass;
-  
-  final String sessionManagerName;
-  
+
+  final Annotation managerAnnotation;
+
   final BeanManager beanManager;
 
-  public MapperBean(Class mapperClass, String sessionManagerName, BeanManager beanManager) {
+  public MapperBean(Class mapperClass, Annotation managerAnnotation, BeanManager beanManager) {
     this.mapperClass = mapperClass;
-    this.sessionManagerName = "".equals(sessionManagerName) ? null : sessionManagerName;
+    this.managerAnnotation = managerAnnotation;
     this.beanManager = beanManager;
   }
 
@@ -63,12 +68,8 @@ public class MapperBean implements Bean {
   }
 
   public String getName() {
-    if (sessionManagerName == null) {
-      return mapperClass.getName();
-    }
-    else {
-      return mapperClass.getName() + "_" + sessionManagerName;
-    }
+    // TODO add the manager name
+    return mapperClass.getName();
   }
 
   public Set getStereotypes() {
@@ -90,15 +91,11 @@ public class MapperBean implements Bean {
   public Set getInjectionPoints() {
     return Collections.emptySet();
   }
-  
+
   public Object create(CreationalContext creationalContext) {
     Bean managerBean = findSqlSessionManagerBean();
     SqlSessionManager manager = (SqlSessionManager) beanManager.getReference(managerBean, SqlSessionManager.class, creationalContext);
-    if (manager == null) {
-      throw new MybatisCdiConfigurationException("There are no SqlSessionManager producers properly configured.");
-    } else {
-      return manager.getMapper(mapperClass);      
-    }
+    return manager.getMapper(mapperClass);
   }
 
   public void destroy(Object instance, CreationalContext creationalContext) {
@@ -106,35 +103,17 @@ public class MapperBean implements Bean {
   }
 
   private Bean findSqlSessionManagerBean() {
-    if (sessionManagerName == null) {
-      return beanManager.resolve(beanManager.getBeans(SqlSessionManager.class));
+    Set<Bean<?>> beans;
+    if (managerAnnotation == null) {
+      beans = beanManager.getBeans(SqlSessionManager.class);
+    } else {
+      beans = beanManager.getBeans(SqlSessionManager.class, managerAnnotation);
     }
-    else {
-      return beanManager.resolve(beanManager.getBeans(sessionManagerName));
+    if (beans.size() == 1) {
+      return beanManager.resolve(beans);
+    } else {
+      throw new MybatisCdiConfigurationException("There are no SqlSessionManager producers properly configured.");
     }
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 3;
-    hash = 19 * hash + (this.mapperClass != null ? this.mapperClass.hashCode() : 0);
-    hash = 19 * hash + (this.sessionManagerName != null ? this.sessionManagerName.hashCode() : 0);
-    return hash;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final MapperBean other = (MapperBean) obj;
-    if (this.mapperClass != other.mapperClass && (this.mapperClass == null || !this.mapperClass.equals(other.mapperClass))) {
-      return false;
-    }
-    return !((this.sessionManagerName == null) ? (other.sessionManagerName != null) : !this.sessionManagerName.equals(other.sessionManagerName));
   }
 
 }
