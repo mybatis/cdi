@@ -30,5 +30,8 @@ public class TestingIoC {
   @Test
   public void shouldGetAUser() {
     Assert.assertEquals("User1", fooService.doSomeBusinessStuff(1).getName());
+    Assert.assertEquals("User1", fooService.doSomeBusinessStuff2(1).getName());
   }
+
+
 }

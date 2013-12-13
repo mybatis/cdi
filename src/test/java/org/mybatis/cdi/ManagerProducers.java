@@ -22,6 +22,7 @@ import java.sql.Connection;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
+import javax.inject.Named;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -31,8 +32,7 @@ import org.apache.ibatis.session.SqlSessionManager;
 @ApplicationScoped
 public class ManagerProducers {
 
-  @Produces
-  public SqlSessionManager createManager1() throws IOException {    
+  private SqlSessionManager createSessionManager() throws IOException {
     Reader reader = Resources.getResourceAsReader("org/mybatis/cdi/mybatis-config.xml");    
     SqlSessionManager manager = SqlSessionManager.newInstance(reader);
     reader.close();
@@ -48,6 +48,17 @@ public class ManagerProducers {
     
     return manager;
   }
+  
+  @Produces
+  public SqlSessionManager createManager1() throws IOException {    
+    return createSessionManager();
+  }
+  
+  @Named("manager2")
+  @Produces
+  public SqlSessionManager createManager2() throws IOException {    
+    return createSessionManager();
+  }  
   
   public void disposes(@Disposes SqlSessionManager m) {
     assert m.isManagedSessionStarted() == false : "Leaked SqlSession";

@@ -16,17 +16,26 @@
 package org.mybatis.cdi;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 @Transactional
 public class FooService {
 
-  private @Inject @Mapper UserMapper userMapper;
+  @Inject
+  @Mapper
+  private UserMapper userMapper;
   
-  private @Inject @Mapper UserMapper userMapper2;
+  @Inject
+  @Mapper
+  //@Named("manager2.UserMapper")
+  private UserMapper userMapper2;
 
   public User doSomeBusinessStuff(int userId) {
-    User dummy = userMapper2.getUser(userId);
     return this.userMapper.getUser(userId);
+  }
+
+  public User doSomeBusinessStuff2(int userId) {
+    return this.userMapper2.getUser(userId);
   }
 
 }
