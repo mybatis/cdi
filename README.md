@@ -5,7 +5,8 @@ This CDI extension allows direct injection of Mybatis Mappers into CDI Beans.
 
 Basic usage is:
 
-Put the mybatis-cdi.jar it your .war applications
+Put the mybatis-cdi.jar it your .war applications.
+
 Create a singleton or application scoped bean to provide your SqlSessionManager. You must maintain your instance in ApplicationScope or Singleton scoped bean. Just retrieve the reference in the producer methods to avoid re-creation of the manager at injection time.
 
 	@ApplicationScoped
@@ -20,6 +21,8 @@ Create a singleton or application scoped bean to provide your SqlSessionManager.
 
 		@Produces
 		public SqlSessionManager getManager() {
+			// Important: Do not create the manager here. 
+			// just retrieve a previously created instance.
 			return manager;
 		}
 	
