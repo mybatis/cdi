@@ -27,43 +27,44 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
-import javax.inject.Named;
 import org.apache.ibatis.session.SqlSessionManager;
 
 /**
- * Internal CDI medatata for a mapper bean
- * 
+ * Internal CDI metadata for a mapper bean.
+ *
  * @author Frank David Martínez
  */
 public class MapperBean implements Bean {
 
-  final Class mapperClass;
+  final Class type;
 
-  final Annotation managerAnnotation;
+  final Set<Annotation> qualifiers;
 
   final BeanManager beanManager;
 
-  public MapperBean(Class mapperClass, Annotation managerAnnotation, BeanManager beanManager) {
-    this.mapperClass = mapperClass;
-    this.managerAnnotation = managerAnnotation;
-    this.beanManager = beanManager;
+  final String sqlSessionManagerName;
+  
+  public MapperBean(Class type, Set<Annotation> qualifiers, String sqlSessionManagerName, BeanManager beanManager) {  
+    this.type = type;
+    this.sqlSessionManagerName = sqlSessionManagerName;
+    this.beanManager = beanManager;    
+    if (qualifiers == null || qualifiers.isEmpty()) {
+      this.qualifiers = new HashSet<Annotation>();
+      this.qualifiers.add(new AnnotationLiteral<Default>() {});
+      this.qualifiers.add(new AnnotationLiteral<Any>() {});
+    }
+    else {
+      this.qualifiers = qualifiers;
+    }    
   }
 
   public Set getTypes() {
     Set<Type> types = new HashSet<Type>();
-    types.add(mapperClass);
+    types.add(type);
     return types;
   }
 
   public Set getQualifiers() {
-    Set<Annotation> qualifiers = new HashSet<Annotation>();
-    if (managerAnnotation != null) {
-      qualifiers.add(managerAnnotation);
-    }
-    else {
-      qualifiers.add(new AnnotationLiteral<Default>() {});
-      qualifiers.add(new AnnotationLiteral<Any>() {});
-    }
     return qualifiers;
   }
 
@@ -72,18 +73,7 @@ public class MapperBean implements Bean {
   }
 
   public String getName() {
-    if (managerAnnotation == null) {
-      return mapperClass.getName();
-    }
-    else {
-      if (managerAnnotation instanceof Named) {
-        Named name = (Named) managerAnnotation;
-        return name.value() + "." + mapperClass.getName();
-      }
-      else {
-        return managerAnnotation.getClass().getName() + "." + mapperClass.getName();
-      }
-    }
+    return null;
   }
 
   public Set getStereotypes() {
@@ -91,7 +81,7 @@ public class MapperBean implements Bean {
   }
 
   public Class getBeanClass() {
-    return mapperClass;
+    return type;
   }
 
   public boolean isAlternative() {
@@ -109,7 +99,7 @@ public class MapperBean implements Bean {
   public Object create(CreationalContext creationalContext) {
     Bean managerBean = findSqlSessionManagerBean();
     SqlSessionManager manager = (SqlSessionManager) beanManager.getReference(managerBean, SqlSessionManager.class, creationalContext);
-    return manager.getMapper(mapperClass);
+    return manager.getMapper(type);
   }
 
   public void destroy(Object instance, CreationalContext creationalContext) {
@@ -118,47 +108,17 @@ public class MapperBean implements Bean {
 
   private Bean findSqlSessionManagerBean() {
     Set<Bean<?>> beans;
-    if (managerAnnotation == null) {
-      beans = beanManager.getBeans(SqlSessionManager.class);
-    } 
-    else if (managerAnnotation instanceof Named) {
-      beans = beanManager.getBeans(((Named)managerAnnotation).value());
+    if (sqlSessionManagerName != null) {
+      beans = beanManager.getBeans(sqlSessionManagerName);
     }
     else {
-      beans = beanManager.getBeans(SqlSessionManager.class, managerAnnotation);
+      beans = beanManager.getBeans(SqlSessionManager.class, qualifiers.toArray(new Annotation[] {}));
     }
-    Bean bean = beanManager.resolve(beans);    
+    Bean bean = beanManager.resolve(beans);
     if (bean == null) {
       throw new MybatisCdiConfigurationException("There are no SqlSessionManager producers properly configured.");
     }
     return bean;
   }
 
-  @Override
-  public int hashCode() {
-    int hash = 5;
-    hash = 61 * hash + (this.mapperClass != null ? this.mapperClass.hashCode() : 0);
-    hash = 61 * hash + (this.managerAnnotation != null ? this.managerAnnotation.hashCode() : 0);
-    return hash;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final MapperBean other = (MapperBean) obj;
-    if (this.mapperClass != other.mapperClass && (this.mapperClass == null || !this.mapperClass.equals(other.mapperClass))) {
-      return false;
-    }
-    if (this.managerAnnotation != other.managerAnnotation && (this.managerAnnotation == null || !this.managerAnnotation.equals(other.managerAnnotation))) {
-      return false;
-    }
-    return true;
-  }
-
-  
 }

@@ -21,20 +21,17 @@ import javax.inject.Named;
 @Transactional
 public class FooService {
 
-  @Inject
-  @Mapper
-  @Named("manager1")
+  @Inject @Mapper @Named("manager1")
   private UserMapper userMapper;
   
-  @Inject
-  @Mapper
-  @MySpecialManager
+  @Inject @Mapper @MySpecialManager @OtherQualifier
   private UserMapper userMapper3;
   
-  @Inject
-  @Mapper
-  @Named("manager2")
+  @Inject @Mapper @Named("manager2")
   private UserMapper userMapper2;
+
+  @Inject @Mapper @Named("manager2")
+  private UserMapper dummyUserMapper;
 
   public User getUser(int userId) {
     return this.userMapper.getUser(userId);
@@ -42,6 +39,10 @@ public class FooService {
 
   public User getUser2(int userId) {
     return this.userMapper2.getUser(userId);
+  }
+
+  public User getUserDummy(int userId) {
+    return this.dummyUserMapper.getUser(userId);
   }
 
   public User getUser3(int userId) {

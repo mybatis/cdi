@@ -33,6 +33,13 @@ public class TestingIoC {
     Assert.assertEquals("2-User2", fooService.getUser2(2).getName());
     Assert.assertEquals("3-User3", fooService.getUser3(3).getName());
   }
+  
+  @Test
+  public void shouldInjectTheSameMapper() {
+    Assert.assertEquals(fooService.getUser2(1).getName(), fooService.getUserDummy(1).getName());
+    Assert.assertEquals(fooService.getUser2(2).getName(), fooService.getUserDummy(2).getName());
+    Assert.assertEquals(fooService.getUser2(3).getName(), fooService.getUserDummy(3).getName());
+  }
 
   @Test
   public void shouldInsertAUserAndCommit() {

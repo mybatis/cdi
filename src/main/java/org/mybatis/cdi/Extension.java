@@ -15,7 +15,6 @@
  */
 package org.mybatis.cdi;
 
-import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -27,7 +26,6 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.InjectionTarget;
 import javax.enterprise.inject.spi.ProcessInjectionTarget;
-import javax.inject.Inject;
 
 /**
  * MyBatis CDI extension
@@ -37,37 +35,24 @@ import javax.inject.Inject;
 public class Extension implements javax.enterprise.inject.spi.Extension {
 
   private final Logger logger = Logger.getLogger(getClass().getName());
-  private final Set<MapperBean> mappers = new HashSet<MapperBean>();
+  private final Set<MapperBeanKey> mappers = new HashSet<MapperBeanKey>();
 
-  public <X> void processAnnotatedType(@Observes ProcessInjectionTarget<X> event, BeanManager beanManager) {
+  public <X> void processAnnotatedType(@Observes ProcessInjectionTarget<X> event) {
     final InjectionTarget<X> it = event.getInjectionTarget();
     for (final InjectionPoint ip : it.getInjectionPoints()) {
       if (ip.getAnnotated().isAnnotationPresent(Mapper.class)) {
-        Annotation managerAnnotation = getManagerAnnotation(ip.getAnnotated().getAnnotations());
-        mappers.add(new MapperBean((Class<?>) ip.getAnnotated().getBaseType(), managerAnnotation, beanManager));
+        mappers.add(new MapperBeanKey(
+          (Class<?>)ip.getAnnotated().getBaseType(), 
+          ip.getAnnotated().getAnnotations()));
       }
     }
   }
   
-  private Annotation getManagerAnnotation(Set<Annotation> annotations) {
-    Annotation managerAnnotation = null;
-    for (Annotation annotation : annotations) {
-      if (!annotation.annotationType().equals(Mapper.class) && !annotation.annotationType().equals(Inject.class)) {
-        if (managerAnnotation != null) {
-          throw new MybatisCdiConfigurationException("Cannot use more than one qualifier for a mapper");
-        } else {
-          managerAnnotation = annotation;
-        }
-      }
-    }
-    return managerAnnotation;
-  }
-
-  public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd) {
+  public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
     logger.log(Level.INFO, "MyBatis CDI Module - Activated");
-    for (MapperBean mapperBean : mappers) {
-      logger.log(Level.INFO, "MyBatis CDI Module - Mapper dependency discovered: {0}", mapperBean.getName());
-      abd.addBean(mapperBean);
+    for (MapperBeanKey key : mappers) {
+      logger.log(Level.INFO, "MyBatis CDI Module - Mapper dependency discovered: {0}", key.getKey());
+      abd.addBean(key.createBean(bm));
     }
     mappers.clear();
   }

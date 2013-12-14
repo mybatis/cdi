@@ -40,10 +40,15 @@ public class ManagerProducers {
   private SqlSessionManager manager3;
 
   @PostConstruct
-  public void init() throws IOException {
-    manager1 = createSessionManager(1);
-    manager2 = createSessionManager(2);
-    manager3 = createSessionManager(3);
+  public void init() {
+    try {
+      manager1 = createSessionManager(1);
+      manager2 = createSessionManager(2);
+      manager3 = createSessionManager(3);
+    }
+    catch (IOException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   private SqlSessionManager createSessionManager(int n) throws IOException {
@@ -77,6 +82,7 @@ public class ManagerProducers {
 
   @Produces
   @MySpecialManager
+  @OtherQualifier
   public SqlSessionManager createManager3() throws IOException {
     return manager3;
   }
