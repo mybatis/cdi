@@ -75,7 +75,7 @@ public class LocalTransactionInterceptor {
   private Set<SqlSessionManager> findSqlSessionManagers() {
     Set<Bean<?>> beans = beanManager.getBeans(SqlSessionManager.class);
     Set<SqlSessionManager> managers = new HashSet<SqlSessionManager>();
-    for (Bean bean : beans) {
+    for (Bean<?> bean : beans) {
       SqlSessionManager manager = (SqlSessionManager) beanManager.getReference(
           bean, SqlSessionManager.class,
           beanManager.createCreationalContext(bean));
