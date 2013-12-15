@@ -29,31 +29,33 @@ import javax.inject.Named;
 import javax.inject.Qualifier;
 
 /**
- *
  * @author Frank D. Martinez [mnesarco]
  */
 public class MapperBeanKey implements Comparable<MapperBeanKey> {
 
   private final String key;
-  
+
   private final List<Annotation> qualifiers;
-  
+
   private final Class<?> type;
-  
+
   private final String sqlSessionManagerName;
 
   public MapperBeanKey(Class<?> type, Set<Annotation> annotations) {
     this.type = type;
     this.qualifiers = sort(filterQualifiers(annotations));
-    
+
     // Create key = type(.qualifier)*(.name)?
     final StringBuilder sb = new StringBuilder();
     String name = null;
     sb.append(type.getName());
     for (Annotation q : this.qualifiers) {
       if (q instanceof Named) {
-        name = ((Named)q).value();
-      }
+        if (name != null) {
+          throw new MybatisCdiConfigurationException("Cannot use more than one @Named annotation in a mapper.");
+        }
+        name = ((Named) q).value();
+      } 
       else {
         sb.append(".").append(q.annotationType().getSimpleName());
       }
@@ -68,14 +70,13 @@ public class MapperBeanKey implements Comparable<MapperBeanKey> {
   private Set<Annotation> filterQualifiers(Set<Annotation> annotations) {
     final Set<Annotation> set = new HashSet<Annotation>();
     for (Annotation a : annotations) {
-      
       if (a.annotationType().isAnnotationPresent(Qualifier.class)) {
         set.add(a);
       }
     }
     return set;
   }
-  
+
   private List<Annotation> sort(Set<Annotation> annotations) {
     final List<Annotation> list = new ArrayList<Annotation>(annotations);
     Collections.sort(list, new Comparator<Annotation>() {
@@ -85,7 +86,7 @@ public class MapperBeanKey implements Comparable<MapperBeanKey> {
     });
     return list;
   }
-  
+
   public int compareTo(MapperBeanKey o) {
     return key.compareTo(o.key);
   }
@@ -108,7 +109,7 @@ public class MapperBeanKey implements Comparable<MapperBeanKey> {
     final MapperBeanKey other = (MapperBeanKey) obj;
     return !((this.key == null) ? (other.key != null) : !this.key.equals(other.key));
   }
-  
+
   public Bean createBean(BeanManager bm) {
     return new MapperBean(type, new HashSet<Annotation>(qualifiers), sqlSessionManagerName, bm);
   }
@@ -116,5 +117,5 @@ public class MapperBeanKey implements Comparable<MapperBeanKey> {
   public String getKey() {
     return key;
   }
-  
+
 }
