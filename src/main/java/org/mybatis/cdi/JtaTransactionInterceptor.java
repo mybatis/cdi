@@ -15,7 +15,6 @@
  */
 package org.mybatis.cdi;
 
-import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
@@ -31,28 +30,18 @@ import javax.transaction.UserTransaction;
  */
 @Transactional
 @Interceptor
-public class JtaTransactionInterceptor {
+public class JtaTransactionInterceptor extends LocalTransactionInterceptor {
 
   @Inject
   private UserTransaction transaction;
-  private LocalTransactionInterceptor localTransactionInterceptor;
   
-  public JtaTransactionInterceptor() {
-    localTransactionInterceptor = new LocalTransactionInterceptor();
-  }
-  
-  @Inject 
-  public void setBeanManager(BeanManager beanManager) {
-    localTransactionInterceptor.setBeanManager(beanManager);
-  }
- 
   @AroundInvoke
   public Object invoke(InvocationContext ctx) throws Throwable {
     boolean nested = transaction.getStatus() == Status.STATUS_ACTIVE;
     if (!nested) transaction.begin();
     Object result = null;
     try {
-      result = localTransactionInterceptor.invoke(ctx);
+      result = super.invoke(ctx);
       if (!nested) transaction.commit();
     } catch (Throwable ex) {
       if (!nested) transaction.rollback();

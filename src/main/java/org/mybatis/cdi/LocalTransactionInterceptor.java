@@ -42,12 +42,8 @@ import org.apache.ibatis.session.SqlSessionManager;
 @Interceptor
 public class LocalTransactionInterceptor {
 
+  @Inject
   private BeanManager beanManager;
-
-  @Inject  
-  public void setBeanManager(BeanManager beanManager) {
-    this.beanManager = beanManager;
-  }
 
   @AroundInvoke
   public Object invoke(InvocationContext ctx) throws Throwable {
