@@ -15,7 +15,8 @@
  */
 package org.mybatis.cdi;
 
-import javax.annotation.Resource;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
@@ -23,32 +24,35 @@ import javax.transaction.Status;
 import javax.transaction.UserTransaction;
 
 /**
- * Interceptor for JTA transactions. Must be used in combination with the @link {@link LocalTransactionInterceptor}
- * this order:
- * <pre>
- *  <interceptors>
- *    <class>org.mybatis.cdi.JtaTransactionInterceptor</class>
- *    <class>org.mybatis.cdi.LocalTransactionInterceptor</class>
- *  </interceptors>
- * </pre>
+ * Interceptor for JTA transactions. 
  * MyBatis should be configured to use the {@code MANAGED} transaction manager.
  * 
- * @author Frank David Martínez
+ * @author Eduardo Macarrón
  */
 @Transactional
 @Interceptor
 public class JtaTransactionInterceptor {
 
-  @Resource
+  @Inject
   private UserTransaction transaction;
+  private LocalTransactionInterceptor localTransactionInterceptor;
   
+  public JtaTransactionInterceptor() {
+    localTransactionInterceptor = new LocalTransactionInterceptor();
+  }
+  
+  @Inject 
+  public void setBeanManager(BeanManager beanManager) {
+    localTransactionInterceptor.setBeanManager(beanManager);
+  }
+ 
   @AroundInvoke
   public Object invoke(InvocationContext ctx) throws Throwable {
     boolean nested = transaction.getStatus() == Status.STATUS_ACTIVE;
     if (!nested) transaction.begin();
     Object result = null;
     try {
-      result = ctx.proceed();
+      result = localTransactionInterceptor.invoke(ctx);
       if (!nested) transaction.commit();
     } catch (Throwable ex) {
       if (!nested) transaction.rollback();

@@ -38,6 +38,8 @@ public class ManagerProducers {
   private SqlSessionManager manager2;
 
   private SqlSessionManager manager3;
+  
+  private SqlSessionManager managerJTA;
 
   @PostConstruct
   public void init() {
@@ -45,6 +47,7 @@ public class ManagerProducers {
       manager1 = createSessionManager(1);
       manager2 = createSessionManager(2);
       manager3 = createSessionManager(3);
+      managerJTA = createSessionManagerJTA();
     }
     catch (IOException ex) {
       throw new RuntimeException(ex);
@@ -68,6 +71,25 @@ public class ManagerProducers {
     return manager;
   }
 
+
+  private SqlSessionManager createSessionManagerJTA() throws IOException {
+    Reader reader = Resources.getResourceAsReader("org/mybatis/cdi/mybatis-config_jta.xml");
+    SqlSessionManager manager = SqlSessionManager.newInstance(reader);
+    reader.close();
+
+    SqlSession session = manager.openSession();
+    Connection conn = session.getConnection();
+    reader = Resources.getResourceAsReader("org/mybatis/cdi/CreateDB_JTA.sql");
+    ScriptRunner runner = new ScriptRunner(conn);
+    runner.setLogWriter(null);
+    runner.runScript(reader);
+    reader.close();
+    session.close();
+
+    return manager;
+  }
+ 
+    
   @Named("manager1")
   @Produces
   public SqlSessionManager createManager1() throws IOException {
@@ -87,6 +109,12 @@ public class ManagerProducers {
     return manager3;
   }
 
+  @Produces
+  @JtaManager
+  public SqlSessionManager createManagerJTA() throws IOException {
+    return managerJTA;
+  }  
+  
   public void disposes(@Disposes SqlSessionManager m) {
     assert m.isManagedSessionStarted() == false : "Leaked SqlSession";
   }

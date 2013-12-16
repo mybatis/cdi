@@ -22,12 +22,14 @@
 
 	<environments default="development">
 		<environment id="development">
-			<transactionManager type="JDBC">
+			<transactionManager type="MANAGED">
 				<property name="" value="" />
 			</transactionManager>
-			<dataSource type="UNPOOLED">
-				<property name="driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
-				<property name="url" value="jdbc:derby:memory:cdi2;create=true" />
+			<dataSource type="org.mybatis.cdi.AtomikosDatasourceFactory">
+				<property name="xaDataSourceClassName" value="org.apache.derby.jdbc.EmbeddedXADataSource" />
+				<property name="uniqueResourceName" value="unique" />
+				<property name="databaseName" value="memory:dbJTA" />
+				<property name="createDatabase" value="create" />
 			</dataSource>
 		</environment>
 	</environments>

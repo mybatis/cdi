@@ -14,11 +14,9 @@
 --    limitations under the License.
 --
 
-drop table users if exists;
-
-create table users (
-  id int,
-  name varchar(20)
+CREATE TABLE USERS (
+    id integer not null,
+    name varchar(80) not null
 );
 
 insert into users (id, name) values(1, '2-User1');

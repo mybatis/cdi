@@ -16,39 +16,16 @@
 package org.mybatis.cdi;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.interceptor.Interceptors;
 
-@Interceptors(LocalTransactionInterceptor.class)
+@Interceptors(JtaTransactionInterceptor.class)
 @Transactional
-public class FooService {
-
-  @Inject @Mapper @Named("manager1")
-  private UserMapper userMapper;
+public class FooServiceJTA {  
   
-  @Inject @Mapper @MySpecialManager @OtherQualifier
-  private UserMapper userMapper3;
-  
-  @Inject @Mapper @Named("manager2")
-  private UserMapper userMapper2;
-
-  @Inject @Mapper @Named("manager2")
-  private UserMapper dummyUserMapper;
-
+  @Inject @Mapper @JtaManager private UserMapper userMapper;
+ 
   public User getUser(int userId) {
     return this.userMapper.getUser(userId);
-  }
-
-  public User getUser2(int userId) {
-    return this.userMapper2.getUser(userId);
-  }
-
-  public User getUserDummy(int userId) {
-    return this.dummyUserMapper.getUser(userId);
-  }
-
-  public User getUser3(int userId) {
-    return this.userMapper3.getUser(userId);
   }
 
   public void insertUser(User user, boolean fail) {

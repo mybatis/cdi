@@ -63,4 +63,34 @@ public class TestingIoC {
     Assert.assertNull(fooService.getUser(30));
   }
 
+  @Inject
+  private FooServiceJTA fooServiceJTA;
+
+  @Test
+  public void shouldGetAUserJTA() {
+    Assert.assertEquals("1-User1", fooServiceJTA.getUser(1).getName());
+  }
+  
+  @Test
+  public void shouldInsertAUserAndCommitJTA() {
+    User user = new User();
+    user.setId(20);
+    user.setName("User20");
+    fooServiceJTA.insertUser(user, false);
+    Assert.assertEquals("User20", fooServiceJTA.getUser(20).getName());
+  }
+
+  @Test
+  public void shouldInsertAUserAndRollItBackJTA() {
+    User user = new User();
+    user.setId(30);
+    user.setName("User30");
+    try {
+      fooServiceJTA.insertUser(user, true);
+    } catch (Exception ignore) {
+      // ignored
+    }
+    Assert.assertNull(fooServiceJTA.getUser(30));
+  }
+  
 }
