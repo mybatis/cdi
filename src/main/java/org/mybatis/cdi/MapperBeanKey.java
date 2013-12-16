@@ -51,9 +51,6 @@ public class MapperBeanKey implements Comparable<MapperBeanKey> {
     sb.append(type.getName());
     for (Annotation q : this.qualifiers) {
       if (q instanceof Named) {
-        if (name != null) {
-          throw new MybatisCdiConfigurationException("Cannot use more than one @Named annotation in a mapper.");
-        }
         name = ((Named) q).value();
       } 
       else {
