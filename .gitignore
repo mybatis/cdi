@@ -3,3 +3,5 @@
 /.project
 /target
 nb-configuration.xml
+*.log
+*.epoch
