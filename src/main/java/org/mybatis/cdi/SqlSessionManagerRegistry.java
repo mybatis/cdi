@@ -19,13 +19,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionManager;
@@ -40,16 +37,16 @@ public class SqlSessionManagerRegistry {
   private Map<SqlSessionFactory, SqlSessionManager> managers;
   
   @Inject @Any
-  private Instance<SqlSessionFactory> facories;
+  private Instance<SqlSessionFactory> factories;
   
   @PostConstruct
   public void init() {
-    if (facories.isUnsatisfied()) {
+    if (factories.isUnsatisfied()) {
       throw new MybatisCdiConfigurationException("There are no SqlSessionFactory producers properly configured.");
     } 
     else {
       Map<SqlSessionFactory, SqlSessionManager> m = new HashMap<SqlSessionFactory, SqlSessionManager>();
-      for (SqlSessionFactory factory : facories) {
+      for (SqlSessionFactory factory : factories) {
         SqlSessionManager manager = SqlSessionManager.newInstance(factory);
         m.put(factory, manager);
       }
