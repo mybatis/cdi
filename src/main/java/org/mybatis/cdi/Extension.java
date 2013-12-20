@@ -34,10 +34,11 @@ import javax.enterprise.inject.spi.ProcessInjectionTarget;
  */
 public class Extension implements javax.enterprise.inject.spi.Extension {
 
-  private final Logger logger = Logger.getLogger(getClass().getName());
+  private static final Logger logger = Logger.getLogger(Extension.class.getName());
+  
   private final Set<MapperBeanKey> mappers = new HashSet<MapperBeanKey>();
 
-  public <X> void processAnnotatedType(@Observes ProcessInjectionTarget<X> event) {
+  public <X> void processInjectionTarget(@Observes ProcessInjectionTarget<X> event) {
     final InjectionTarget<X> it = event.getInjectionTarget();
     for (final InjectionPoint ip : it.getInjectionPoints()) {
       if (ip.getAnnotated().isAnnotationPresent(Mapper.class)) {

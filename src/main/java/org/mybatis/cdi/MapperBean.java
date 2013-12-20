@@ -19,6 +19,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
@@ -27,6 +28,7 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionManager;
 
 /**
@@ -36,17 +38,17 @@ import org.apache.ibatis.session.SqlSessionManager;
  */
 public class MapperBean implements Bean {
 
-  final Class type;
+  private final Class type;
 
-  final Set<Annotation> qualifiers;
+  private final Set<Annotation> qualifiers;
 
-  final BeanManager beanManager;
+  private final BeanManager beanManager;
 
-  final String sqlSessionManagerName;
+  private final String sqlSessionFactoryName;
   
   public MapperBean(Class type, Set<Annotation> qualifiers, String sqlSessionManagerName, BeanManager beanManager) {  
     this.type = type;
-    this.sqlSessionManagerName = sqlSessionManagerName;
+    this.sqlSessionFactoryName = sqlSessionManagerName;
     this.beanManager = beanManager;    
     if (qualifiers == null || qualifiers.isEmpty()) {
       this.qualifiers = new HashSet<Annotation>();
@@ -97,8 +99,7 @@ public class MapperBean implements Bean {
   }
 
   public Object create(CreationalContext creationalContext) {
-    Bean managerBean = findSqlSessionManagerBean();
-    SqlSessionManager manager = (SqlSessionManager) beanManager.getReference(managerBean, SqlSessionManager.class, creationalContext);
+    SqlSessionManager manager = findSqlSessionManagerBean(creationalContext);
     return manager.getMapper(type);
   }
 
@@ -106,19 +107,20 @@ public class MapperBean implements Bean {
     creationalContext.release();
   }
 
-  private Bean findSqlSessionManagerBean() {
+  private SqlSessionManager findSqlSessionManagerBean(CreationalContext creationalContext) {
     Set<Bean<?>> beans;
-    if (sqlSessionManagerName != null) {
-      beans = beanManager.getBeans(sqlSessionManagerName);
+    if (sqlSessionFactoryName != null) {
+      beans = beanManager.getBeans(sqlSessionFactoryName);
     }
     else {
-      beans = beanManager.getBeans(SqlSessionManager.class, qualifiers.toArray(new Annotation[] {}));
+      beans = beanManager.getBeans(SqlSessionFactory.class, qualifiers.toArray(new Annotation[] {}));
     }
     Bean bean = beanManager.resolve(beans);
     if (bean == null) {
-      throw new MybatisCdiConfigurationException("There are no SqlSessionManager producers properly configured.");
+      throw new MybatisCdiConfigurationException("There are no SqlSessionFactory producers properly configured.");
     }
-    return bean;
+    SqlSessionFactory factory = (SqlSessionFactory) beanManager.getReference(bean, SqlSessionFactory.class, creationalContext);
+    return CDIUtils.getRegistry(beanManager, creationalContext).getManager(factory);
   }
 
 }
