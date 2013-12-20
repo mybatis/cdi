@@ -23,8 +23,8 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -39,20 +39,17 @@ public class SqlSessionManagerRegistry {
 
   private Map<SqlSessionFactory, SqlSessionManager> managers;
   
-  @Inject
-  private BeanManager bm;
+  @Inject @Any
+  private Instance<SqlSessionFactory> facories;
   
   @PostConstruct
   public void init() {
-    Set<Bean<?>> beans = bm.getBeans(SqlSessionFactory.class, new AnnotationLiteral<Any>() {});
-    if (beans.isEmpty()) {
+    if (facories.isUnsatisfied()) {
       throw new MybatisCdiConfigurationException("There are no SqlSessionFactory producers properly configured.");
     } 
     else {
       Map<SqlSessionFactory, SqlSessionManager> m = new HashMap<SqlSessionFactory, SqlSessionManager>();
-      for (Bean<?> bean : beans) {
-        SqlSessionFactory factory =
-          (SqlSessionFactory) bm.getReference(bean, SqlSessionFactory.class, bm.createCreationalContext(bean));
+      for (SqlSessionFactory factory : facories) {
         SqlSessionManager manager = SqlSessionManager.newInstance(factory);
         m.put(factory, manager);
       }
