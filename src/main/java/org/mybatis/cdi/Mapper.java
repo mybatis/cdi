@@ -33,7 +33,6 @@ import javax.interceptor.InterceptorBinding;
  * @author Frank David Martínez
  */
 @Inherited
-@InterceptorBinding
 @Retention(RUNTIME)
 @Target({TYPE, METHOD, FIELD, PARAMETER})
 public @interface Mapper {
