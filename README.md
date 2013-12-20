@@ -7,23 +7,21 @@ Basic usage is:
 
 Put the mybatis-cdi.jar it your .war applications.
 
-Create a singleton or application scoped bean to provide your SqlSessionManager. You must maintain your instance in ApplicationScope or Singleton scoped bean. Just retrieve the reference in the producer methods to avoid re-creation of the manager at injection time.
+Create a singleton or application scoped bean to provide your SqlSessionFactory.
 
 	@ApplicationScoped
 	public class SessionManagerProvider {
 	
-		private SqlSessionManager manager;
+		private SqlSessionFactory factory;
 	
 		@PostConstruct
 		public void init() {
-			manager = create the manager instance ....
+			factory = create the factory instance ....
 		}
 
 		@Produces
-		public SqlSessionManager getManager() {
-			// Important: Do not create the manager here. 
-			// just retrieve a previously created instance.
-			return manager;
+		public SqlSessionFactory produceFactory() {
+			return factory;
 		}
 	
 	}
