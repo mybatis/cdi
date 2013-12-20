@@ -29,13 +29,13 @@ import javax.enterprise.inject.spi.ProcessInjectionTarget;
 
 /**
  * MyBatis CDI extension
- * 
+ *
  * @author Frank David Martínez
  */
 public class Extension implements javax.enterprise.inject.spi.Extension {
 
   private static final Logger logger = Logger.getLogger(Extension.class.getName());
-  
+
   private final Set<MapperBeanKey> mappers = new HashSet<MapperBeanKey>();
 
   public <X> void processInjectionTarget(@Observes ProcessInjectionTarget<X> event) {
@@ -43,12 +43,12 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
     for (final InjectionPoint ip : it.getInjectionPoints()) {
       if (ip.getAnnotated().isAnnotationPresent(Mapper.class)) {
         mappers.add(new MapperBeanKey(
-          (Class<?>)ip.getAnnotated().getBaseType(), 
+          (Class<?>) ip.getAnnotated().getBaseType(),
           ip.getAnnotated().getAnnotations()));
       }
     }
   }
-  
+
   public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
     logger.log(Level.INFO, "MyBatis CDI Module - Activated");
     for (MapperBeanKey key : mappers) {

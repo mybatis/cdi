@@ -23,9 +23,9 @@ import javax.transaction.Status;
 import javax.transaction.UserTransaction;
 
 /**
- * Interceptor for JTA transactions. 
- * MyBatis should be configured to use the {@code MANAGED} transaction manager.
- * 
+ * Interceptor for JTA transactions. MyBatis should be configured to use the
+ * {@code MANAGED} transaction manager.
+ *
  * @author Eduardo Macarrón
  */
 @Transactional
@@ -34,18 +34,26 @@ public class JtaTransactionInterceptor extends LocalTransactionInterceptor {
 
   @Inject
   private UserTransaction transaction;
-  
+
   @AroundInvoke
+  @Override
   public Object invoke(InvocationContext ctx) throws Throwable {
     boolean nested = transaction.getStatus() == Status.STATUS_ACTIVE;
-    if (!nested) transaction.begin();
+    if (!nested) {
+      transaction.begin();
+    }
     Object result = null;
     try {
       result = super.invoke(ctx);
-      if (!nested) transaction.commit();
-    } catch (Throwable ex) {
-      if (!nested) transaction.rollback();
-    } 
+      if (!nested) {
+        transaction.commit();
+      }
+    }
+    catch (Throwable ex) {
+      if (!nested) {
+        transaction.rollback();
+      }
+    }
     return result;
   }
 

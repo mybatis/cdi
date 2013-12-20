@@ -16,25 +16,23 @@
 package org.mybatis.cdi;
 
 import java.util.Collection;
-import java.util.Set;
-
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-
 import org.apache.ibatis.reflection.ExceptionUtil;
 import org.apache.ibatis.session.SqlSessionManager;
 
 /**
- * Best-effort interceptor for local transactions.
- * It locates all the instances of {@code SqlSssionManager} and starts transactions on all them.
- * It cannot guarantee atomiticy if there is more than one {@code SqlSssionManager}. 
- * Use XA drivers, a JTA container and the {@link JtaTransactionInterceptor} in that case.
- * 
+ * Best-effort interceptor for local transactions. It locates all the instances
+ * of {@code SqlSssionManager} and starts transactions on all them. It cannot
+ * guarantee atomiticy if there is more than one {@code SqlSssionManager}. Use
+ * XA drivers, a JTA container and the {@link JtaTransactionInterceptor} in that
+ * case.
+ *
  * @see JtaTransactionInterceptor
- * 
+ *
  * @author Frank David Martínez
  */
 @Transactional
@@ -46,7 +44,7 @@ public class LocalTransactionInterceptor {
 
   @Inject
   private SqlSessionManagerRegistry registry;
-  
+
   @AroundInvoke
   public Object invoke(InvocationContext ctx) throws Throwable {
     Transactional t = getTransactionalAnnotation(ctx);
@@ -58,10 +56,14 @@ public class LocalTransactionInterceptor {
       if (started && !t.rollbackOnly()) {
         commit(managers, t);
       }
-    } catch (Throwable ex) {
+    }
+    catch (Exception ex) {
       throw ExceptionUtil.unwrapThrowable(ex);
-    } finally {
-      if (started) close(managers);
+    }
+    finally {
+      if (started) {
+        close(managers);
+      }
     }
     return result;
   }
