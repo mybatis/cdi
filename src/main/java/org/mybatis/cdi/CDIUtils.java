@@ -29,12 +29,7 @@ public class CDIUtils {
 
   public static SqlSessionManagerRegistry getRegistry(BeanManager beanManager, CreationalContext creationalContext) {
     Iterator<Bean<?>> beans = beanManager.getBeans(SqlSessionManagerRegistry.class).iterator();
-    if (beans.hasNext()) {
-      return (SqlSessionManagerRegistry) beanManager.getReference(beans.next(), SqlSessionManagerRegistry.class, creationalContext);
-    }
-    else {
-      throw new MybatisCdiConfigurationException("There are no SqlSessionFactory producers properly configured.");
-    }
+    return (SqlSessionManagerRegistry) beanManager.getReference(beans.next(), SqlSessionManagerRegistry.class, creationalContext);
   }
   
 }

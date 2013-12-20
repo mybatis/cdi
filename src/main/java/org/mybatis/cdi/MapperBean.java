@@ -19,7 +19,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
@@ -46,9 +45,9 @@ public class MapperBean implements Bean {
 
   private final String sqlSessionFactoryName;
   
-  public MapperBean(Class type, Set<Annotation> qualifiers, String sqlSessionManagerName, BeanManager beanManager) {  
+  public MapperBean(Class type, Set<Annotation> qualifiers, String sqlSessionFactoryName, BeanManager beanManager) {  
     this.type = type;
-    this.sqlSessionFactoryName = sqlSessionManagerName;
+    this.sqlSessionFactoryName = sqlSessionFactoryName;
     this.beanManager = beanManager;    
     if (qualifiers == null || qualifiers.isEmpty()) {
       this.qualifiers = new HashSet<Annotation>();
@@ -99,7 +98,7 @@ public class MapperBean implements Bean {
   }
 
   public Object create(CreationalContext creationalContext) {
-    SqlSessionManager manager = findSqlSessionManagerBean(creationalContext);
+    SqlSessionManager manager = findSqlSessionManager(creationalContext);
     return manager.getMapper(type);
   }
 
@@ -107,7 +106,7 @@ public class MapperBean implements Bean {
     creationalContext.release();
   }
 
-  private SqlSessionManager findSqlSessionManagerBean(CreationalContext creationalContext) {
+  private SqlSessionManager findSqlSessionManager(CreationalContext creationalContext) {
     Set<Bean<?>> beans;
     if (sqlSessionFactoryName != null) {
       beans = beanManager.getBeans(sqlSessionFactoryName);
