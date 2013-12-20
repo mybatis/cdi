@@ -107,18 +107,7 @@ public class MapperBean implements Bean {
   }
 
   private SqlSessionManager findSqlSessionManager(CreationalContext creationalContext) {
-    Set<Bean<?>> beans;
-    if (sqlSessionFactoryName != null) {
-      beans = beanManager.getBeans(sqlSessionFactoryName);
-    }
-    else {
-      beans = beanManager.getBeans(SqlSessionFactory.class, qualifiers.toArray(new Annotation[] {}));
-    }
-    Bean bean = beanManager.resolve(beans);
-    if (bean == null) {
-      throw new MybatisCdiConfigurationException("There are no SqlSessionFactory producers properly configured.");
-    }
-    SqlSessionFactory factory = (SqlSessionFactory) beanManager.getReference(bean, SqlSessionFactory.class, creationalContext);
+    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(sqlSessionFactoryName, qualifiers, beanManager, creationalContext);
     return CDIUtils.getRegistry(beanManager, creationalContext).getManager(factory);
   }
 

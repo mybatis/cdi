@@ -15,10 +15,13 @@
  */
 package org.mybatis.cdi;
 
+import java.lang.annotation.Annotation;
 import java.util.Iterator;
+import java.util.Set;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 /**
  *
@@ -29,6 +32,21 @@ public class CDIUtils {
   public static SqlSessionManagerRegistry getRegistry(BeanManager beanManager, CreationalContext creationalContext) {
     Iterator<Bean<?>> beans = beanManager.getBeans(SqlSessionManagerRegistry.class).iterator();
     return (SqlSessionManagerRegistry) beanManager.getReference(beans.next(), SqlSessionManagerRegistry.class, creationalContext);
+  }
+
+  public static SqlSessionFactory findSqlSessionFactory(String name, Set<Annotation> qualifiers, BeanManager beanManager, CreationalContext creationalContext) {
+    Set<Bean<?>> beans;
+    if (name != null) {
+      beans = beanManager.getBeans(name);
+    }
+    else {
+      beans = beanManager.getBeans(SqlSessionFactory.class, qualifiers.toArray(new Annotation[]{}));
+    }
+    Bean bean = beanManager.resolve(beans);
+    if (bean == null) {
+      throw new MybatisCdiConfigurationException("There are no SqlSessionFactory producers properly configured.");
+    }
+    return (SqlSessionFactory) beanManager.getReference(bean, SqlSessionFactory.class, creationalContext);
   }
 
 }
