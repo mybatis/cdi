@@ -146,7 +146,7 @@
       
 <p>
         In base MyBatis, the <tt>SqlSessionFactory</tt> is built using <tt>SqlSessionFactoryBuilder</tt>. 
-        In MyBatis-CDI it is produced by any bean with a method annotated with <tt>@Prouces</tt>.
+        In MyBatis-CDI it is produced by any bean with a method annotated with <tt>@Produces</tt>.
       </p>
 
       
@@ -256,7 +256,7 @@ public SqlSessionFactory createManager() throws IOException {
       
 <p><span class="label important">NOTE</span>
         MyBatis-CDI controls the lifecycle of the injected <tt>SqlSession</tt> so you must not call any transactional method
-        like <tt>commit()</tt> or <tt>rollback</tt>, nor any lifecycle method like <tt>close()</tt>.
+        like <tt>commit()</tt> or <tt>rollback()</tt>, nor any lifecycle method like <tt>close()</tt>.
       </p>
 	  
 	</div>      
