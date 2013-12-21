@@ -147,7 +147,7 @@
       
 <p>
         By default, each method call will use an isolated session but if you want to enclose many method calls in a transaction, 
-        annotated the method with <tt>@Transactional</tt>
+        annotated the method with <tt>@Transactional</tt>.
       </p>
       
         
@@ -186,7 +186,8 @@ public void doSomethingInATransaction() {
       
 <p>
         With this setting, MyBatis-CDI commit start a transaction before entering the transactional method and will commit it if it
-        ends with no exception, otherwise the transaction will be rolled back. 
+        ends with no exception, otherwise the transaction will be rolled back. If there are nested transactional methods, the inner method
+        annotations will be ignored.
       </p>
 
       

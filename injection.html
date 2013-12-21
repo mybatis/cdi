@@ -12,7 +12,7 @@
     <meta name="Date-Revision-yyyymmdd" content="20131221" />
     <meta http-equiv="Content-Language" content="en" />
     <title>MyBatis - 
-    MyBatis-CDI | SqlSessionFactory</title>
+    MyBatis-CDI | Injecting MyBatis beans</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.3.0.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -138,21 +138,23 @@
 
   
     <div class="section">
-<h2>SqlSessionFactory<a name="SqlSessionFactory"></a></h2>
-      
-<p>
-        In base MyBatis, the <tt>SqlSessionFactory</tt> is built using <tt>SqlSessionFactoryBuilder</tt>. 
-        In MyBatis-CDI it is produced by any bean with a method annotated with <tt>@Prouces</tt>.
-      </p>
+<h2>Injecting MyBatis beans<a name="Injecting_MyBatis_beans"></a></h2>
       
     
 <div class="section">
 <h3>Selecting the Factory<a name="Selecting_the_Factory"></a></h3>
       
 <p>
+        In base MyBatis, the <tt>SqlSessionFactory</tt> is built using <tt>SqlSessionFactoryBuilder</tt>. 
+        In MyBatis-CDI it is produced by any bean with a method annotated with <tt>@Prouces</tt>.
+      </p>
+
+      
+<p>
         MyBatis-CDI lets you have more than one <tt>SqlSessionFactory</tt> and you can choose the one you want to use
         in any injection point by using:
       </p>
+      
       
 <ul>
         
@@ -160,7 +162,7 @@
         
 <li>The name of the <tt>SqlSessionFactory</tt></li>
         
-<li>A combination or both</li>
+<li>Any paranoic combination or both</li>
       </ul>
 	</div>      
       
@@ -177,17 +179,11 @@
         
 <div class="source">
 <pre>
-  @ApplicationScoped
-  @Produces
-  @OneQualifier
-  public SqlSessionFactory createManagerOne() throws IOException {
+  @ApplicationScoped  @Produces  @OneQualifier  public SqlSessionFactory createManagerOne() throws IOException {
     ...
   }
   
-  @ApplicationScoped
-  @Produces
-  @OtherQualifier
-  public SqlSessionFactory createManagerTwo() throws IOException {
+  @ApplicationScoped  @Produces  @OtherQualifier  public SqlSessionFactory createManagerTwo() throws IOException {
     ...
   }</pre></div>
     
@@ -205,11 +201,11 @@
       
     
 <div class="section">
-<h3>Selecting a Factory by using its name<a name="Selecting_a_Factory_by_using_its_name"></a></h3>
+<h3>Selecting a Factory by its name<a name="Selecting_a_Factory_by_its_name"></a></h3>
     
       
 <p>
-        You can also give a name to your <tt>SqlSessionFactory</tt> and refert to its name in a injection point:
+        You can also give a name to your <tt>SqlSessionFactory</tt> and refer to it by its name in a injection point:
       </p>
 
         
