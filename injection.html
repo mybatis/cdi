@@ -142,12 +142,70 @@
       
     
 <div class="section">
-<h3>Selecting the Factory<a name="Selecting_the_Factory"></a></h3>
+<h3>Injecting a mapper<a name="Injecting_a_mapper"></a></h3>
+
       
 <p>
         In base MyBatis, the <tt>SqlSessionFactory</tt> is built using <tt>SqlSessionFactoryBuilder</tt>. 
         In MyBatis-CDI it is produced by any bean with a method annotated with <tt>@Produces</tt>.
       </p>
+      
+        
+<div class="source">
+<pre>
+import javax.enterprise.inject.Produces;
+import org.apache.ibatis.session.SqlSessionFactory;
+        
+@ApplicationScoped
+public class SqlSessionFactoryProvider {
+
+  @Produces
+  public SqlSessionFactory produceFactory() {
+    SqlSessionFactory factory = create the factory instance ....
+    return factory;
+  }
+
+}</pre></div>      
+      
+      
+<p>
+        During the initialization process MyBatis-CDI will look for injection points annotated with <tt>@Mapper</tt>
+        like the following:
+      </p>
+      
+        
+<div class="source">
+<pre>
+import javax.inject.Inject;
+import org.mybatis.cdi.Mapper;
+        
+public class FooServiceImpl implements FooService {
+
+@Inject @Mapper private UserMapper userMapper;
+
+public User doSomeStuff(String userId) {
+  return this.userMapper.getUser(userId);
+}</pre></div>
+
+      
+<p>
+        Then it will get an instance (a proxy in fact) of that mapper from the <tt>SqlSessionFactory</tt> registered in 
+        the CDI container and inject it into the bean. This proxy is a thread safe singleton so you should
+        not worry about its scope. 
+      </p>
+
+      
+<p>
+        Any configuration problem that may happen during the initialization process will make the module throw a 
+        <tt>MyBatisCdiConfiurationException</tt>. In fact, given that there is not much to configure, this
+        exception is only thrown when the <tt>SqlSessionFactory</tt> cannot be found.
+      </p>
+    
+    </div>
+      
+    
+<div class="section">
+<h3>Selecting the Factory<a name="Selecting_the_Factory"></a></h3>
 
       
 <p>
@@ -164,11 +222,6 @@
         
 <li>Any paranoic combination or both</li>
       </ul>
-	</div>      
-      
-    
-<div class="section">
-<h3>Selecting a Factory by using qualifiers<a name="Selecting_a_Factory_by_using_qualifiers"></a></h3>
       
       
 <p>
@@ -203,12 +256,7 @@ public SqlSessionFactory createManagerTwo() throws IOException {
 <pre>
 @Inject @Mapper @OneQualifier private UserMapper userMapper;
 </pre></div>    
-    </div>
       
-    
-<div class="section">
-<h3>Selecting a Factory by its name<a name="Selecting_a_Factory_by_its_name"></a></h3>
-    
       
 <p>
         You can also give a name to your <tt>SqlSessionFactory</tt> and refer to it by its name in a injection point:

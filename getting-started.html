@@ -188,14 +188,17 @@
         
 <div class="source">
 <pre>
+import javax.enterprise.inject.Produces;
+import org.apache.ibatis.session.SqlSessionFactory;
+        
 @ApplicationScoped
 public class SqlSessionFactoryProvider {
 
-    @Produces
-    public SqlSessionFactory produceFactory() {
-        SqlSessionFactory factory = create the factory instance ....
-        return factory;
-    }
+  @Produces
+  public SqlSessionFactory produceFactory() {
+    SqlSessionFactory factory = create the factory instance ....
+    return factory;
+  }
 
 }</pre></div>
 
@@ -218,6 +221,9 @@ public class SqlSessionFactoryProvider {
         
 <div class="source">
 <pre>
+import javax.inject.Inject;
+import org.mybatis.cdi.Mapper;
+        
 public class FooServiceImpl implements FooService {
 
 @Inject @Mapper private UserMapper userMapper;
