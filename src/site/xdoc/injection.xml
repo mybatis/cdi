@@ -32,7 +32,7 @@
     <subsection name="Selecting the Factory">
       <p>
         In base MyBatis, the <code>SqlSessionFactory</code> is built using <code>SqlSessionFactoryBuilder</code>. 
-        In MyBatis-CDI it is produced by any bean with a method annotated with <code>@Prouces</code>.
+        In MyBatis-CDI it is produced by any bean with a method annotated with <code>@Produces</code>.
       </p>
 
       <p>
@@ -114,7 +114,7 @@ public SqlSessionFactory createManager() throws IOException {
 	  
       <p><span class="label important">NOTE</span>
         MyBatis-CDI controls the lifecycle of the injected <code>SqlSession</code> so you must not call any transactional method
-        like <code>commit()</code> or <code>rollback</code>, nor any lifecycle method like <code>close()</code>.
+        like <code>commit()</code> or <code>rollback()</code>, nor any lifecycle method like <code>close()</code>.
       </p>
 	  
 	</subsection>      
