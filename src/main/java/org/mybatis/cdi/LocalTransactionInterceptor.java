@@ -16,11 +16,12 @@
 package org.mybatis.cdi;
 
 import java.util.Collection;
-import javax.enterprise.inject.spi.BeanManager;
+
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+
 import org.apache.ibatis.reflection.ExceptionUtil;
 import org.apache.ibatis.session.SqlSessionManager;
 
@@ -38,9 +39,6 @@ import org.apache.ibatis.session.SqlSessionManager;
 @Transactional
 @Interceptor
 public class LocalTransactionInterceptor {
-
-  @Inject
-  private BeanManager beanManager;
 
   @Inject
   private SqlSessionManagerRegistry registry;
