@@ -216,6 +216,16 @@ public void doSomethingInATransaction() {
       &lt;class&gt;org.mybatis.cdi.JtaTransactionInterceptor&lt;/class&gt;
    &lt;/interceptors&gt;
 &lt;/beans&gt;</pre></div>
+      
+      
+<p>
+        Note that MyBatis should be configured with the MANAGED transaction manager.
+      </p>
+
+      
+<div class="source">
+<pre>&lt;transactionManager type=&quot;MANAGED&quot; /&gt;</pre></div>
+      
 	</div>
 	
     

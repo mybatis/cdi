@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2013-12-21T11:41:57.951">
+<pmd version="4.3" timestamp="2013-12-21T12:17:33.173">
 <file name="/home/eduardo/git/cdi/src/main/java/org/mybatis/cdi/Mapper.java">
 <violation beginline="16" endline="37" begincolumn="1" endcolumn="2" rule="TooManyStaticImports" ruleset="Import Statement Rules" package="org.mybatis.cdi" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#TooManyStaticImports" priority="3">
 Too many static imports may lead to messy code
