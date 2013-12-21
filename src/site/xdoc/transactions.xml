@@ -35,7 +35,7 @@
            
       <p>
         By default, each method call will use an isolated session but if you want to enclose many method calls in a transaction, 
-        annotated the method with <code>@Transactional</code>.
+        annotate the method with <code>@Transactional</code>.
       </p>
       
         <source><![CDATA[@Transactional

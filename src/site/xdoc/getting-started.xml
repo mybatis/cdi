@@ -86,7 +86,7 @@ public class SqlSessionFactoryProvider {
 } ]]></source>
 
       <p>
-        You can inject it into a CDI bean by adding the annotation <code>@Mapper</code> to the injection point:
+        You can inject it into a CDI bean by adding the <code>@Mapper</code> annotation to the injection point:
       </p>
 
         <source><![CDATA[
