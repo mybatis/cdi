@@ -47,7 +47,7 @@ public void doSomethingInATransaction() {
 }]]></source>
 
       <p><span class="label important">NOTE</span>
-        Batch statements are held in the transactional context so you must use the @Transactional attribute to use the batch executor.
+        Batch statements are held in the transactional context so you must use the <code>@Transactional</code> attribute to use the batch executor.
       </p>
       
       <p>
@@ -93,7 +93,7 @@ public void doSomethingInATransaction() {
 </beans>]]></source>
       
       <p>
-        And configuring MyBatis to to use the MANAGED transaction manager in mybatis-config.xml file.
+        And configure MyBatis to to use the MANAGED transaction manager in mybatis-config.xml file.
       </p>
 
       <source><![CDATA[<transactionManager type="MANAGED" />]]></source>

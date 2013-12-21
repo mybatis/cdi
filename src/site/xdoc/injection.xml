@@ -147,7 +147,7 @@ public SqlSessionFactory createManager() throws IOException {
       
     <subsection name="Injecting an SqlSession">
 
-	  <p>You can also inject an <code>SqlSession</code> by requesting its injection as follows:</p>
+	  <p>You can inject an <code>SqlSession</code> by requesting its injection as follows:</p>
 	  
         <source><![CDATA[
 @Inject private SqlSession sqlSession;
