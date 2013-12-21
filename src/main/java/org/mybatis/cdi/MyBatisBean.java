@@ -36,9 +36,9 @@ import org.apache.ibatis.session.SqlSessionManager;
 /**
  * Internal CDI metadata for a mapper bean.
  *
- * @author Frank David Martínez
+ * @author Frank D. Martinez [mnesarco]
  */
-public class MapperBean implements Bean {
+public class MyBatisBean implements Bean {
 
   private final Class type;
 
@@ -48,7 +48,7 @@ public class MapperBean implements Bean {
 
   private final String sqlSessionFactoryName;
   
-  public MapperBean(Class type, Set<Annotation> qualifiers, String sqlSessionFactoryName, BeanManager beanManager) {  
+  public MyBatisBean(Class type, Set<Annotation> qualifiers, String sqlSessionFactoryName, BeanManager beanManager) {  
     this.type = type;
     this.sqlSessionFactoryName = sqlSessionFactoryName;
     this.beanManager = beanManager;    
