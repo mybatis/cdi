@@ -20,6 +20,7 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.Any;
@@ -27,6 +28,8 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
+
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionManager;
 
@@ -99,7 +102,7 @@ public class MapperBean implements Bean {
 
   public Object create(CreationalContext creationalContext) {
     SqlSessionManager manager = findSqlSessionManager(creationalContext);
-    return manager.getMapper(type);
+    return SqlSession.class.equals(type) ? manager : manager.getMapper(type);
   }
 
   public void destroy(Object instance, CreationalContext creationalContext) {

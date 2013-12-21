@@ -19,10 +19,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.interceptor.Interceptors;
 
+import org.apache.ibatis.session.SqlSession;
+
 @Interceptors(LocalTransactionInterceptor.class)
 @Transactional
 public class FooService {
 
+  @Inject @Mapper @Named("manager1")
+  private SqlSession sqlSession;
+  
   @Inject @Mapper @Named("manager1")
   private UserMapper userMapper;
   
@@ -35,6 +40,10 @@ public class FooService {
   @Inject @Mapper @Named("manager2")
   private UserMapper dummyUserMapper;
 
+  public User getUserFromSqlSession(int userId) {
+    return this.sqlSession.selectOne("getUser", userId);
+  }
+  
   public User getUser(int userId) {
     return this.userMapper.getUser(userId);
   }

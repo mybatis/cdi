@@ -27,6 +27,8 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.InjectionTarget;
 import javax.enterprise.inject.spi.ProcessInjectionTarget;
 
+import org.apache.ibatis.session.SqlSession;
+
 /**
  * MyBatis CDI extension
  *
@@ -41,7 +43,7 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
   public <X> void processInjectionTarget(@Observes ProcessInjectionTarget<X> event) {
     final InjectionTarget<X> it = event.getInjectionTarget();
     for (final InjectionPoint ip : it.getInjectionPoints()) {
-      if (ip.getAnnotated().isAnnotationPresent(Mapper.class)) {
+      if (ip.getAnnotated().isAnnotationPresent(Mapper.class) || SqlSession.class.equals(ip.getAnnotated().getBaseType())) {
         mappers.add(new MapperBeanKey(
           (Class<?>) ip.getAnnotated().getBaseType(),
           ip.getAnnotated().getAnnotations()));
