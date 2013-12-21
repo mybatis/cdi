@@ -179,13 +179,19 @@
         
 <div class="source">
 <pre>
-  @ApplicationScoped  @Produces  @OneQualifier  public SqlSessionFactory createManagerOne() throws IOException {
-    ...
-  }
+@ApplicationScoped  
+@Produces
+@OneQualifier
+public SqlSessionFactory createManagerOne() throws IOException {
+  ...
+}
   
-  @ApplicationScoped  @Produces  @OtherQualifier  public SqlSessionFactory createManagerTwo() throws IOException {
-    ...
-  }</pre></div>
+@ApplicationScoped
+@Produces
+@OtherQualifier
+public SqlSessionFactory createManagerTwo() throws IOException {
+  ...
+}</pre></div>
     
       
 <p>
@@ -211,12 +217,12 @@
         
 <div class="source">
 <pre>
-  @ApplicationScoped
-  @Produces
-  @Named(&quot;fooManager&quot;)
-  public SqlSessionFactory createManager() throws IOException {
-    ...
-  }
+@ApplicationScoped
+@Produces
+@Named(&quot;fooManager&quot;)
+public SqlSessionFactory createManager() throws IOException {
+  ...
+}
 </pre></div>
       
       
