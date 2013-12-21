@@ -29,8 +29,6 @@
   <body>
     <section name="Injecting MyBatis beans">
       
-    <subsection name="Injecting a mapper">
-
       <p>
         Create a singleton or application scoped bean with a <code>@Producer</code> annotated method that 
         provides an <code>SqlSessionFactory</code>: 
@@ -83,8 +81,6 @@ public User doSomeStuff(String userId) {
         <code>MyBatisCdiConfiurationException</code>. In fact, given that there is not much to configure, this
         exception is only thrown when the <code>SqlSessionFactory</code> cannot be found.
       </p>
-    
-    </subsection>
       
     <subsection name="Selecting the Factory">
 
