@@ -55,13 +55,19 @@
       </p>
 
         <source><![CDATA[
-  @ApplicationScoped  @Produces  @OneQualifier  public SqlSessionFactory createManagerOne() throws IOException {
-    ...
-  }
+@ApplicationScoped  
+@Produces
+@OneQualifier
+public SqlSessionFactory createManagerOne() throws IOException {
+  ...
+}
   
-  @ApplicationScoped  @Produces  @OtherQualifier  public SqlSessionFactory createManagerTwo() throws IOException {
-    ...
-  }]]></source>
+@ApplicationScoped
+@Produces
+@OtherQualifier
+public SqlSessionFactory createManagerTwo() throws IOException {
+  ...
+}]]></source>
     
       <p>
         Now that there is no ambiguity you can select what factory you want to inject to a bean by adding the qualifiers to it:
