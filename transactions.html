@@ -151,7 +151,7 @@
       
 <p>
         By default, each method call will use an isolated session but if you want to enclose many method calls in a transaction, 
-        annotated the method with <tt>@Transactional</tt>.
+        annotate the method with <tt>@Transactional</tt>.
       </p>
       
         
@@ -166,7 +166,7 @@ public void doSomethingInATransaction() {
 
       
 <p><span class="label important">NOTE</span>
-        Batch statements are held in the transactional context so you must use the @Transactional attribute to use the batch executor.
+        Batch statements are held in the transactional context so you must use the <tt>@Transactional</tt> attribute to use the batch executor.
       </p>
       
       
@@ -223,7 +223,7 @@ public void doSomethingInATransaction() {
       
       
 <p>
-        And configuring MyBatis to to use the MANAGED transaction manager in mybatis-config.xml file.
+        And configure MyBatis to to use the MANAGED transaction manager in mybatis-config.xml file.
       </p>
 
       
