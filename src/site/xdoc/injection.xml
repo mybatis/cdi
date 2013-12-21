@@ -85,12 +85,12 @@ public SqlSessionFactory createManagerTwo() throws IOException {
       </p>
 
         <source><![CDATA[
-  @ApplicationScoped
-  @Produces
-  @Named("fooManager")
-  public SqlSessionFactory createManager() throws IOException {
-    ...
-  }
+@ApplicationScoped
+@Produces
+@Named("fooManager")
+public SqlSessionFactory createManager() throws IOException {
+  ...
+}
 ]]></source>
       
       <p>And inject it as follows:
