@@ -32,21 +32,25 @@
     <subsection name="Injecting a mapper">
 
       <p>
-        In base MyBatis, the <code>SqlSessionFactory</code> is built using <code>SqlSessionFactoryBuilder</code>. 
-        In MyBatis-CDI it is produced by any bean with a method annotated with <code>@Produces</code>.
+        Create a singleton or application scoped bean with a <code>@Producer</code> annotated method that 
+        provides an <code>SqlSessionFactory</code>: 
       </p>
       
         <source><![CDATA[
 import javax.enterprise.inject.Produces;
+import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
-        
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
 @ApplicationScoped
 public class SqlSessionFactoryProvider {
 
   @Produces
   public SqlSessionFactory produceFactory() {
-    SqlSessionFactory factory = create the factory instance ....
-    return factory;
+    String resource = "org/mybatis/example/mybatis-config.xml";
+    InputStream inputStream = Resources.getResourceAsStream(resource);
+    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+    return sqlSessionFactory;
   }
 
 }]]></source>      
