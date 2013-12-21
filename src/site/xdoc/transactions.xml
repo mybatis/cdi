@@ -91,6 +91,13 @@ public void doSomethingInATransaction() {
       <class>org.mybatis.cdi.JtaTransactionInterceptor</class>
    </interceptors>
 </beans>]]></source>
+      
+      <p>
+        Note that MyBatis should be configured with the MANAGED transaction manager.
+      </p>
+
+      <source><![CDATA[<transactionManager type="MANAGED" />]]></source>
+      
 	</subsection>
 	
     <subsection name="The @Transactional annotation">
