@@ -7,12 +7,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="Eduardo Macarron" />
     <meta name="author" content="Frank Martinez" />
+    <meta name="author" content="Eduardo Macarron" />
     <meta name="Date-Revision-yyyymmdd" content="20131221" />
     <meta http-equiv="Content-Language" content="en" />
     <title>MyBatis - 
-    MyBatis-CDI | Introduction</title>
+    MyBatis-CDI | SqlSessionFactory</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.3.0.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -62,10 +62,12 @@
                 <ul class="nav nav-list">
                     <li class="nav-header">Reference Documentation</li>
                                 
-      <li class="active">
+      <li>
     
-            <a href="#"><i class="none"></i>Introduction</a>
-          </li>
+                          <a href="index.html" title="Introduction">
+          <i class="none"></i>
+        Introduction</a>
+            </li>
                   
       <li>
     
@@ -74,12 +76,10 @@
         Getting Started</a>
             </li>
                   
-      <li>
+      <li class="active">
     
-                          <a href="injection.html" title="Injecting beans">
-          <i class="none"></i>
-        Injecting beans</a>
-            </li>
+            <a href="#"><i class="none"></i>Injecting beans</a>
+          </li>
                   
       <li>
     
@@ -88,104 +88,13 @@
         Transactions</a>
             </li>
                               <li class="nav-header">Project Documentation</li>
-                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                          
       <li>
     
                           <a href="project-info.html" title="Project Information">
-          <i class="icon-chevron-down"></i>
+          <i class="icon-chevron-right"></i>
         Project Information</a>
-                    <ul class="nav nav-list">
-                      
-      <li class="active">
-    
-            <a href="#"><i class="none"></i>About</a>
-          </li>
-                      
-      <li>
-    
-                          <a href="plugin-management.html" title="Plugin Management">
-          <i class="none"></i>
-        Plugin Management</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="distribution-management.html" title="Distribution Management">
-          <i class="none"></i>
-        Distribution Management</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="dependency-info.html" title="Dependency Information">
-          <i class="none"></i>
-        Dependency Information</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="source-repository.html" title="Source Repository">
-          <i class="none"></i>
-        Source Repository</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="mail-lists.html" title="Mailing Lists">
-          <i class="none"></i>
-        Mailing Lists</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="issue-tracking.html" title="Issue Tracking">
-          <i class="none"></i>
-        Issue Tracking</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="integration.html" title="Continuous Integration">
-          <i class="none"></i>
-        Continuous Integration</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="plugins.html" title="Project Plugins">
-          <i class="none"></i>
-        Project Plugins</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="license.html" title="Project License">
-          <i class="none"></i>
-        Project License</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="team-list.html" title="Project Team">
-          <i class="none"></i>
-        Project Team</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="project-summary.html" title="Project Summary">
-          <i class="none"></i>
-        Project Summary</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="dependencies.html" title="Dependencies">
-          <i class="none"></i>
-        Dependencies</a>
-            </li>
-              </ul>
-        </li>
+                  </li>
                                                                                                                                                                                                                                       
       <li>
     
@@ -228,60 +137,129 @@
   limitations under the License. --><!-- version: $Id$ -->
 
   
- <div class="section">
-<h2>Introduction<a name="Introduction"></a></h2>
-  
-<div class="section">
-<h3>What is MyBatis-CDI?<a name="What_is_MyBatis-CDI"></a></h3>
+    <div class="section">
+<h2>SqlSessionFactory<a name="SqlSessionFactory"></a></h2>
       
 <p>
-      MyBatis-CDI extension takes care of the lifecycle of the MyBatis mappers and <tt>SqlSession</tt>s. MyBatis components 
-      ared directly injected into your CDI beans and ready to be used. There is no need to create or destroy them.  
-      It also provides local and XA transactions support based on the <tt>@Transactional</tt> interceptor.
+        In base MyBatis, the <tt>SqlSessionFactory</tt> is built using <tt>SqlSessionFactoryBuilder</tt>. 
+        In MyBatis-CDI it is produced by any bean with a method annotated with <tt>@Prouces</tt>.
       </p>
-  </div>
-
-  
+      
+    
 <div class="section">
-<h3>Requirements<a name="Requirements"></a></h3>
-    
+<h3>Selecting the Factory<a name="Selecting_the_Factory"></a></h3>
+      
 <p>
-      Before starting with MyBatis-CDI integration, it is very important
-      that you are familiar with both MyBatis and CDI terminology. This
-      document does not attempt to provide background information or basic
-      setup and configuration tutorials for either MyBatis or CDI.
-    </p>
+        MyBatis-CDI lets you have more than one <tt>SqlSessionFactory</tt> and you can choose the one you want to use
+        in any injection point by using:
+      </p>
+      
+<ul>
+        
+<li>One or more qualifiers</li>
+        
+<li>The name of the <tt>SqlSessionFactory</tt></li>
+        
+<li>A combination or both</li>
+      </ul>
+	</div>      
+      
     
-<p>
-      MyBatis-CDI requires Java EE 6 or higher and any MyBatis version.
-    </p>
-  </div>
-
-  
 <div class="section">
-<h3>Help make this documentation better&#x2026;<a name="Help_make_this_documentation_better"></a></h3>
-    
+<h3>Selecting a Factory by using qualifiers<a name="Selecting_a_Factory_by_using_qualifiers"></a></h3>
+      
+      
 <p>
-      If you find this documentation lacking in any way, or missing
-      documentation for a feature, then the best thing to do is learn
-      about it and then write the documentation yourself!
-    </p>
+        If you have more than one <tt>SqlSessionFactory</tt>s you can differentiate them by adding qualifiers as you would
+        do with any other CDI bean:
+      </p>
+
+        
+<div class="source">
+<pre>
+  @ApplicationScoped
+  @Produces
+  @OneQualifier
+  public SqlSessionFactory createManagerOne() throws IOException {
+    ...
+  }
+  
+  @ApplicationScoped
+  @Produces
+  @OtherQualifier
+  public SqlSessionFactory createManagerTwo() throws IOException {
+    ...
+  }</pre></div>
     
+      
 <p>
-      Sources of this manual are available in xdoc format at
-      <a class="externalLink" href="https://github.com/mybatis/spring/tree/master/src/site">project's Git </a>
-      Fork the repository, update them and send a pull request.
-    </p>
+        Now that there is no ambiguity you can select what factory you want to inject to a bean by adding the qualifiers to it:
+      </p>
     
+        
+<div class="source">
+<pre>
+@Inject @Mapper @OneQualifier private UserMapper userMapper;
+</pre></div>    
+    </div>
+      
+    
+<div class="section">
+<h3>Selecting a Factory by using its name<a name="Selecting_a_Factory_by_using_its_name"></a></h3>
+    
+      
 <p>
-      You&#x2019;re the best author of this documentation, people like you have
-      to read it!
-    </p>
-  </div>
+        You can also give a name to your <tt>SqlSessionFactory</tt> and refert to its name in a injection point:
+      </p>
 
-</div>
+        
+<div class="source">
+<pre>
+  @ApplicationScoped
+  @Produces
+  @Named(&quot;fooManager&quot;)
+  public SqlSessionFactory createManager() throws IOException {
+    ...
+  }
+</pre></div>
+      
+      
+<p>And inject it as follows:
+      </p>
+      
+        
+<div class="source">
+<pre>
+@Inject @Mapper @Named(&quot;fooManager&quot;) private UserMapper userMapper;
+</pre></div>    
+      
+      </div>
+      
+    
+<div class="section">
+<h3>Injecting an SqlSession<a name="Injecting_an_SqlSession"></a></h3>
 
+	  
+<p>You can also inject an <tt>SqlSession</tt> by requesting its injection as follows:</p>
+	  
+        
+<div class="source">
+<pre>
+@Inject private SqlSession sqlSession;
+</pre></div>    
 
+	  
+<p>The factory selection criteria we saw for mappers apply also to <tt>SqlSession</tt> injection.</p>
+	  
+      
+<p><span class="label important">NOTE</span>
+        MyBatis-CDI controls the lifecycle of the injected <tt>SqlSession</tt> so you must not call any transactional method
+        like <tt>commit()</tt> or <tt>rollback</tt>, nor any lifecycle method like <tt>close()</tt>.
+      </p>
+	  
+	</div>      
+    </div>
+  
 
                   </div>
             </div>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.3" timestamp="2013-12-21T11:06:00.433">
+<file name="/home/eduardo/git/cdi/src/main/java/org/mybatis/cdi/LocalTransactionInterceptor.java">
+<violation beginline="43" endline="43" begincolumn="23" endcolumn="33" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.mybatis.cdi" class="LocalTransactionInterceptor" variable="beanManager" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'beanManager'.
+</violation>
+</file>
+<file name="/home/eduardo/git/cdi/src/main/java/org/mybatis/cdi/Mapper.java">
+<violation beginline="16" endline="39" begincolumn="1" endcolumn="2" rule="TooManyStaticImports" ruleset="Import Statement Rules" package="org.mybatis.cdi" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#TooManyStaticImports" priority="3">
+Too many static imports may lead to messy code
+</violation>
+<violation beginline="28" endline="28" begincolumn="1" endcolumn="44" rule="UnusedImports" ruleset="Import Statement Rules" package="org.mybatis.cdi" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.interceptor.InterceptorBinding'
+</violation>
+</file>
+</pmd>

@@ -7,12 +7,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="Eduardo Macarron" />
     <meta name="author" content="Frank Martinez" />
+    <meta name="author" content="Eduardo Macarron" />
     <meta name="Date-Revision-yyyymmdd" content="20131221" />
     <meta http-equiv="Content-Language" content="en" />
     <title>MyBatis - 
-    MyBatis-CDI | Introduction</title>
+    MyBatis-CDI | Getting Started</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.3.0.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -62,17 +62,17 @@
                 <ul class="nav nav-list">
                     <li class="nav-header">Reference Documentation</li>
                                 
-      <li class="active">
-    
-            <a href="#"><i class="none"></i>Introduction</a>
-          </li>
-                  
       <li>
     
-                          <a href="getting-started.html" title="Getting Started">
+                          <a href="index.html" title="Introduction">
           <i class="none"></i>
-        Getting Started</a>
+        Introduction</a>
             </li>
+                  
+      <li class="active">
+    
+            <a href="#"><i class="none"></i>Getting Started</a>
+          </li>
                   
       <li>
     
@@ -88,104 +88,13 @@
         Transactions</a>
             </li>
                               <li class="nav-header">Project Documentation</li>
-                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                          
       <li>
     
                           <a href="project-info.html" title="Project Information">
-          <i class="icon-chevron-down"></i>
+          <i class="icon-chevron-right"></i>
         Project Information</a>
-                    <ul class="nav nav-list">
-                      
-      <li class="active">
-    
-            <a href="#"><i class="none"></i>About</a>
-          </li>
-                      
-      <li>
-    
-                          <a href="plugin-management.html" title="Plugin Management">
-          <i class="none"></i>
-        Plugin Management</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="distribution-management.html" title="Distribution Management">
-          <i class="none"></i>
-        Distribution Management</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="dependency-info.html" title="Dependency Information">
-          <i class="none"></i>
-        Dependency Information</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="source-repository.html" title="Source Repository">
-          <i class="none"></i>
-        Source Repository</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="mail-lists.html" title="Mailing Lists">
-          <i class="none"></i>
-        Mailing Lists</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="issue-tracking.html" title="Issue Tracking">
-          <i class="none"></i>
-        Issue Tracking</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="integration.html" title="Continuous Integration">
-          <i class="none"></i>
-        Continuous Integration</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="plugins.html" title="Project Plugins">
-          <i class="none"></i>
-        Project Plugins</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="license.html" title="Project License">
-          <i class="none"></i>
-        Project License</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="team-list.html" title="Project Team">
-          <i class="none"></i>
-        Project Team</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="project-summary.html" title="Project Summary">
-          <i class="none"></i>
-        Project Summary</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="dependencies.html" title="Dependencies">
-          <i class="none"></i>
-        Dependencies</a>
-            </li>
-              </ul>
-        </li>
+                  </li>
                                                                                                                                                                                                                                       
       <li>
     
@@ -228,60 +137,107 @@
   limitations under the License. --><!-- version: $Id$ -->
 
   
- <div class="section">
-<h2>Introduction<a name="Introduction"></a></h2>
-  
-<div class="section">
-<h3>What is MyBatis-CDI?<a name="What_is_MyBatis-CDI"></a></h3>
+    <div class="section">
+<h2>Getting Started<a name="Getting_Started"></a></h2>
       
 <p>
-      MyBatis-CDI extension takes care of the lifecycle of the MyBatis mappers and <tt>SqlSession</tt>s. MyBatis components 
-      ared directly injected into your CDI beans and ready to be used. There is no need to create or destroy them.  
-      It also provides local and XA transactions support based on the <tt>@Transactional</tt> interceptor.
+        This chapter will show you in a few steps how to install and setup
+        MyBatis-CDI and how to build a simple transactional application.
       </p>
-  </div>
 
-  
+    
 <div class="section">
-<h3>Requirements<a name="Requirements"></a></h3>
-    
+<h3>Installation<a name="Installation"></a></h3>
+      
 <p>
-      Before starting with MyBatis-CDI integration, it is very important
-      that you are familiar with both MyBatis and CDI terminology. This
-      document does not attempt to provide background information or basic
-      setup and configuration tutorials for either MyBatis or CDI.
-    </p>
-    
+        To use the MyBatis-CDI module, you just need to include the
+        <tt>
+          mybatis-cdi-x.x.x.jar
+        </tt>
+        file and its dependencies in the classpath.
+      </p>
+      
 <p>
-      MyBatis-CDI requires Java EE 6 or higher and any MyBatis version.
-    </p>
-  </div>
+        If you are using Maven just add the following dependency
+        to your
+        pom.xml:
+      </p>
+        
+<div class="source">
+<pre>
+&lt;dependency&gt;
+  &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
+  &lt;artifactId&gt;mybatis-cdi&lt;/artifactId&gt;
+  &lt;version&gt;x.x.x&lt;/version&gt;
+&lt;/dependency&gt;</pre></div>
+    </div>
 
-  
+    
 <div class="section">
-<h3>Help make this documentation better&#x2026;<a name="Help_make_this_documentation_better"></a></h3>
+<h3>Quick Setup<a name="Quick_Setup"></a></h3>
     
-<p>
-      If you find this documentation lacking in any way, or missing
-      documentation for a feature, then the best thing to do is learn
-      about it and then write the documentation yourself!
-    </p>
+      
+<p>First, switch CDI on by adding a <tt>beans.xml</tt> file to your <tt>META-INF</tt> directory.
+      </p>
     
+      
 <p>
-      Sources of this manual are available in xdoc format at
-      <a class="externalLink" href="https://github.com/mybatis/spring/tree/master/src/site">project's Git </a>
-      Fork the repository, update them and send a pull request.
-    </p>
-    
+        Now, to use MyBatis with CDI you need to provide at least two things: 
+        an <tt>SqlSessionFactory</tt> and a CDI bean that requires a MyBatis mapper injection.
+      </p>
+
+      
 <p>
-      You&#x2019;re the best author of this documentation, people like you have
-      to read it!
-    </p>
-  </div>
+        Create a singleton or application scoped bean to provide your <tt>SqlSessionFactory</tt>:
+      </p>
 
-</div>
+        
+<div class="source">
+<pre>
+@ApplicationScoped
+public class SqlSessionFactoryProvider {
 
+    @Produces
+    public SqlSessionFactory produceFactory() {
+        SqlSessionFactory factory = create the factory instance ....
+        return factory;
+    }
 
+}</pre></div>
+
+      
+<p>
+        Assume you have a mapper interface defined like the following:
+      </p>
+        
+<div class="source">
+<pre>public interface UserMapper {
+  @Select(&quot;SELECT * FROM users WHERE id = #{userId}&quot;)
+  User getUser(@Param(&quot;userId&quot;) String userId);
+} </pre></div>
+
+      
+<p>
+        You can inject it into a CDI bean by adding the annotation <tt>@Mapper</tt> to the injection point:
+      </p>
+
+        
+<div class="source">
+<pre>
+public class FooServiceImpl implements FooService {
+
+@Inject @Mapper private UserMapper userMapper;
+
+public void setUserMapper(UserMapper userMapper) {
+  this.userMapper = userMapper;
+}
+
+public User doSomeBusinessStuff(String userId) {
+  return this.userMapper.getUser(userId);
+}</pre></div>
+      </div>
+    </div>
+  
 
                   </div>
             </div>
