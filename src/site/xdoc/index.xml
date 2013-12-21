@@ -57,7 +57,7 @@
     </p>
     <p>
       Sources of this manual are available in xdoc format at
-      <a href="https://github.com/mybatis/spring/tree/master/src/site">project's Git </a>
+      <a href="https://github.com/mybatis/cdi/tree/master/src/site">project's Git </a>
       Fork the repository, update them and send a pull request.
     </p>
     <p>
