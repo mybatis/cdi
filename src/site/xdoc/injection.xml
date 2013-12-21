@@ -29,11 +29,60 @@
   <body>
     <section name="Injecting MyBatis beans">
       
-    <subsection name="Selecting the Factory">
+    <subsection name="Injecting a mapper">
+
       <p>
         In base MyBatis, the <code>SqlSessionFactory</code> is built using <code>SqlSessionFactoryBuilder</code>. 
         In MyBatis-CDI it is produced by any bean with a method annotated with <code>@Produces</code>.
       </p>
+      
+        <source><![CDATA[
+import javax.enterprise.inject.Produces;
+import org.apache.ibatis.session.SqlSessionFactory;
+        
+@ApplicationScoped
+public class SqlSessionFactoryProvider {
+
+  @Produces
+  public SqlSessionFactory produceFactory() {
+    SqlSessionFactory factory = create the factory instance ....
+    return factory;
+  }
+
+}]]></source>      
+      
+      <p>
+        During the initialization process MyBatis-CDI will look for injection points annotated with <code>@Mapper</code>
+        like the following:
+      </p>
+      
+        <source><![CDATA[
+import javax.inject.Inject;
+import org.mybatis.cdi.Mapper;
+        
+public class FooServiceImpl implements FooService {
+
+@Inject @Mapper private UserMapper userMapper;
+
+public User doSomeStuff(String userId) {
+  return this.userMapper.getUser(userId);
+}]]></source>
+
+      <p>
+        Then it will get an instance (a proxy in fact) of that mapper from the <code>SqlSessionFactory</code> registered in 
+        the CDI container and inject it into the bean. This proxy is a thread safe singleton so you should
+        not worry about its scope. 
+      </p>
+
+      <p>
+        Any configuration problem that may happen during the initialization process will make the module throw a 
+        <code>MyBatisCdiConfiurationException</code>. In fact, given that there is not much to configure, this
+        exception is only thrown when the <code>SqlSessionFactory</code> cannot be found.
+      </p>
+    
+    </subsection>
+      
+    <subsection name="Selecting the Factory">
 
       <p>
         MyBatis-CDI lets you have more than one <code>SqlSessionFactory</code> and you can choose the one you want to use
@@ -45,9 +94,6 @@
         <li>The name of the <code>SqlSessionFactory</code></li>
         <li>Any paranoic combination or both</li>
       </ul>
-	</subsection>      
-      
-    <subsection name="Selecting a Factory by using qualifiers">
       
       <p>
         If you have more than one <code>SqlSessionFactory</code>s you can differentiate them by adding qualifiers as you would
@@ -78,8 +124,6 @@ public SqlSessionFactory createManagerTwo() throws IOException {
 ]]></source>    
     </subsection>
       
-    <subsection name="Selecting a Factory by its name">
-    
       <p>
         You can also give a name to your <code>SqlSessionFactory</code> and refer to it by its name in a injection point:
       </p>
