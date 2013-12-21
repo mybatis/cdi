@@ -144,29 +144,29 @@
     <div class="section">
 <h2>Injecting MyBatis beans<a name="Injecting_MyBatis_beans"></a></h2>
       
-    
-<div class="section">
-<h3>Injecting a mapper<a name="Injecting_a_mapper"></a></h3>
-
       
 <p>
-        In base MyBatis, the <tt>SqlSessionFactory</tt> is built using <tt>SqlSessionFactoryBuilder</tt>. 
-        In MyBatis-CDI it is produced by any bean with a method annotated with <tt>@Produces</tt>.
+        Create a singleton or application scoped bean with a <tt>@Producer</tt> annotated method that 
+        provides an <tt>SqlSessionFactory</tt>: 
       </p>
       
         
 <div class="source">
 <pre>
 import javax.enterprise.inject.Produces;
+import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
-        
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
 @ApplicationScoped
 public class SqlSessionFactoryProvider {
 
   @Produces
   public SqlSessionFactory produceFactory() {
-    SqlSessionFactory factory = create the factory instance ....
-    return factory;
+    String resource = &quot;org/mybatis/example/mybatis-config.xml&quot;;
+    InputStream inputStream = Resources.getResourceAsStream(resource);
+    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+    return sqlSessionFactory;
   }
 
 }</pre></div>      
@@ -204,8 +204,6 @@ public User doSomeStuff(String userId) {
         <tt>MyBatisCdiConfiurationException</tt>. In fact, given that there is not much to configure, this
         exception is only thrown when the <tt>SqlSessionFactory</tt> cannot be found.
       </p>
-    
-    </div>
       
     
 <div class="section">
