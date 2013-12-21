@@ -153,11 +153,6 @@
         
 <div class="source">
 <pre>
-import javax.enterprise.inject.Produces;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-
 @ApplicationScoped
 public class SqlSessionFactoryProvider {
 
@@ -180,9 +175,6 @@ public class SqlSessionFactoryProvider {
         
 <div class="source">
 <pre>
-import javax.inject.Inject;
-import org.mybatis.cdi.Mapper;
-        
 public class FooServiceImpl implements FooService {
 
 @Inject @Mapper private UserMapper userMapper;
