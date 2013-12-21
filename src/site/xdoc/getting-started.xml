@@ -29,22 +29,16 @@
   <body>
     <section name="Getting Started">
       <p>
-        This chapter will show you in a few steps how to install and setup
-        MyBatis-CDI and how to build a simple transactional application.
+        This chapter will show you in a few steps how to install and setup MyBatis-CDI.
       </p>
 
     <subsection name="Installation">
       <p>
-        To use the MyBatis-CDI module, you just need to include the
-        <code>
-          mybatis-cdi-x.x.x.jar
-        </code>
+        To use the MyBatis-CDI module, you just need to include the <code>mybatis-cdi-x.x.x.jar</code> 
         file and its dependencies in the classpath.
       </p>
       <p>
-        If you are using Maven just add the following dependency
-        to your
-        pom.xml:
+        If you are using Maven just add the following dependency to your pom.xml:
       </p>
         <source><![CDATA[
 <dependency>
@@ -60,12 +54,12 @@
       </p>
     
       <p>
-        Now, to use MyBatis with CDI you need to provide at least two things: 
+        Next, to use MyBatis with CDI you need to provide at least two things: 
         an <code>SqlSessionFactory</code> and a CDI bean that requires a MyBatis mapper injection.
       </p>
 
       <p>
-        Create a singleton or application scoped bean to provide your <code>SqlSessionFactory</code>:
+        Create a singleton or application scoped bean to provide an <code>SqlSessionFactory</code>:
       </p>
 
         <source><![CDATA[
@@ -97,11 +91,7 @@ public class FooServiceImpl implements FooService {
 
 @Inject @Mapper private UserMapper userMapper;
 
-public void setUserMapper(UserMapper userMapper) {
-  this.userMapper = userMapper;
-}
-
-public User doSomeBusinessStuff(String userId) {
+public User doSomeStuff(String userId) {
   return this.userMapper.getUser(userId);
 }]]></source>
       </subsection>
