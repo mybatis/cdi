@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2013 the original author or authors.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!--  version: $Id$ -->
+
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>MyBatis-CDI | Introduction</title>
+    <author email="eduardo.macarron@gmail.com">Eduardo Macarron</author>
+    <author email="mnesarco@gmail.com">Frank Martinez</author>
+  </properties>
+
+ <body>
+ <section name="Introduction">
+  <subsection name="What is MyBatis-CDI?">
+      <p>
+      MyBatis-CDI extension takes care of the lifecycle of the MyBatis mappers and <code>SqlSession</code>s. MyBatis components 
+      ared directly injected into your CDI beans and ready to be used. There is no need to create or destroy them.  
+      It also provides local and XA transactions support based on the <code>@Transactional</code> interceptor.
+      </p>
+  </subsection>
+
+  <subsection name="Requirements">
+    <p>
+      Before starting with MyBatis-CDI integration, it is very important
+      that you are familiar with both MyBatis and CDI terminology. This
+      document does not attempt to provide background information or basic
+      setup and configuration tutorials for either MyBatis or CDI.
+    </p>
+    <p>
+      MyBatis-CDI requires Java EE 6 or higher and any MyBatis version.
+    </p>
+  </subsection>
+
+  <subsection name="Help make this documentation better…">
+    <p>
+      If you find this documentation lacking in any way, or missing
+      documentation for a feature, then the best thing to do is learn
+      about it and then write the documentation yourself!
+    </p>
+    <p>
+      Sources of this manual are available in xdoc format at
+      <a href="https://github.com/mybatis/spring/tree/master/src/site">project's Git </a>
+      Fork the repository, update them and send a pull request.
+    </p>
+    <p>
+      You’re the best author of this documentation, people like you have
+      to read it!
+    </p>
+  </subsection>
+
+</section>
+</body>
+
+</document>

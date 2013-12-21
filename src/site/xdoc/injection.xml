@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2013 the original author or authors.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!--  version: $Id$ -->
+
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>MyBatis-CDI | SqlSessionFactory</title>
+    <author email="mnesarco@gmail.com">Frank Martinez</author>
+    <author email="eduardo.macarron@gmail.com">Eduardo Macarron</author>
+  </properties>
+
+  <body>
+    <section name="SqlSessionFactory">
+      <p>
+        In base MyBatis, the <code>SqlSessionFactory</code> is built using <code>SqlSessionFactoryBuilder</code>. 
+        In MyBatis-CDI it is produced by any bean with a method annotated with <code>@Prouces</code>.
+      </p>
+      
+    <subsection name="Selecting the Factory">
+      <p>
+        MyBatis-CDI lets you have more than one <code>SqlSessionFactory</code> and you can choose the one you want to use
+        in any injection point by using:
+      </p>
+      <ul>
+        <li>One or more qualifiers</li>
+        <li>The name of the <code>SqlSessionFactory</code></li>
+        <li>A combination or both</li>
+      </ul>
+	</subsection>      
+      
+    <subsection name="Selecting a Factory by using qualifiers">
+      
+      <p>
+        If you have more than one <code>SqlSessionFactory</code>s you can differentiate them by adding qualifiers as you would
+        do with any other CDI bean:
+      </p>
+
+        <source><![CDATA[
+  @ApplicationScoped
+  @Produces
+  @OneQualifier
+  public SqlSessionFactory createManagerOne() throws IOException {
+    ...
+  }
+  
+  @ApplicationScoped
+  @Produces
+  @OtherQualifier
+  public SqlSessionFactory createManagerTwo() throws IOException {
+    ...
+  }]]></source>
+    
+      <p>
+        Now that there is no ambiguity you can select what factory you want to inject to a bean by adding the qualifiers to it:
+      </p>
+    
+        <source><![CDATA[
+@Inject @Mapper @OneQualifier private UserMapper userMapper;
+]]></source>    
+    </subsection>
+      
+    <subsection name="Selecting a Factory by using its name">
+    
+      <p>
+        You can also give a name to your <code>SqlSessionFactory</code> and refert to its name in a injection point:
+      </p>
+
+        <source><![CDATA[
+  @ApplicationScoped
+  @Produces
+  @Named("fooManager")
+  public SqlSessionFactory createManager() throws IOException {
+    ...
+  }
+]]></source>
+      
+      <p>And inject it as follows:
+      </p>
+      
+        <source><![CDATA[
+@Inject @Mapper @Named("fooManager") private UserMapper userMapper;
+]]></source>    
+      
+      </subsection>
+      
+    <subsection name="Injecting an SqlSession">
+
+	  <p>You can also inject an <code>SqlSession</code> by requesting its injection as follows:</p>
+	  
+        <source><![CDATA[
+@Inject private SqlSession sqlSession;
+]]></source>    
+
+	  <p>The factory selection criteria we saw for mappers apply also to <code>SqlSession</code> injection.</p>
+	  
+      <p><span class="label important">NOTE</span>
+        MyBatis-CDI controls the lifecycle of the injected <code>SqlSession</code> so you must not call any transactional method
+        like <code>commit()</code> or <code>rollback</code>, nor any lifecycle method like <code>close()</code>.
+      </p>
+	  
+	</subsection>      
+    </section>
+  </body>
+</document>

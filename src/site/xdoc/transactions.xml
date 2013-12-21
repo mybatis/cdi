@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2013 the original author or authors.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!--  version: $Id$ -->
+
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>MyBatis-CDI | Transactions</title>
+    <author email="mnesarco@gmail.com">Frank Martinez</author>
+    <author email="eduardo.macarron@gmail.com">Eduardo Macarron</author>
+  </properties>
+                             
+  <body>
+    <section name="Transactions">
+      <p>
+        As you may have expected, MyBatis-CDI provides annotation based transaction support.
+      </p>
+           
+      <p>
+        By default, each method call will use an isolated session but if you want to enclose many method calls in a transaction, 
+        annotated the method with <code>@Transactional</code>
+      </p>
+      
+        <source><![CDATA[@Transactional
+public void doSomethingInATransaction() {
+  ...
+  mapper.insertMyBean(...);
+  mapper.updateMyBean(...);
+  ...  
+}]]></source>
+
+      <p><span class="label important">NOTE</span>
+        Batch statements are held in the transactional context so you must use the @Transactional attribute to use the batch executor.
+      </p>
+      
+      <p>
+        To enable transactions you need to activate the local transaction interceptor in beans.xml:
+      </p>
+
+      <source><![CDATA[<beans
+   xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="
+      http://java.sun.com/xml/ns/javaee
+      http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+   <interceptors>
+      <class>org.mybatis.cdi.LocalTransactionInterceptor</class>
+   </interceptors>
+</beans>]]></source>
+         
+      <p>
+        With this setting, MyBatis-CDI commit start a transaction before entering the transactional method and will commit it if it
+        ends with no exception, otherwise the transaction will be rolled back. 
+      </p>
+
+      <p><span class="label important">NOTE</span>
+        The local transaction interceptor uses a best-effort strategy. In case there are more than one <code>SqlSessionFactories</code>
+        it will try to commit or roll them all back one by one. <code>LocalTransactionInterceptor</code> cannot guarantee data consistency
+        in this scenario, you should use the <code>JtaTransactionInterceptor</code> instead. See the following section for the details.
+      </p>
+  
+    <subsection name="JTA Transactions">
+      <p>
+        In case you are using more than one datasource you should use the JTA transaction interceptor by configuring the beans.xml file as follows:
+      </p>
+        <source><![CDATA[<beans
+   xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="
+      http://java.sun.com/xml/ns/javaee
+      http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+   <interceptors>
+      <class>org.mybatis.cdi.JtaTransactionInterceptor</class>
+   </interceptors>
+</beans>]]></source>
+	</subsection>
+	
+    <subsection name="The @Transactional annotation">
+        <p>
+            The <code>@Transactional</code> annotation supports the following parameters:</p>
+            <table>
+                <caption>@Transactional properties</caption>
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>executorType</td>
+                        <td>ExecutorType.SIMPLE</td>
+                        <td>the MyBatis executor type</td>
+                    </tr>
+                    <tr>
+                        <td>isolation</td>
+                        <td>Isolation.DEFAULT</td>
+                        <td>the transaction isolation level.  The default value will
+                          cause MyBatis to use the default isolation level from the
+                          data source.</td>
+                    </tr>
+                    <tr>
+                        <td>force</td>
+                        <td>false</td>
+                        <td>Flag to indicate that MyBatis has to force the
+                        transaction <code>commit()</code></td>
+                    </tr>
+                    <tr>
+                        <td>rollbackOnly</td>
+                        <td>false</td>
+                        <td>If true, the transaction will never committed, but rather the rollback will be forced.
+                        That configuration is useful for testing purposes.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+      </subsection>
+    </section>
+  </body>
+</document>

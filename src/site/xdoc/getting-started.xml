@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2013 the original author or authors.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!--  version: $Id$ -->
+
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>MyBatis-CDI | Getting Started</title>
+    <author email="mnesarco@gmail.com">Frank Martinez</author>
+    <author email="eduardo.macarron@gmail.com">Eduardo Macarron</author>
+  </properties>
+
+  <body>
+    <section name="Getting Started">
+      <p>
+        This chapter will show you in a few steps how to install and setup
+        MyBatis-CDI and how to build a simple transactional application.
+      </p>
+
+    <subsection name="Installation">
+      <p>
+        To use the MyBatis-CDI module, you just need to include the
+        <code>
+          mybatis-cdi-x.x.x.jar
+        </code>
+        file and its dependencies in the classpath.
+      </p>
+      <p>
+        If you are using Maven just add the following dependency
+        to your
+        pom.xml:
+      </p>
+        <source><![CDATA[
+<dependency>
+  <groupId>org.mybatis</groupId>
+  <artifactId>mybatis-cdi</artifactId>
+  <version>x.x.x</version>
+</dependency>]]></source>
+    </subsection>
+
+    <subsection name="Quick Setup">
+    
+      <p>First, switch CDI on by adding a <code>beans.xml</code> file to your <code>META-INF</code> directory.
+      </p>
+    
+      <p>
+        Now, to use MyBatis with CDI you need to provide at least two things: 
+        an <code>SqlSessionFactory</code> and a CDI bean that requires a MyBatis mapper injection.
+      </p>
+
+      <p>
+        Create a singleton or application scoped bean to provide your <code>SqlSessionFactory</code>:
+      </p>
+
+        <source><![CDATA[
+@ApplicationScoped
+public class SqlSessionFactoryProvider {
+
+    @Produces
+    public SqlSessionFactory produceFactory() {
+        SqlSessionFactory factory = create the factory instance ....
+        return factory;
+    }
+
+}]]></source>
+
+      <p>
+        Assume you have a mapper interface defined like the following:
+      </p>
+        <source><![CDATA[public interface UserMapper {
+  @Select("SELECT * FROM users WHERE id = #{userId}")
+  User getUser(@Param("userId") String userId);
+} ]]></source>
+
+      <p>
+        You can inject it into a CDI bean by adding the annotation <code>@Mapper</code> to the injection point:
+      </p>
+
+        <source><![CDATA[
+public class FooServiceImpl implements FooService {
+
+@Inject @Mapper private UserMapper userMapper;
+
+public void setUserMapper(UserMapper userMapper) {
+  this.userMapper = userMapper;
+}
+
+public User doSomeBusinessStuff(String userId) {
+  return this.userMapper.getUser(userId);
+}]]></source>
+      </subsection>
+    </section>
+  </body>
+</document>
