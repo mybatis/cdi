@@ -93,7 +93,7 @@ public void doSomethingInATransaction() {
 </beans>]]></source>
       
       <p>
-        Note that MyBatis should be configured with the MANAGED transaction manager.
+        And configuring MyBatis to to use the MANAGED transaction manager in mybatis-config.xml file.
       </p>
 
       <source><![CDATA[<transactionManager type="MANAGED" />]]></source>
