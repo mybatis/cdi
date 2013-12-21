@@ -122,7 +122,6 @@ public SqlSessionFactory createManagerTwo() throws IOException {
         <source><![CDATA[
 @Inject @Mapper @OneQualifier private UserMapper userMapper;
 ]]></source>    
-    </subsection>
       
       <p>
         You can also give a name to your <code>SqlSessionFactory</code> and refer to it by its name in a injection point:
