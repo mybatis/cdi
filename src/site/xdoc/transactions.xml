@@ -104,7 +104,6 @@ public void doSomethingInATransaction() {
         <p>
             The <code>@Transactional</code> annotation supports the following parameters:</p>
             <table>
-                <caption>@Transactional properties</caption>
                 <thead>
                     <tr>
                         <th>Property</th>
