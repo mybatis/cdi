@@ -142,6 +142,12 @@ public void doSomethingInATransaction() {
                         <td>If true, the transaction will never be committed, but rather the rollback will be forced.
                         That configuration is useful for testing purposes.</td>
                     </tr>
+                    <tr>
+                        <td>rollbackOn</td>
+                        <td>not set</td>
+                        <td>Indicates which exception types must cause a transaction rollback. In addition
+                        to the indicated exceptions, any <code>RuntimeException</code> will also cause a rollback.</td>
+                    </tr>
                 </tbody>
             </table>
 
