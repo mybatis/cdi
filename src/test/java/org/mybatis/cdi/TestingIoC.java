@@ -47,23 +47,49 @@ public class TestingIoC {
     User user = new User();
     user.setId(20);
     user.setName("User20");
-    fooService.insertUser(user, false);
+    fooService.insertUser(user);
     Assert.assertEquals("User20", fooService.getUser(20).getName());
   }
 
   @Test
-  public void shouldInsertAUserAndRollItBack() {
+  public void shouldInsertAUserThatFailsWithRuntimeAndRollItBack() {
+    User user = new User();
+    user.setId(30);
+    user.setName("User40");
+    try {
+      fooService.insertUserAndThrowARuntime(user);
+    } catch (Exception ignore) {
+      // ignored
+    }
+    Assert.assertNull(fooService.getUser(40));
+  }
+
+  @Test
+  public void shouldInsertAUserThatFailsWithACheckedAndCommit() {
     User user = new User();
     user.setId(30);
     user.setName("User30");
     try {
-      fooService.insertUser(user, true);
+      fooService.insertUserAndThrowACheckedThatShouldNotRollback(user);
+    } catch (Exception ignore) {
+      // ignored
+    }
+    Assert.assertEquals("User30", fooService.getUser(30).getName());
+  }
+
+  @Test
+  public void shouldInsertAUserThatFailsWithACustomExceptionMarkedToRollbackAndRollItBack() {
+    User user = new User();
+    user.setId(30);
+    user.setName("User30");
+    try {
+      fooService.insertUserAndThrowACheckedThatShouldRollback(user);
     } catch (Exception ignore) {
       // ignored
     }
     Assert.assertNull(fooService.getUser(30));
   }
-
+  
   @Inject
   private FooServiceJTA fooServiceJTA;
 

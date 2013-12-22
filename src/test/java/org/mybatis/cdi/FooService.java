@@ -22,7 +22,7 @@ import javax.interceptor.Interceptors;
 import org.apache.ibatis.session.SqlSession;
 
 @Interceptors(LocalTransactionInterceptor.class)
-@Transactional
+@Transactional(rollbackFor=RollbackException.class)
 public class FooService {
 
   @Inject @Mapper @Named("manager1")
@@ -60,9 +60,23 @@ public class FooService {
     return this.userMapper3.getUser(userId);
   }
 
-  public void insertUser(User user, boolean fail) {
+  public void insertUser(User user) {
     this.userMapper.insertUser(user);
-    if (fail) throw new RuntimeException("fail");
+  }
+  
+  public void insertUserAndThrowARuntime(User user) {
+    this.userMapper.insertUser(user);
+    throw new RuntimeException("fail");
+  }
+
+  public void insertUserAndThrowACheckedThatShouldNotRollback(User user) throws NoRollbackException {
+    this.userMapper.insertUser(user);
+    throw new NoRollbackException();
+  }
+  
+  public void insertUserAndThrowACheckedThatShouldRollback(User user) throws RollbackException {
+    this.userMapper.insertUser(user);
+    throw new RollbackException();
   }
   
 }

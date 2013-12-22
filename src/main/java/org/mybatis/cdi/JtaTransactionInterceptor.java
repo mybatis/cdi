@@ -16,10 +16,7 @@
 package org.mybatis.cdi;
 
 import javax.inject.Inject;
-import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
-import javax.interceptor.InvocationContext;
-import javax.transaction.Status;
 import javax.transaction.UserTransaction;
 
 /**
@@ -33,28 +30,20 @@ import javax.transaction.UserTransaction;
 public class JtaTransactionInterceptor extends LocalTransactionInterceptor {
 
   @Inject
-  private UserTransaction transaction;
+  private UserTransaction userTransaction;
 
-  @AroundInvoke
   @Override
-  public Object invoke(InvocationContext ctx) throws Throwable {
-    boolean nested = transaction.getStatus() == Status.STATUS_ACTIVE;
-    if (!nested) {
-      transaction.begin();
+  protected void beginJta() throws Exception {
+    userTransaction.begin();
+  }
+  
+  @Override
+  protected void endJta(boolean commit) throws Exception {
+    if (commit) {
+      userTransaction.commit();
+    } else {
+      userTransaction.rollback();
     }
-    Object result = null;
-    try {
-      result = super.invoke(ctx);
-      if (!nested) {
-        transaction.commit();
-      }
-    }
-    catch (Throwable ex) {
-      if (!nested) {
-        transaction.rollback();
-      }
-    }
-    return result;
   }
 
 }

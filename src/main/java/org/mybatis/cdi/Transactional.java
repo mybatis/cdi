@@ -68,5 +68,13 @@ public @interface Transactional {
    */
   @Nonbinding
   boolean rollbackOnly() default false;
+
+  /**
+   * Defines zero (0) or more exception {@link Class classes}, which must be a
+   * subclass of {@link Throwable}, indicating which exception types must cause
+   * a transaction rollback.
+   */
+  @Nonbinding  
+  Class<? extends Throwable>[] rollbackFor() default {};
   
 }

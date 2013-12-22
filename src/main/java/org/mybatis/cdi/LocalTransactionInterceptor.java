@@ -45,25 +45,58 @@ public class LocalTransactionInterceptor {
 
   @AroundInvoke
   public Object invoke(InvocationContext ctx) throws Throwable {
-    Transactional t = getTransactionalAnnotation(ctx);
+    Transactional transactional = getTransactionalAnnotation(ctx);
     Collection<SqlSessionManager> managers = registry.getManagers();
-    boolean started = start(managers, t);
+    boolean started = start(managers, transactional);
+    if (started) {
+      beginJta();
+    }
+    boolean endWithCommit = true;
     Object result;
     try {
       result = ctx.proceed();
-      if (started && !t.rollbackOnly()) {
-        commit(managers, t);
-      }
     }
-    catch (Exception ex) {
-      throw ExceptionUtil.unwrapThrowable(ex);
+    catch (Throwable throwable) {
+      Throwable unwrapped = ExceptionUtil.unwrapThrowable(throwable); 
+      endWithCommit = shouldCommit(transactional, unwrapped);
+      throw unwrapped;
     }
     finally {
       if (started) {
+        if (endWithCommit) {
+          commit(managers, transactional);
+        } 
+        else {
+          rollback(managers, transactional);
+        }
         close(managers);
+        endJta(endWithCommit);
       }
     }
     return result;
+  }
+
+  protected void beginJta() throws Exception {
+    // nothing to do
+  }
+
+  protected void endJta(boolean commit) throws Exception {
+    // nothing to do
+  }
+
+  private boolean shouldCommit(Transactional transactional, Throwable throwable) {
+    if (transactional.rollbackOnly()) {
+      return false;
+    }
+    if (RuntimeException.class.isAssignableFrom(throwable.getClass())) {
+      return false;
+    }
+    for (Class<?> exceptionClass : transactional.rollbackFor()) {
+      if (exceptionClass.isAssignableFrom(throwable.getClass())) {
+        return false;
+      }
+    }
+    return true;
   }
 
   protected Transactional getTransactionalAnnotation(InvocationContext ctx) {
@@ -74,23 +107,29 @@ public class LocalTransactionInterceptor {
     return t;
   }
 
-  private boolean start(Collection<SqlSessionManager> managers, Transactional t) {
+  private boolean start(Collection<SqlSessionManager> managers, Transactional transactional) {
     boolean started = false;
     for (SqlSessionManager manager : managers) {
       if (!manager.isManagedSessionStarted()) {
-        manager.startManagedSession(t.executorType(), t.isolation().getTransactionIsolationLevel());
+        manager.startManagedSession(transactional.executorType(), transactional.isolation().getTransactionIsolationLevel());
         started = true;
       }
     }
     return started;
   }
 
-  private void commit(Collection<SqlSessionManager> managers, Transactional t) {
+  private void commit(Collection<SqlSessionManager> managers, Transactional transactional) {
     for (SqlSessionManager manager : managers) {
-      manager.commit(t.force());
+      manager.commit(transactional.force());
     }
   }
 
+  private void rollback(Collection<SqlSessionManager> managers, Transactional transactional) {
+    for (SqlSessionManager manager : managers) {
+      manager.rollback(transactional.force());
+    }
+  }
+  
   private void close(Collection<SqlSessionManager> managers) {
     for (SqlSessionManager manager : managers) {
       manager.close();
