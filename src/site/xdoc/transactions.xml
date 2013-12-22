@@ -72,9 +72,10 @@ public void doSomethingInATransaction() {
       </p>
 
       <p><span class="label important">NOTE</span>
-        The local transaction interceptor uses a best-effort strategy. In case there are more than one <code>SqlSessionFactories</code>
+        The local transaction interceptor uses a best-effort strategy. In case there are more than one <code>SqlSessionFactory</code>s
         it will try to commit or roll them all back one by one. <code>LocalTransactionInterceptor</code> cannot guarantee data consistency
-        in this scenario, you should use the <code>JtaTransactionInterceptor</code> instead. See the following section for the details.
+        in this scenario, and it is only recommended when you are using at least one no-XA datasource. 
+        Otherwise you should use the <code>JtaTransactionInterceptor</code> instead. See the following section for the details.
       </p>
   
     <subsection name="JTA Transactions">
@@ -115,12 +116,12 @@ public void doSomethingInATransaction() {
                     <tr>
                         <td>executorType</td>
                         <td>ExecutorType.SIMPLE</td>
-                        <td>the MyBatis executor type</td>
+                        <td>The MyBatis executor type</td>
                     </tr>
                     <tr>
                         <td>isolation</td>
                         <td>Isolation.DEFAULT</td>
-                        <td>the transaction isolation level.  The default value will
+                        <td>The transaction isolation level.  The default value will
                           cause MyBatis to use the default isolation level from the
                           data source.</td>
                     </tr>
@@ -133,7 +134,7 @@ public void doSomethingInATransaction() {
                     <tr>
                         <td>rollbackOnly</td>
                         <td>false</td>
-                        <td>If true, the transaction will never committed, but rather the rollback will be forced.
+                        <td>If true, the transaction will never be committed, but rather the rollback will be forced.
                         That configuration is useful for testing purposes.</td>
                     </tr>
                 </tbody>
