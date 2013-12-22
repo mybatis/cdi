@@ -251,9 +251,9 @@ Summary:
 
 
 
-  &#124; <a href="#pubmethods">Methods</a>
-  
 
+  &#124; <a href="#promethods">Protected Methods</a>
+  
 
 
   &#124; <a href="#inhmethods">Inherited Methods</a>
@@ -423,8 +423,10 @@ Summary:
 
 
 
+
+
 <!-- ========== METHOD SUMMARY =========== -->
-<table id="pubmethods" class="jd-sumtable"><tr><th colspan="12">Public Methods</th></tr>
+<table id="promethods" class="jd-sumtable"><tr><th colspan="12">Protected Methods</th></tr>
 
 
 
@@ -436,18 +438,32 @@ Summary:
             
             
             
-            Object</nobr>
+            void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../org/mybatis/cdi/JtaTransactionInterceptor.html#invoke(javax.interceptor.InvocationContext)">invoke</a></span>(InvocationContext ctx)</nobr>
+        <span class="sympad"><a href="../../../org/mybatis/cdi/JtaTransactionInterceptor.html#beginJta()">beginJta</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../org/mybatis/cdi/JtaTransactionInterceptor.html#endJta(boolean)">endJta</a></span>(boolean commit)</nobr>
         
   </td></tr>
 
 
 
 </table>
-
-
 
 
 
@@ -476,6 +492,38 @@ From class
   <div id="inherited-methods-org.mybatis.cdi.LocalTransactionInterceptor-summary" style="display: none;">
     <table class="jd-sumtable-expando">
     
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html#beginJta()">beginJta</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html#endJta(boolean)">endJta</a></span>(boolean commit)</nobr>
+        
+  </td></tr>
 
 
 	 
@@ -794,24 +842,28 @@ From class
 <!-- ========= METHOD DETAIL ======== -->
 <!-- Public methdos -->
 
-<h2>Public Methods</h2>
+
+
+<!-- ========= METHOD DETAIL ======== -->
+
+<h2>Protected Methods</h2>
 
 
 
-<A NAME="invoke(javax.interceptor.InvocationContext)"></A>
+<A NAME="beginJta()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
       <span class="normal">
-        public 
+        protected 
          
          
          
          
-        Object
+        void
       </span>
-      <span class="sympad">invoke</span>
-      <span class="normal">(InvocationContext ctx)</span>
+      <span class="sympad">beginJta</span>
+      <span class="normal">()</span>
     </h4>
       <div class="api-level">
         <div>
@@ -828,7 +880,7 @@ From class
       <h5 class="jd-tagtitle">Throws</h5>
       <table class="jd-tagtable">  
         <tr>
-            <th>Throwable</td>
+            <th>Exception</td>
             <td></td>
         </tr>
       </table>
@@ -838,10 +890,46 @@ From class
 </div>
 
 
+<A NAME="endJta(boolean)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">endJta</span>
+      <span class="normal">(boolean commit)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th>Exception</td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
 
 
-
-<!-- ========= METHOD DETAIL ======== -->
 
 
 
