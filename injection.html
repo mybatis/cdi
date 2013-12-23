@@ -142,10 +142,16 @@
 
   
     <div class="section"><h2>Injecting MyBatis beans<a name="Injecting_MyBatis_beans"></a></h2>
-      
+    
       <p>
-        Create a singleton or application scoped bean with a <tt>@Producer</tt> annotated method that 
-        provides an <tt>SqlSessionFactory</tt>: 
+        This section will take you through de details of the discovery and injection process.
+      </p>
+    
+    <div class="section"><h3>Producing a Factory<a name="Producing_a_Factory"></a></h3>
+      <p>
+        The <tt>SqlSessionFactory</tt> is the source of any MyBatis bean so first you need to create one (at least)
+        and let the container know about it existence. This is done by create a singleton or application scoped bean 
+        with a <tt>@Producer</tt> annotated method that provides the <tt>SqlSessionFactory</tt>: 
       </p>
       
         <div class="source"><pre class="prettyprint">
@@ -162,6 +168,9 @@ public class SqlSessionFactoryProvider {
 
 }</pre></div>      
       
+    </div>
+    <div class="section"><h3>Disvovering and injecting Mappers<a name="Disvovering_and_injecting_Mappers"></a></h3>
+
       <p>
         During the initialization process MyBatis-CDI will look for injection points annotated with <tt>@Mapper</tt>
         like the following:
@@ -178,20 +187,22 @@ public User doSomeStuff(String userId) {
 
       <p>
         Then it will get an instance (a proxy in fact) of that mapper from the <tt>SqlSessionFactory</tt> registered in 
-        the CDI container and inject it into the bean. This proxy is a thread safe singleton so you should
-        not worry about its scope. 
+        the CDI container and inject it into the bean. This proxy is not a normal mapper but a thread safe singleton 
+        so you should not worry about its scope. 
       </p>
 
       <p>
         Any configuration problem that may happen during the initialization process will make the module throw a 
-        <tt>MyBatisCdiConfiurationException</tt>. In fact, given that there is not much to configure, this
+        <tt>MyBatisCdiConfiurationException</tt>. Given that there is not much to configure, this
         exception is only thrown when the <tt>SqlSessionFactory</tt> cannot be found.
       </p>
       
-    <div class="section"><h3>Selecting the Factory<a name="Selecting_the_Factory"></a></h3>
+    </div>
+      
+    <div class="section"><h3>Resolving ambiguities<a name="Resolving_ambiguities"></a></h3>
 
       <p>
-        MyBatis-CDI lets you have more than one <tt>SqlSessionFactory</tt> and you can choose the one you want to use
+        In case you have more than one <tt>SqlSessionFactory</tt> you can choose the one you want to use
         in any injection point by using:
       </p>
       
@@ -202,35 +213,35 @@ public User doSomeStuff(String userId) {
       </ul>
       
       <p>
-        If you have more than one <tt>SqlSessionFactory</tt>s you can differentiate them by adding qualifiers as you would
-        do with any other CDI bean:
+        Follows below an snippet that shows a produccer that creates two <tt>SqlSessionFactory</tt>s. A qualifier is used
+        to differentiate them as you would do with any other CDI bean:
       </p>
 
         <div class="source"><pre class="prettyprint">
 @ApplicationScoped  
 @Produces
-@OneQualifier
-public SqlSessionFactory createManagerOne() throws IOException {
+@FooQualifier
+public SqlSessionFactory createManagerFoo() throws IOException {
   ...
 }
   
 @ApplicationScoped
 @Produces
-@OtherQualifier
-public SqlSessionFactory createManagerTwo() throws IOException {
+@BarQualifier
+public SqlSessionFactory createManagerBar() throws IOException {
   ...
 }</pre></div>
     
       <p>
-        Now that there is no ambiguity you can select what factory you want to inject to a bean by adding the qualifiers to it:
+        Now that there is no ambiguity you can select what factory you want to inject by adding the qualifier to it:
       </p>
     
         <div class="source"><pre class="prettyprint">
-@Inject @Mapper @OneQualifier private UserMapper userMapper;
+@Inject @Mapper @FooQualifier private UserMapper userMapper;
 </pre></div>    
       
       <p>
-        You can also give a name to your <tt>SqlSessionFactory</tt> and refer to it by its name in a injection point:
+        You can also give a name to your <tt>SqlSessionFactory</tt>:
       </p>
 
         <div class="source"><pre class="prettyprint">
@@ -239,21 +250,21 @@ public SqlSessionFactory createManagerTwo() throws IOException {
 @Named(&quot;fooManager&quot;)
 public SqlSessionFactory createManager() throws IOException {
   ...
-}
-</pre></div>
+}</pre></div>
       
-      <p>And inject it as follows:
+      <p>
+        And refer to it by its name in an injection point:
       </p>
       
         <div class="source"><pre class="prettyprint">
 @Inject @Mapper @Named(&quot;fooManager&quot;) private UserMapper userMapper;
 </pre></div>    
       
-      </div>
+    </div>
       
     <div class="section"><h3>Injecting an SqlSession<a name="Injecting_an_SqlSession"></a></h3>
 
-	  <p>You can inject an <tt>SqlSession</tt> by requesting its injection as follows:</p>
+	  <p>You can inject a thread safe <tt>SqlSession</tt> by requesting its injection as follows:</p>
 	  
         <div class="source"><pre class="prettyprint">
 @Inject private SqlSession sqlSession;
