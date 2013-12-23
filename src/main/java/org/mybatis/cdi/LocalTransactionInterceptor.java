@@ -15,6 +15,8 @@
  */
 package org.mybatis.cdi;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Collection;
 
 import javax.inject.Inject;
@@ -22,7 +24,6 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
-import org.apache.ibatis.reflection.ExceptionUtil;
 import org.apache.ibatis.session.SqlSessionManager;
 
 /**
@@ -44,7 +45,7 @@ public class LocalTransactionInterceptor {
   private SqlSessionManagerRegistry registry;
 
   @AroundInvoke
-  public Object invoke(InvocationContext ctx) throws Throwable {
+  public Object invoke(InvocationContext ctx) throws Exception {
     Transactional transactional = getTransactionalAnnotation(ctx);
     Collection<SqlSessionManager> managers = registry.getManagers();
     boolean started = start(managers, transactional);
@@ -56,8 +57,8 @@ public class LocalTransactionInterceptor {
     try {
       result = ctx.proceed();
     }
-    catch (Throwable throwable) {
-      Throwable unwrapped = ExceptionUtil.unwrapThrowable(throwable); 
+    catch (Exception ex) {
+      Exception unwrapped = unwrapException(ex); 
       endWithCommit = shouldCommit(transactional, unwrapped);
       throw unwrapped;
     }
@@ -135,5 +136,24 @@ public class LocalTransactionInterceptor {
       manager.close();
     }
   }
+  
+  private Exception unwrapException(Exception wrapped) {
+    Throwable unwrapped = wrapped;
+    while (true) {
+      if (unwrapped instanceof InvocationTargetException) {
+        unwrapped = ((InvocationTargetException) unwrapped).getTargetException();
+      } 
+      else if (unwrapped instanceof UndeclaredThrowableException) {
+        unwrapped = ((UndeclaredThrowableException) unwrapped).getUndeclaredThrowable();
+      } 
+      else if (!(unwrapped instanceof Exception)) {
+        return new RuntimeException(unwrapped);
+      }
+      else {
+       return (Exception) unwrapped; 
+      }      
+    }
+  }
+  
 
 }
