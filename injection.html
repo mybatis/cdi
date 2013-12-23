@@ -150,15 +150,16 @@
     <div class="section"><h3>Producing a Factory<a name="Producing_a_Factory"></a></h3>
       <p>
         The <tt>SqlSessionFactory</tt> is the source of any MyBatis bean so first you need to create one (at least)
-        and let the container know about it existence. This is done by create a singleton or application scoped bean 
-        with a <tt>@Producer</tt> annotated method that provides the <tt>SqlSessionFactory</tt>: 
+        and let the container know about it existence. To do so, create a bean with producer method, and make sure
+        that you add the <tt>@ApplicationScoped</tt> annotation to it because we just want to have one instance
+        of the factory for the whole application.
       </p>
       
-        <div class="source"><pre class="prettyprint">
-@ApplicationScoped
+      <div class="source"><pre class="prettyprint">
 public class SqlSessionFactoryProvider {
 
   @Produces
+  @ApplicationScoped
   public SqlSessionFactory produceFactory() {
     String resource = &quot;org/mybatis/example/mybatis-config.xml&quot;;
     InputStream inputStream = Resources.getResourceAsStream(resource);
@@ -167,6 +168,11 @@ public class SqlSessionFactoryProvider {
   }
 
 }</pre></div>      
+      
+      <p><span class="label important">NOTE</span>
+        If you forget the <tt>@ApplicationScoped</tt> the factory will be created on each injection, what implies 
+        parsing and loading the whole MyBatis xml file set. You application will not fail but will startup terribly slow.
+      </p>
       
     </div>
     <div class="section"><h3>Disvovering and injecting Mappers<a name="Disvovering_and_injecting_Mappers"></a></h3>
@@ -213,7 +219,7 @@ public User doSomeStuff(String userId) {
       </ul>
       
       <p>
-        Follows below an snippet that shows a produccer that creates two <tt>SqlSessionFactory</tt>s. A qualifier is used
+        Follows below an snippet that shows a producer that creates two <tt>SqlSessionFactory</tt>s. A qualifier is used
         to differentiate them as you would do with any other CDI bean:
       </p>
 

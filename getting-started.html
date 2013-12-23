@@ -164,7 +164,8 @@
 
     <div class="section"><h3>Quick Setup<a name="Quick_Setup"></a></h3>
     
-      <p>First, switch CDI on by adding a <tt>beans.xml</tt> file to your <tt>META-INF</tt> directory.
+      <p>
+        First, switch CDI on by adding a <tt>beans.xml</tt> file to your <tt>META-INF</tt> directory.
       </p>
     
       <p>
@@ -173,17 +174,17 @@
       </p>
 
       <p>
-        Create a singleton or application scoped bean to provide an <tt>SqlSessionFactory</tt>:
+        Create a producer method that returns an application scoped <tt>SqlSessionFactory</tt>:
       </p>
 
         <div class="source"><pre class="prettyprint">
 import javax.enterprise.inject.Produces;
 import org.apache.ibatis.session.SqlSessionFactory;
         
-@ApplicationScoped
 public class SqlSessionFactoryProvider {
 
   @Produces
+  @ApplicationScoped
   public SqlSessionFactory produceFactory() {
     SqlSessionFactory factory = create the factory instance ....
     return factory;
@@ -200,7 +201,7 @@ public class SqlSessionFactoryProvider {
 } </pre></div>
 
       <p>
-        You can inject it into a CDI bean by adding the <tt>@Mapper</tt> annotation to the injection point:
+        You can inject it into a CDI bean by just adding the <tt>@Mapper</tt> annotation to the injection point:
       </p>
 
         <div class="source"><pre class="prettyprint">
