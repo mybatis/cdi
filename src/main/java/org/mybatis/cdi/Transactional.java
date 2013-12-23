@@ -38,7 +38,7 @@ public @interface Transactional {
   /**
    * Returns the constant indicating the myBatis executor type.
    *
-   * @return the constant indicating the myBatis executor type.
+   * @return ExecutorType.SIMPLE by default, user defined otherwise.
    */
   @Nonbinding
   ExecutorType executorType() default ExecutorType.SIMPLE;
@@ -46,7 +46,7 @@ public @interface Transactional {
   /**
    * Returns the constant indicating the transaction isolation level.
    *
-   * @return the constant indicating the transaction isolation level.
+   * @return Isolation.DEFAULT by default, user defined otherwise.
    */
   @Nonbinding
   Isolation isolation() default Isolation.DEFAULT;
@@ -62,17 +62,17 @@ public @interface Transactional {
   /**
    * If true, the transaction will never committed but rather rolled back, useful for testing purposes.
    *
-   * This parameter is false by default.
-   *
-   * @return if true, the transaction will never committed but rather rolled back, useful for testing purposes.
+   * @return false by default, user defined otherwise.
    */
   @Nonbinding
   boolean rollbackOnly() default false;
 
   /**
-   * Defines zero (0) or more exception {@link Class classes}, which must be a
-   * subclass of {@link Throwable}, indicating which exception types must cause
+   * Defines zero (0) or more exception {@code Class classes}, which must be a
+   * subclass of {@code Throwable}, indicating which exception types must cause
    * a transaction rollback.
+   * 
+   * @return an empty array by default, user defined otherwise. 
    */
   @Nonbinding  
   Class<? extends Throwable>[] rollbackFor() default {};
