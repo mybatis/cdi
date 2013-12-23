@@ -50,7 +50,8 @@
 
     <subsection name="Quick Setup">
     
-      <p>First, switch CDI on by adding a <code>beans.xml</code> file to your <code>META-INF</code> directory.
+      <p>
+        First, switch CDI on by adding a <code>beans.xml</code> file to your <code>META-INF</code> directory.
       </p>
     
       <p>
@@ -59,17 +60,17 @@
       </p>
 
       <p>
-        Create a singleton or application scoped bean to provide an <code>SqlSessionFactory</code>:
+        Create a producer method that returns an application scoped <code>SqlSessionFactory</code>:
       </p>
 
         <source><![CDATA[
 import javax.enterprise.inject.Produces;
 import org.apache.ibatis.session.SqlSessionFactory;
         
-@ApplicationScoped
 public class SqlSessionFactoryProvider {
 
   @Produces
+  @ApplicationScoped
   public SqlSessionFactory produceFactory() {
     SqlSessionFactory factory = create the factory instance ....
     return factory;
@@ -86,7 +87,7 @@ public class SqlSessionFactoryProvider {
 } ]]></source>
 
       <p>
-        You can inject it into a CDI bean by adding the <code>@Mapper</code> annotation to the injection point:
+        You can inject it into a CDI bean by just adding the <code>@Mapper</code> annotation to the injection point:
       </p>
 
         <source><![CDATA[

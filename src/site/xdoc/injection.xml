@@ -36,15 +36,16 @@
     <subsection name="Producing a Factory">
       <p>
         The <code>SqlSessionFactory</code> is the source of any MyBatis bean so first you need to create one (at least)
-        and let the container know about it existence. This is done by create a singleton or application scoped bean 
-        with a <code>@Producer</code> annotated method that provides the <code>SqlSessionFactory</code>: 
+        and let the container know about it existence. To do so, create a bean with producer method, and make sure
+        that you add the <code>@ApplicationScoped</code> annotation to it because we just want to have one instance
+        of the factory for the whole application.
       </p>
       
-        <source><![CDATA[
-@ApplicationScoped
+      <source><![CDATA[
 public class SqlSessionFactoryProvider {
 
   @Produces
+  @ApplicationScoped
   public SqlSessionFactory produceFactory() {
     String resource = "org/mybatis/example/mybatis-config.xml";
     InputStream inputStream = Resources.getResourceAsStream(resource);
@@ -53,6 +54,11 @@ public class SqlSessionFactoryProvider {
   }
 
 }]]></source>      
+      
+      <p><span class="label important">NOTE</span>
+        If you forget the <code>@ApplicationScoped</code> the factory will be created on each injection, what implies 
+        parsing and loading the whole MyBatis xml file set. You application will not fail but will startup terribly slow.
+      </p>
       
     </subsection>
     <subsection name="Disvovering and injecting Mappers">
@@ -99,7 +105,7 @@ public User doSomeStuff(String userId) {
       </ul>
       
       <p>
-        Follows below an snippet that shows a produccer that creates two <code>SqlSessionFactory</code>s. A qualifier is used
+        Follows below an snippet that shows a producer that creates two <code>SqlSessionFactory</code>s. A qualifier is used
         to differentiate them as you would do with any other CDI bean:
       </p>
 
