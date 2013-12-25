@@ -21,22 +21,26 @@ import javax.sql.DataSource;
 
 import org.apache.ibatis.datasource.DataSourceFactory;
 
-import com.atomikos.jdbc.AtomikosDataSourceBean;
+import bitronix.tm.resource.jdbc.PoolingDataSource;
 
-public class AtomikosDatasourceFactory implements DataSourceFactory {
+public class JtaDatasourceFactory implements DataSourceFactory {
 
-  AtomikosDataSourceBean ds; 
+  PoolingDataSource ds; 
   
-  public AtomikosDatasourceFactory() {
-    ds = new AtomikosDataSourceBean(); 
+  public JtaDatasourceFactory() {
+    ds = new PoolingDataSource(); 
   }
   
   public void setProperties(Properties props) {
-    ds.setUniqueResourceName(props.getProperty("uniqueResourceName"));
-    props.remove("uniqueResourceName");
-    ds.setXaDataSourceClassName(props.getProperty("xaDataSourceClassName"));
-    props.remove("xaDataSourceClassName");
-    ds.setXaProperties(props);
+    ds.setUniqueName(props.getProperty("resourceName"));
+    props.remove("resourceName");
+    ds.setClassName(props.getProperty("driver"));
+    props.remove("driver");
+    ds.setMaxPoolSize(Integer.valueOf(props.getProperty("maxPoolSize")));
+    props.remove("maxPoolSize");
+    ds.setAllowLocalTransactions(Boolean.valueOf(props.getProperty("allowLocalTransactions")));
+    props.remove("allowLocalTransactions");    
+    ds.setDriverProperties(props);
   }
 
   public DataSource getDataSource() {

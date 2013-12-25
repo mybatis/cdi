@@ -19,11 +19,13 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.transaction.UserTransaction;
 
+import bitronix.tm.TransactionManagerServices;
+
 public class UserTransactionProvider {
   
   @Produces @ApplicationScoped
   public UserTransaction initTX() {
-    return new com.atomikos.icatch.jta.UserTransactionImp(); 
+    return  TransactionManagerServices.getTransactionManager();
   }
 
 }
