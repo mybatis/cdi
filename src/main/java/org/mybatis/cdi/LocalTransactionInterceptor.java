@@ -17,7 +17,6 @@ package org.mybatis.cdi;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.UndeclaredThrowableException;
-import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -47,8 +46,7 @@ public class LocalTransactionInterceptor {
   @AroundInvoke
   public Object invoke(InvocationContext ctx) throws Exception {
     Transactional transactional = getTransactionalAnnotation(ctx);
-    Collection<SqlSessionManager> managers = registry.getManagers();
-    boolean started = start(managers, transactional);
+    boolean started = start(transactional);
     if (started) {
       beginJta();
     }
@@ -65,12 +63,12 @@ public class LocalTransactionInterceptor {
     finally {
       if (started) {
         if (needsRollback) {
-          rollback(managers, transactional);
+          rollback(transactional);
         } 
         else {
-          commit(managers, transactional);
+          commit(transactional);
         }
-        close(managers);
+        close();
         endJta(needsRollback);
       }
     }
@@ -108,9 +106,9 @@ public class LocalTransactionInterceptor {
     return t;
   }
 
-  private boolean start(Collection<SqlSessionManager> managers, Transactional transactional) {
+  private boolean start(Transactional transactional) {
     boolean started = false;
-    for (SqlSessionManager manager : managers) {
+    for (SqlSessionManager manager : registry.getManagers()) {
       if (!manager.isManagedSessionStarted()) {
         manager.startManagedSession(transactional.executorType(), transactional.isolation().getTransactionIsolationLevel());
         started = true;
@@ -119,20 +117,20 @@ public class LocalTransactionInterceptor {
     return started;
   }
 
-  private void commit(Collection<SqlSessionManager> managers, Transactional transactional) {
-    for (SqlSessionManager manager : managers) {
+  private void commit(Transactional transactional) {
+    for (SqlSessionManager manager : registry.getManagers()) {
       manager.commit(transactional.force());
     }
   }
 
-  private void rollback(Collection<SqlSessionManager> managers, Transactional transactional) {
-    for (SqlSessionManager manager : managers) {
+  private void rollback(Transactional transactional) {
+    for (SqlSessionManager manager : registry.getManagers()) {
       manager.rollback(transactional.force());
     }
   }
-  
-  private void close(Collection<SqlSessionManager> managers) {
-    for (SqlSessionManager manager : managers) {
+
+  private void close() {
+    for (SqlSessionManager manager : registry.getManagers()) {
       manager.close();
     }
   }
@@ -154,6 +152,5 @@ public class LocalTransactionInterceptor {
       }      
     }
   }
-  
 
 }
