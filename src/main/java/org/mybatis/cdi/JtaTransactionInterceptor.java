@@ -38,11 +38,11 @@ public class JtaTransactionInterceptor extends LocalTransactionInterceptor {
   }
   
   @Override
-  protected void endJta(boolean commit) throws Exception {
-    if (commit) {
-      userTransaction.commit();
-    } else {
+  protected void endJta(boolean needsRollback) throws Exception {
+    if (needsRollback) {
       userTransaction.rollback();
+    } else {
+      userTransaction.commit();
     }
   }
 
