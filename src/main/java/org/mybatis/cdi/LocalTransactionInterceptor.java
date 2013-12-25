@@ -52,26 +52,26 @@ public class LocalTransactionInterceptor {
     if (started) {
       beginJta();
     }
-    boolean endWithCommit = true;
+    boolean needsRollback = false;
     Object result;
     try {
       result = ctx.proceed();
     }
     catch (Exception ex) {
       Exception unwrapped = unwrapException(ex); 
-      endWithCommit = shouldCommit(transactional, unwrapped);
+      needsRollback = needsRollback(transactional, unwrapped);
       throw unwrapped;
     }
     finally {
       if (started) {
-        if (endWithCommit) {
-          commit(managers, transactional);
+        if (needsRollback) {
+          rollback(managers, transactional);
         } 
         else {
-          rollback(managers, transactional);
+          commit(managers, transactional);
         }
         close(managers);
-        endJta(endWithCommit);
+        endJta(needsRollback);
       }
     }
     return result;
@@ -85,19 +85,19 @@ public class LocalTransactionInterceptor {
     // nothing to do
   }
 
-  private boolean shouldCommit(Transactional transactional, Throwable throwable) {
+  private boolean needsRollback(Transactional transactional, Throwable throwable) {
     if (transactional.rollbackOnly()) {
-      return false;
+      return true;
     }
     if (RuntimeException.class.isAssignableFrom(throwable.getClass())) {
-      return false;
+      return true;
     }
     for (Class<?> exceptionClass : transactional.rollbackFor()) {
       if (exceptionClass.isAssignableFrom(throwable.getClass())) {
-        return false;
+        return true;
       }
     }
-    return true;
+    return false;
   }
 
   protected Transactional getTransactionalAnnotation(InvocationContext ctx) {
