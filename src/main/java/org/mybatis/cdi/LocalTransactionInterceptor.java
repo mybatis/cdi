@@ -46,8 +46,9 @@ public class LocalTransactionInterceptor {
   @AroundInvoke
   public Object invoke(InvocationContext ctx) throws Exception {
     Transactional transactional = getTransactionalAnnotation(ctx);
-    boolean started = start(transactional);
-    if (started) {
+    boolean isInitiator = start(transactional);
+    boolean isExternalJta =  isTransactionActive();
+    if (isInitiator && !isExternalJta) {
       beginJta();
     }
     boolean needsRollback = false;
@@ -61,7 +62,7 @@ public class LocalTransactionInterceptor {
       throw unwrapped;
     }
     finally {
-      if (started) {
+      if (isInitiator) {
         if (needsRollback) {
           rollback(transactional);
         } 
@@ -69,17 +70,21 @@ public class LocalTransactionInterceptor {
           commit(transactional);
         }
         close();
-        endJta(needsRollback);
+        endJta(isExternalJta, needsRollback);
       }
     }
     return result;
   }
 
+  protected boolean isTransactionActive() throws Exception {
+    return false;
+  }
+    
   protected void beginJta() throws Exception {
     // nothing to do
   }
 
-  protected void endJta(boolean commit) throws Exception {
+  protected void endJta(boolean isExternaTransaction, boolean commit) throws Exception {
     // nothing to do
   }
 
