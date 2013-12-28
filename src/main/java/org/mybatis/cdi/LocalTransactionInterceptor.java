@@ -63,14 +63,17 @@ public class LocalTransactionInterceptor {
     }
     finally {
       if (isInitiator) {
-        if (needsRollback) {
-          rollback(transactional);
-        } 
-        else {
-          commit(transactional);
+        try {
+          if (needsRollback) {
+            rollback(transactional);
+          } 
+          else {
+            commit(transactional);
+          }
+        } finally {
+          close();
+          endJta(isExternalJta, needsRollback);
         }
-        close();
-        endJta(isExternalJta, needsRollback);
       }
     }
     return result;
