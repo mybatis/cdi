@@ -31,7 +31,7 @@ import javax.transaction.UserTransaction;
 public class JtaTransactionInterceptor extends LocalTransactionInterceptor {
 
   @Inject
-  private UserTransaction userTransaction;
+  private transient UserTransaction userTransaction;
 
   @Override
   protected boolean isTransactionActive() throws Exception {

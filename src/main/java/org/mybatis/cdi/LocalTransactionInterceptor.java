@@ -15,6 +15,7 @@
  */
 package org.mybatis.cdi;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.UndeclaredThrowableException;
 
@@ -38,10 +39,10 @@ import org.apache.ibatis.session.SqlSessionManager;
  */
 @Transactional
 @Interceptor
-public class LocalTransactionInterceptor {
+public class LocalTransactionInterceptor implements Serializable {
 
   @Inject
-  private SqlSessionManagerRegistry registry;
+  private transient SqlSessionManagerRegistry registry;
 
   @AroundInvoke
   public Object invoke(InvocationContext ctx) throws Exception {
