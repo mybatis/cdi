@@ -58,7 +58,7 @@
   LocalTransactionInterceptor
 
 
-| MyBatis CDI Module
+| MyBatis CDI Extension
 
 </title>
 <link href="../../../../assets/android-developer-docs.css" rel="stylesheet" type="text/css" />
@@ -90,7 +90,7 @@
 <div id="header">
     <div id="headerLeft">
     
-      <span id="masthead-title">MyBatis CDI Module</span>
+      <span id="masthead-title">MyBatis CDI Extension</span>
     
     </div>
     <div id="headerRight">
@@ -503,7 +503,7 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html#endJta(boolean)">endJta</a></span>(boolean commit)</nobr>
+        <span class="sympad"><a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html#endJta(boolean, boolean)">endJta</a></span>(boolean isExternaTransaction, boolean commit)</nobr>
         
   </td></tr>
 
@@ -520,6 +520,22 @@ Summary:
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html#getTransactionalAnnotation(javax.interceptor.InvocationContext)">getTransactionalAnnotation</a></span>(InvocationContext ctx)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html#isTransactionActive()">isTransactionActive</a></span>()</nobr>
         
   </td></tr>
 
@@ -848,7 +864,7 @@ From class
       <h5 class="jd-tagtitle">Throws</h5>
       <table class="jd-tagtable">  
         <tr>
-            <th>Throwable</td>
+            <th>Exception</td>
             <td></td>
         </tr>
       </table>
@@ -907,7 +923,7 @@ From class
 </div>
 
 
-<A NAME="endJta(boolean)"></A>
+<A NAME="endJta(boolean, boolean)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -920,7 +936,7 @@ From class
         void
       </span>
       <span class="sympad">endJta</span>
-      <span class="normal">(boolean commit)</span>
+      <span class="normal">(boolean isExternaTransaction, boolean commit)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -973,6 +989,46 @@ From class
     <div class="jd-details-descr">
       
   <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="isTransactionActive()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">isTransactionActive</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th>Exception</td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
 
     </div>
 </div>

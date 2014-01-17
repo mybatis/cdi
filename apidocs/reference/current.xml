@@ -257,6 +257,8 @@
  deprecated="not deprecated"
  visibility="protected"
 >
+<parameter name="isExternaTransaction" type="boolean">
+</parameter>
 <parameter name="commit" type="boolean">
 </parameter>
 <exception name="Exception" type="java.lang.Exception">
@@ -287,7 +289,20 @@
 >
 <parameter name="ctx" type="javax.interceptor.InvocationContext">
 </parameter>
-<exception name="Throwable" type="java.lang.Throwable">
+<exception name="Exception" type="java.lang.Exception">
+</exception>
+</method>
+<method name="isTransactionActive"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<exception name="Exception" type="java.lang.Exception">
 </exception>
 </method>
 </class>
