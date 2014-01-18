@@ -226,6 +226,8 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<implements name="java.io.Serializable">
+</implements>
 <constructor name="LocalTransactionInterceptor"
  type="org.mybatis.cdi.LocalTransactionInterceptor"
  static="false"
