@@ -24,7 +24,7 @@
     </parent>
 
     <artifactId>mybatis-cdi</artifactId>
-    <version>1.0.0-beta1</version>
+    <version>1.0.0-beta2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>MyBatis CDI Extension</name>
@@ -34,7 +34,7 @@
         <url>http://github.com/mybatis/cdi</url>
         <connection>scm:git:ssh://github.com/mybatis/cdi.git</connection>
         <developerConnection>scm:git:git+ssh://git@github.com/mybatis/cdi.git</developerConnection>
-        <tag>mybatis-cdi-1.0.0-beta1</tag>
+        <tag>HEAD</tag>
     </scm>
     <issueManagement>
         <system>GitHub Issue Management</system>
