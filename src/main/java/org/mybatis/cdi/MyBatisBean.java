@@ -15,7 +15,9 @@
  */
 package org.mybatis.cdi;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashSet;
@@ -23,11 +25,8 @@ import java.util.Set;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.util.AnnotationLiteral;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -38,15 +37,15 @@ import org.apache.ibatis.session.SqlSessionManager;
  *
  * @author Frank D. Martinez [mnesarco]
  */
-public class MyBatisBean implements Bean {
+public class MyBatisBean implements Bean, Serializable {
 
-  private final Class type;
+  protected final Class type;
 
-  private final Set<Annotation> qualifiers;
+  protected final Set<Annotation> qualifiers;
 
-  private final BeanManager beanManager;
+  protected final BeanManager beanManager;
 
-  private final String sqlSessionFactoryName;
+  protected final String sqlSessionFactoryName;
   
   public MyBatisBean(Class type, Set<Annotation> qualifiers, String sqlSessionFactoryName, BeanManager beanManager) {  
     this.type = type;
@@ -54,8 +53,8 @@ public class MyBatisBean implements Bean {
     this.beanManager = beanManager;    
     if (qualifiers == null || qualifiers.isEmpty()) {
       this.qualifiers = new HashSet<Annotation>();
-      this.qualifiers.add(new AnnotationLiteral<Default>() {});
-      this.qualifiers.add(new AnnotationLiteral<Any>() {});
+      this.qualifiers.add(new CDIUtils.SerializableDefaultAnnotationLiteral());
+      this.qualifiers.add(new CDIUtils.SerializableAnyAnnotationLiteral());
     }
     else {
       this.qualifiers = qualifiers;
@@ -101,8 +100,15 @@ public class MyBatisBean implements Bean {
   }
 
   public Object create(CreationalContext creationalContext) {
-    SqlSessionManager manager = findSqlSessionManager(creationalContext);
-    return SqlSession.class.equals(type) ? manager : manager.getMapper(type);
+    if (SqlSession.class.equals(type)) {
+      return findSqlSessionManager(creationalContext);
+    }
+    else {
+      return Proxy.newProxyInstance(
+        SqlSessionFactory.class.getClassLoader(), 
+        new Class[] {type}, 
+        new SerializableMapperProxy(this, creationalContext));
+    }
   }
 
   public void destroy(Object instance, CreationalContext creationalContext) {

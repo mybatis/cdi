@@ -15,12 +15,16 @@
  */
 package org.mybatis.cdi;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Iterator;
 import java.util.Set;
 import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.util.AnnotationLiteral;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 /**
@@ -48,5 +52,9 @@ public class CDIUtils {
     }
     return (SqlSessionFactory) beanManager.getReference(bean, SqlSessionFactory.class, creationalContext);
   }
+  
+  public static class SerializableDefaultAnnotationLiteral extends AnnotationLiteral<Default> implements Serializable {}
+
+  public static class SerializableAnyAnnotationLiteral extends AnnotationLiteral<Any> implements Serializable {}
 
 }
