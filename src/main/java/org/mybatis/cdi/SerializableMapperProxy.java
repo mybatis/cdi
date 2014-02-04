@@ -15,6 +15,9 @@
  */
 package org.mybatis.cdi;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -27,6 +30,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
  */
 public class SerializableMapperProxy implements InvocationHandler, Serializable {
 
+  private static final long serialVersionUID = 1L;
+
   private transient Object mapper;
 
   private final MyBatisBean bean;
@@ -36,18 +41,25 @@ public class SerializableMapperProxy implements InvocationHandler, Serializable 
   public SerializableMapperProxy(MyBatisBean bean, CreationalContext creationalContext) {
     this.bean = bean;
     this.creationalContext = creationalContext;
+    this.mapper = getMapper();
   }
 
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    return method.invoke(getMapper(), args);
+    return method.invoke(mapper, args);
   }
 
   private Object getMapper() {
-    if (mapper == null) {
-      SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(bean.sqlSessionFactoryName, bean.qualifiers, bean.beanManager, creationalContext);
-      mapper = CDIUtils.getRegistry(bean.beanManager, creationalContext).getManager(factory).getMapper(bean.type);
-    }
-    return mapper;
+    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(bean.sqlSessionFactoryName, bean.qualifiers, bean.beanManager, creationalContext);
+    return CDIUtils.getRegistry(bean.beanManager, creationalContext).getManager(factory).getMapper(bean.type);
+  }
+
+  private void readObject(ObjectInputStream is) throws ClassNotFoundException, IOException {
+    is.defaultReadObject();
+    mapper = getMapper();
+  }
+
+  private void writeObject(ObjectOutputStream os) throws IOException {
+    os.defaultWriteObject();
   }
 
 }

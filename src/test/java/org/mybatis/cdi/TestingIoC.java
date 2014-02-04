@@ -15,6 +15,11 @@
  */
 package org.mybatis.cdi;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.transaction.UserTransaction;
 
@@ -27,7 +32,10 @@ public class TestingIoC {
 
   @Inject
   private FooService fooService;
-
+  
+  @Inject
+  private SerializableFooService serFooService;
+  
   @Test
   public void shouldGetAUser() {
     Assert.assertEquals("1-User1", fooService.getUserFromSqlSession(1).getName());
@@ -150,4 +158,15 @@ public class TestingIoC {
     Assert.assertNull(fooServiceJTA.getUserWithNoTransaction(user.getId()));
   }
 
+  @Test
+  public void injectedMappersAreSerializable() throws Exception {
+    ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream("mapper.ser"));
+    oout.writeObject(serFooService);
+    oout.close();
+    ObjectInputStream oin = new ObjectInputStream(new FileInputStream("mapper.ser"));
+    SerializableFooService unserialized = (SerializableFooService) oin.readObject();
+    oin.close();    
+    Assert.assertEquals(serFooService.getUser(1).getName(), unserialized.getUser(1).getName());
+  }
+  
 }
