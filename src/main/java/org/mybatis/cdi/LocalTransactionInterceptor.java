@@ -52,14 +52,14 @@ public class LocalTransactionInterceptor implements Serializable {
     if (isInitiator && !isExternalJta) {
       beginJta();
     }
-    boolean needsRollback = false;
+    boolean needsRollback = transactional.rollbackOnly();
     Object result;
     try {
       result = ctx.proceed();
     }
     catch (Exception ex) {
       Exception unwrapped = unwrapException(ex); 
-      needsRollback = needsRollback(transactional, unwrapped);
+      needsRollback = needsRollback || needsRollback(transactional, unwrapped);
       throw unwrapped;
     }
     finally {
@@ -93,9 +93,6 @@ public class LocalTransactionInterceptor implements Serializable {
   }
 
   private boolean needsRollback(Transactional transactional, Throwable throwable) {
-    if (transactional.rollbackOnly()) {
-      return true;
-    }
     if (RuntimeException.class.isAssignableFrom(throwable.getClass())) {
       return true;
     }
