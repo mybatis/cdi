@@ -76,5 +76,5 @@ public @interface Transactional {
    */
   @Nonbinding  
   Class<? extends Throwable>[] rollbackFor() default {};
-  
+
 }

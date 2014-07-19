@@ -39,7 +39,9 @@ import org.apache.ibatis.session.SqlSessionManager;
  */
 public class MyBatisBean implements Bean, Serializable {
 
-  protected final Class type;
+  private static final long serialVersionUID = 1L;
+
+  protected final Class<Type> type;
 
   protected final Set<Annotation> qualifiers;
 
@@ -47,7 +49,7 @@ public class MyBatisBean implements Bean, Serializable {
 
   protected final String sqlSessionFactoryName;
   
-  public MyBatisBean(Class type, Set<Annotation> qualifiers, String sqlSessionFactoryName, BeanManager beanManager) {  
+  public MyBatisBean(Class<Type> type, Set<Annotation> qualifiers, String sqlSessionFactoryName, BeanManager beanManager) {  
     this.type = type;
     this.sqlSessionFactoryName = sqlSessionFactoryName;
     this.beanManager = beanManager;    
@@ -55,23 +57,22 @@ public class MyBatisBean implements Bean, Serializable {
       this.qualifiers = new HashSet<Annotation>();
       this.qualifiers.add(new CDIUtils.SerializableDefaultAnnotationLiteral());
       this.qualifiers.add(new CDIUtils.SerializableAnyAnnotationLiteral());
-    }
-    else {
+    } else {
       this.qualifiers = qualifiers;
-    }    
+    }
   }
 
-  public Set getTypes() {
+  public Set<Type> getTypes() {
     Set<Type> types = new HashSet<Type>();
     types.add(type);
     return types;
   }
 
-  public Set getQualifiers() {
+  public Set<Annotation> getQualifiers() {
     return qualifiers;
   }
 
-  public Class getScope() {
+  public Class<Dependent> getScope() {
     return Dependent.class;
   }
 
@@ -79,11 +80,11 @@ public class MyBatisBean implements Bean, Serializable {
     return null;
   }
 
-  public Set getStereotypes() {
+  public Set<Object> getStereotypes() {
     return Collections.emptySet();
   }
 
-  public Class getBeanClass() {
+  public Class<Type> getBeanClass() {
     return type;
   }
 
@@ -95,15 +96,14 @@ public class MyBatisBean implements Bean, Serializable {
     return false;
   }
 
-  public Set getInjectionPoints() {
+  public Set<Object> getInjectionPoints() {
     return Collections.emptySet();
   }
 
   public Object create(CreationalContext creationalContext) {
     if (SqlSession.class.equals(type)) {
       return findSqlSessionManager(creationalContext);
-    }
-    else {
+    } else {
       return Proxy.newProxyInstance(
         SqlSessionFactory.class.getClassLoader(), 
         new Class[] {type}, 

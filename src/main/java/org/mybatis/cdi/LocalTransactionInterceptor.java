@@ -23,6 +23,11 @@ import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 
 import org.apache.ibatis.session.SqlSessionManager;
 
@@ -41,6 +46,8 @@ import org.apache.ibatis.session.SqlSessionManager;
 @Interceptor
 public class LocalTransactionInterceptor implements Serializable {
 
+  private static final long serialVersionUID = 1L;
+
   @Inject
   private transient SqlSessionManagerRegistry registry;
 
@@ -56,19 +63,16 @@ public class LocalTransactionInterceptor implements Serializable {
     Object result;
     try {
       result = ctx.proceed();
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       Exception unwrapped = unwrapException(ex); 
       needsRollback = needsRollback || needsRollback(transactional, unwrapped);
       throw unwrapped;
-    }
-    finally {
+    } finally {
       if (isInitiator) {
         try {
           if (needsRollback) {
             rollback(transactional);
-          } 
-          else {
+          } else {
             commit(transactional);
           }
         } finally {
@@ -80,15 +84,15 @@ public class LocalTransactionInterceptor implements Serializable {
     return result;
   }
 
-  protected boolean isTransactionActive() throws Exception {
+  protected boolean isTransactionActive() throws SystemException {
     return false;
   }
     
-  protected void beginJta() throws Exception {
+  protected void beginJta() throws NotSupportedException, SystemException {
     // nothing to do
   }
 
-  protected void endJta(boolean isExternaTransaction, boolean commit) throws Exception {
+  protected void endJta(boolean isExternaTransaction, boolean commit) throws SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
     // nothing to do
   }
 
@@ -140,22 +144,19 @@ public class LocalTransactionInterceptor implements Serializable {
       manager.close();
     }
   }
-  
+
   private Exception unwrapException(Exception wrapped) {
     Throwable unwrapped = wrapped;
     while (true) {
       if (unwrapped instanceof InvocationTargetException) {
         unwrapped = ((InvocationTargetException) unwrapped).getTargetException();
-      } 
-      else if (unwrapped instanceof UndeclaredThrowableException) {
+      } else if (unwrapped instanceof UndeclaredThrowableException) {
         unwrapped = ((UndeclaredThrowableException) unwrapped).getUndeclaredThrowable();
-      } 
-      else if (!(unwrapped instanceof Exception)) {
+      } else if (!(unwrapped instanceof Exception)) {
         return new RuntimeException(unwrapped);
-      }
-      else {
+      } else {
        return (Exception) unwrapped; 
-      }      
+      }
     }
   }
 

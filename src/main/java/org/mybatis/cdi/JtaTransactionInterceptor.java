@@ -17,7 +17,12 @@ package org.mybatis.cdi;
 
 import javax.inject.Inject;
 import javax.interceptor.Interceptor;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
 import javax.transaction.Status;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 /**
@@ -30,21 +35,23 @@ import javax.transaction.UserTransaction;
 @Interceptor
 public class JtaTransactionInterceptor extends LocalTransactionInterceptor {
 
+  private static final long serialVersionUID = 1L;
+
   @Inject
   private transient UserTransaction userTransaction;
 
   @Override
-  protected boolean isTransactionActive() throws Exception {
+  protected boolean isTransactionActive() throws SystemException {
     return userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION;
   }
-  
+
   @Override
-  protected void beginJta() throws Exception {
+  protected void beginJta() throws NotSupportedException, SystemException {
     userTransaction.begin();
   }
-  
+
   @Override
-  protected void endJta(boolean isExternaTransaction, boolean needsRollback) throws Exception {
+  protected void endJta(boolean isExternaTransaction, boolean needsRollback) throws SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
     if (isExternaTransaction) {
       if (needsRollback) {
         userTransaction.setRollbackOnly();

@@ -31,7 +31,11 @@ import org.apache.ibatis.session.SqlSessionFactory;
  *
  * @author Frank D. Martinez [mnesarco]
  */
-public class CDIUtils {
+public final class CDIUtils {
+
+  private CDIUtils() {
+      // this class cannot be instantiated
+  }
 
   public static SqlSessionManagerRegistry getRegistry(BeanManager beanManager, CreationalContext creationalContext) {
     Iterator<Bean<?>> beans = beanManager.getBeans(SqlSessionManagerRegistry.class).iterator();
@@ -42,8 +46,7 @@ public class CDIUtils {
     Set<Bean<?>> beans;
     if (name != null) {
       beans = beanManager.getBeans(name);
-    }
-    else {
+    } else {
       beans = beanManager.getBeans(SqlSessionFactory.class, qualifiers.toArray(new Annotation[]{}));
     }
     Bean bean = beanManager.resolve(beans);
@@ -52,9 +55,13 @@ public class CDIUtils {
     }
     return (SqlSessionFactory) beanManager.getReference(bean, SqlSessionFactory.class, creationalContext);
   }
-  
-  public static class SerializableDefaultAnnotationLiteral extends AnnotationLiteral<Default> implements Serializable {}
 
-  public static class SerializableAnyAnnotationLiteral extends AnnotationLiteral<Any> implements Serializable {}
+  public static class SerializableDefaultAnnotationLiteral extends AnnotationLiteral<Default> implements Serializable {
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class SerializableAnyAnnotationLiteral extends AnnotationLiteral<Any> implements Serializable {
+    private static final long serialVersionUID = 1L;
+  }
 
 }

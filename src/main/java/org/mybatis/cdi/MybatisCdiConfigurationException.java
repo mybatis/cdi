@@ -22,8 +22,10 @@ package org.mybatis.cdi;
  */
 public class MybatisCdiConfigurationException extends RuntimeException {
 
+  private static final long serialVersionUID = 1L;
+
   public MybatisCdiConfigurationException(String message) {
     super(message);
   }
-  
+
 }
