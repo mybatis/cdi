@@ -20,8 +20,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import javax.enterprise.context.spi.CreationalContext;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 
 /**
@@ -44,7 +47,7 @@ public class SerializableMapperProxy implements InvocationHandler, Serializable 
     this.mapper = getMapper();
   }
 
-  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+  public Object invoke(Object proxy, Method method, Object[] args) throws IllegalAccessException, InvocationTargetException {
     return method.invoke(mapper, args);
   }
 

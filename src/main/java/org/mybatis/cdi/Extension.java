@@ -16,6 +16,7 @@
 package org.mybatis.cdi;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -52,7 +53,7 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
     final InjectionTarget<X> it = event.getInjectionTarget();
     for (final InjectionPoint ip : it.getInjectionPoints()) {
       if (ip.getAnnotated().isAnnotationPresent(Mapper.class) || SqlSession.class.equals(ip.getAnnotated().getBaseType())) {
-        mappers.add(new BeanKey((Class<?>) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));
+        mappers.add(new BeanKey((Class<Type>) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));
       }
     }
   }
@@ -72,11 +73,11 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
 
     private final List<Annotation> qualifiers;
 
-    private final Class<?> type;
+    private final Class<Type> type;
 
     private final String sqlSessionManagerName;
 
-    public BeanKey(Class<?> type, Set<Annotation> annotations) {
+    public BeanKey(Class<Type> type, Set<Annotation> annotations) {
       this.type = type;
       this.qualifiers = sort(filterQualifiers(annotations));
 
@@ -138,7 +139,7 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
         return false;
       }
       final BeanKey other = (BeanKey) obj;
-      return !((this.key == null) ? (other.key != null) : !this.key.equals(other.key));
+      return !(this.key == null ? other.key != null : !this.key.equals(other.key));
     }
 
     public Bean createBean(BeanManager bm) {
