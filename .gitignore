@@ -5,3 +5,5 @@
 nb-configuration.xml
 *.log
 *.epoch
+*.tlog
+*.ser
