@@ -63,7 +63,7 @@
     <dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis</artifactId>
-      <version>3.2.7</version>
+      <version>3.2.8</version>
       <scope>provided</scope>
     </dependency>
     <!-- Keep this on 2.1.x in order to allow use in servlet 2.5 containers -->
@@ -91,11 +91,24 @@
       <groupId>org.codehaus.btm</groupId>
       <artifactId>btm</artifactId>
       <version>2.1.4</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
       <version>10.11.1.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.7</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.7</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
