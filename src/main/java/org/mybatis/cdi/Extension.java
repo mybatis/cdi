@@ -112,6 +112,7 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
     private List<Annotation> sort(Set<Annotation> annotations) {
       final List<Annotation> list = new ArrayList<Annotation>(annotations);
       Collections.sort(list, new Comparator<Annotation>() {
+        @Override
         public int compare(Annotation a, Annotation b) {
           return a.getClass().getName().compareTo(b.getClass().getName());
         }
@@ -119,6 +120,7 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
       return list;
     }
 
+    @Override
     public int compareTo(BeanKey o) {
       return key.compareTo(o.key);
     }
