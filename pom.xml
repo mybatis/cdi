@@ -66,11 +66,10 @@
       <version>3.2.8</version>
       <scope>provided</scope>
     </dependency>
-    <!-- Keep this on 2.1.x in order to allow use in servlet 2.5 containers -->
     <dependency>
       <groupId>org.jboss.weld.se</groupId>
       <artifactId>weld-se</artifactId>
-      <version>2.1.2.Final</version>
+      <version>2.2.11.Final</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
