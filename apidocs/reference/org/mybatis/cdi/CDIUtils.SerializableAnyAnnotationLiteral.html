@@ -55,7 +55,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.ico" />
 <title>
 
-  JtaTransactionInterceptor
+  CDIUtils.SerializableAnyAnnotationLiteral
 
 
 | mybatis-cdi
@@ -154,11 +154,11 @@
     <li><h2>Classes</h2>
       <ul>
           <li class="api apilevel-"><a href="../../../org/mybatis/cdi/CDIUtils.html">CDIUtils</a></li>
-          <li class="api apilevel-"><a href="../../../org/mybatis/cdi/CDIUtils.SerializableAnyAnnotationLiteral.html">CDIUtils.SerializableAnyAnnotationLiteral</a></li>
+          <li class="selected api apilevel-"><a href="../../../org/mybatis/cdi/CDIUtils.SerializableAnyAnnotationLiteral.html">CDIUtils.SerializableAnyAnnotationLiteral</a></li>
           <li class="api apilevel-"><a href="../../../org/mybatis/cdi/CDIUtils.SerializableDefaultAnnotationLiteral.html">CDIUtils.SerializableDefaultAnnotationLiteral</a></li>
           <li class="api apilevel-"><a href="../../../org/mybatis/cdi/Extension.html">Extension</a></li>
           <li class="api apilevel-"><a href="../../../org/mybatis/cdi/Extension.BeanKey.html">Extension.BeanKey</a></li>
-          <li class="selected api apilevel-"><a href="../../../org/mybatis/cdi/JtaTransactionInterceptor.html">JtaTransactionInterceptor</a></li>
+          <li class="api apilevel-"><a href="../../../org/mybatis/cdi/JtaTransactionInterceptor.html">JtaTransactionInterceptor</a></li>
           <li class="api apilevel-"><a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html">LocalTransactionInterceptor</a></li>
           <li class="api apilevel-"><a href="../../../org/mybatis/cdi/MyBatisBean.html">MyBatisBean</a></li>
           <li class="api apilevel-"><a href="../../../org/mybatis/cdi/SerializableMapperProxy.html">SerializableMapperProxy</a></li>
@@ -241,6 +241,13 @@
   
   
 
+  
+   
+  
+  
+  
+  
+
 
 <div class="sum-details-links">
 
@@ -259,9 +266,6 @@ Summary:
 
 
 
-
-  &#124; <a href="#promethods">Protected Methods</a>
-  
 
 
   &#124; <a href="#inhmethods">Inherited Methods</a>
@@ -284,11 +288,11 @@ Summary:
 
 <div id="jd-header">
     public
-     
+    static 
      
     
     class
-<h1>JtaTransactionInterceptor</h1>
+<h1>CDIUtils.SerializableAnyAnnotationLiteral</h1>
 
 
 
@@ -297,12 +301,17 @@ Summary:
   
 
   
-    extends <a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html">LocalTransactionInterceptor</a><br/>
+    extends AnnotationLiteral&lt;T&nbsp;extends&nbsp;Annotation&gt;<br/>
   
   
   
 
   
+  
+      implements 
+      
+        Serializable 
+      
   
   
 
@@ -325,7 +334,7 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="2" class="jd-inheritance-class-cell"><a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html">org.mybatis.cdi.LocalTransactionInterceptor</a></td>
+        <td colspan="2" class="jd-inheritance-class-cell">javax.enterprise.util.AnnotationLiteral&lt;T&nbsp;extends&nbsp;java.lang.annotation.Annotation&gt;</td>
     </tr>
     
 
@@ -335,7 +344,7 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="1" class="jd-inheritance-class-cell">org.mybatis.cdi.JtaTransactionInterceptor</td>
+        <td colspan="1" class="jd-inheritance-class-cell">org.mybatis.cdi.CDIUtils.SerializableAnyAnnotationLiteral</td>
     </tr>
     
 
@@ -349,10 +358,6 @@ Summary:
 
 <div class="jd-descr">
 
-
-<h2>Class Overview</h2>
-<p>Interceptor for JTA transactions. MyBatis should be configured to use the
- <code>MANAGED</code> transaction manager.</p>
 
 
 
@@ -418,7 +423,7 @@ Summary:
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../org/mybatis/cdi/JtaTransactionInterceptor.html#JtaTransactionInterceptor()">JtaTransactionInterceptor</a></span>()</nobr>
+        <span class="sympad"><a href="../../../org/mybatis/cdi/CDIUtils.SerializableAnyAnnotationLiteral.html#CDIUtils.SerializableAnyAnnotationLiteral()">CDIUtils.SerializableAnyAnnotationLiteral</a></span>()</nobr>
         
   </td></tr>
 
@@ -431,63 +436,6 @@ Summary:
 
 
 
-
-
-<!-- ========== METHOD SUMMARY =========== -->
-<table id="promethods" class="jd-sumtable"><tr><th colspan="12">Protected Methods</th></tr>
-
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../org/mybatis/cdi/JtaTransactionInterceptor.html#beginJta()">beginJta</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../org/mybatis/cdi/JtaTransactionInterceptor.html#endJta(boolean, boolean)">endJta</a></span>(boolean isExternaTransaction, boolean needsRollback)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            boolean</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../org/mybatis/cdi/JtaTransactionInterceptor.html#isTransactionActive()">isTransactionActive</a></span>()</nobr>
-        
-  </td></tr>
-
-
-
-</table>
 
 
 
@@ -501,19 +449,19 @@ Summary:
 
 <tr class="api apilevel-" >
 <td colspan="12">
-  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-org.mybatis.cdi.LocalTransactionInterceptor" class="jd-expando-trigger closed"
-          ><img id="inherited-methods-org.mybatis.cdi.LocalTransactionInterceptor-trigger"
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-javax.enterprise.util.AnnotationLiteral" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-javax.enterprise.util.AnnotationLiteral-trigger"
           src="../../../../assets/images/triangle-closed.png"
           class="jd-expando-trigger-img" /></a>
 From class
 
-  <a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html">org.mybatis.cdi.LocalTransactionInterceptor</a>
+  javax.enterprise.util.AnnotationLiteral
 
-<div id="inherited-methods-org.mybatis.cdi.LocalTransactionInterceptor">
-  <div id="inherited-methods-org.mybatis.cdi.LocalTransactionInterceptor-list"
+<div id="inherited-methods-javax.enterprise.util.AnnotationLiteral">
+  <div id="inherited-methods-javax.enterprise.util.AnnotationLiteral-list"
         class="jd-inheritedlinks">
   </div>
-  <div id="inherited-methods-org.mybatis.cdi.LocalTransactionInterceptor-summary" style="display: none;">
+  <div id="inherited-methods-javax.enterprise.util.AnnotationLiteral-summary" style="display: none;">
     <table class="jd-sumtable-expando">
     
 
@@ -526,64 +474,16 @@ From class
             
             
             
-            void</nobr>
+            Class&lt;?&nbsp;extends&nbsp;Annotation&gt;</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html#beginJta()">beginJta</a></span>()</nobr>
+        <span class="sympad">annotationType</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html#endJta(boolean, boolean)">endJta</a></span>(boolean isExternaTransaction, boolean commit)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            <a href="../../../org/mybatis/cdi/Transactional.html">Transactional</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html#getTransactionalAnnotation(javax.interceptor.InvocationContext)">getTransactionalAnnotation</a></span>(InvocationContext ctx)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            Object</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html#invoke(javax.interceptor.InvocationContext)">invoke</a></span>(InvocationContext ctx)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -593,7 +493,39 @@ From class
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html#isTransactionActive()">isTransactionActive</a></span>()</nobr>
+        <span class="sympad">equals</span>(Object arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">hashCode</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            String</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">toString</span>()</nobr>
         
   </td></tr>
 
@@ -808,6 +740,96 @@ From class
 
 
 
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-java.lang.annotation.Annotation" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-java.lang.annotation.Annotation-trigger"
+          src="../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From interface
+
+  java.lang.annotation.Annotation
+
+<div id="inherited-methods-java.lang.annotation.Annotation">
+  <div id="inherited-methods-java.lang.annotation.Annotation-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-java.lang.annotation.Annotation-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            Class&lt;?&nbsp;extends&nbsp;Annotation&gt;</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">annotationType</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">equals</span>(Object arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">hashCode</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            String</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">toString</span>()</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
 </table>
 
 
@@ -842,7 +864,7 @@ From class
 
 
 
-<A NAME="JtaTransactionInterceptor()"></A>
+<A NAME="CDIUtils.SerializableAnyAnnotationLiteral()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -854,7 +876,7 @@ From class
          
         
       </span>
-      <span class="sympad">JtaTransactionInterceptor</span>
+      <span class="sympad">CDIUtils.SerializableAnyAnnotationLiteral</span>
       <span class="normal">()</span>
     </h4>
       <div class="api-level">
@@ -887,147 +909,6 @@ From class
 
 
 <!-- ========= METHOD DETAIL ======== -->
-
-<h2>Protected Methods</h2>
-
-
-
-<A NAME="beginJta()"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        protected 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">beginJta</span>
-      <span class="normal">()</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th>NotSupportedException</td>
-            <td></td>
-        </tr>  
-        <tr>
-            <th>SystemException</td>
-            <td></td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="endJta(boolean, boolean)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        protected 
-         
-         
-         
-         
-        void
-      </span>
-      <span class="sympad">endJta</span>
-      <span class="normal">(boolean isExternaTransaction, boolean needsRollback)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th>SystemException</td>
-            <td></td>
-        </tr>  
-        <tr>
-            <th>RollbackException</td>
-            <td></td>
-        </tr>  
-        <tr>
-            <th>HeuristicMixedException</td>
-            <td></td>
-        </tr>  
-        <tr>
-            <th>HeuristicRollbackException</td>
-            <td></td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
-<A NAME="isTransactionActive()"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        protected 
-         
-         
-         
-         
-        boolean
-      </span>
-      <span class="sympad">isTransactionActive</span>
-      <span class="normal">()</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Throws</h5>
-      <table class="jd-tagtable">  
-        <tr>
-            <th>SystemException</td>
-            <td></td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
 
 
 

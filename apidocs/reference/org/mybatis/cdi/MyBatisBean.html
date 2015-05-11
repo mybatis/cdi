@@ -58,7 +58,7 @@
   MyBatisBean
 
 
-| MyBatis CDI Extension
+| mybatis-cdi
 
 </title>
 <link href="../../../../assets/android-developer-docs.css" rel="stylesheet" type="text/css" />
@@ -90,7 +90,7 @@
 <div id="header">
     <div id="headerLeft">
     
-      <span id="masthead-title">MyBatis CDI Extension</span>
+      <span id="masthead-title">mybatis-cdi</span>
     
     </div>
     <div id="headerRight">
@@ -154,11 +154,14 @@
     <li><h2>Classes</h2>
       <ul>
           <li class="api apilevel-"><a href="../../../org/mybatis/cdi/CDIUtils.html">CDIUtils</a></li>
+          <li class="api apilevel-"><a href="../../../org/mybatis/cdi/CDIUtils.SerializableAnyAnnotationLiteral.html">CDIUtils.SerializableAnyAnnotationLiteral</a></li>
+          <li class="api apilevel-"><a href="../../../org/mybatis/cdi/CDIUtils.SerializableDefaultAnnotationLiteral.html">CDIUtils.SerializableDefaultAnnotationLiteral</a></li>
           <li class="api apilevel-"><a href="../../../org/mybatis/cdi/Extension.html">Extension</a></li>
           <li class="api apilevel-"><a href="../../../org/mybatis/cdi/Extension.BeanKey.html">Extension.BeanKey</a></li>
           <li class="api apilevel-"><a href="../../../org/mybatis/cdi/JtaTransactionInterceptor.html">JtaTransactionInterceptor</a></li>
           <li class="api apilevel-"><a href="../../../org/mybatis/cdi/LocalTransactionInterceptor.html">LocalTransactionInterceptor</a></li>
           <li class="selected api apilevel-"><a href="../../../org/mybatis/cdi/MyBatisBean.html">MyBatisBean</a></li>
+          <li class="api apilevel-"><a href="../../../org/mybatis/cdi/SerializableMapperProxy.html">SerializableMapperProxy</a></li>
           <li class="api apilevel-"><a href="../../../org/mybatis/cdi/SqlSessionManagerRegistry.html">SqlSessionManagerRegistry</a></li>
       </ul>
     </li>
@@ -227,6 +230,11 @@
   
 
   
+  
+  
+  
+
+  
    
   
   
@@ -258,9 +266,12 @@ Summary:
 
 
 
+  <a href="#lfields">Fields</a>
+  
 
 
-  <a href="#pubctors">Ctors</a>
+
+  &#124; <a href="#pubctors">Ctors</a>
   
 
 
@@ -307,6 +318,8 @@ Summary:
   
   
       implements 
+      
+        Serializable 
       
         Bean&lt;T&gt; 
       
@@ -393,6 +406,59 @@ Summary:
 
 
 
+<!-- =========== FIELD SUMMARY =========== -->
+<table id="lfields" class="jd-sumtable"><tr><th colspan="12">Fields</th></tr>
+
+
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          final
+          BeanManager</nobr></td>
+          <td class="jd-linkcol"><a href="../../../org/mybatis/cdi/MyBatisBean.html#beanManager">beanManager</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          final
+          Set&lt;Annotation&gt;</nobr></td>
+          <td class="jd-linkcol"><a href="../../../org/mybatis/cdi/MyBatisBean.html#qualifiers">qualifiers</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          final
+          String</nobr></td>
+          <td class="jd-linkcol"><a href="../../../org/mybatis/cdi/MyBatisBean.html#sqlSessionFactoryName">sqlSessionFactoryName</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          final
+          Class&lt;Type&gt;</nobr></td>
+          <td class="jd-linkcol"><a href="../../../org/mybatis/cdi/MyBatisBean.html#type">type</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+
+</table>
+
+
 
 
 
@@ -414,7 +480,7 @@ Summary:
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../org/mybatis/cdi/MyBatisBean.html#MyBatisBean(java.lang.Class, java.util.Set<java.lang.annotation.Annotation>, java.lang.String, javax.enterprise.inject.spi.BeanManager)">MyBatisBean</a></span>(Class type, Set&lt;Annotation&gt; qualifiers, String sqlSessionFactoryName, BeanManager beanManager)</nobr>
+        <span class="sympad"><a href="../../../org/mybatis/cdi/MyBatisBean.html#MyBatisBean(java.lang.Class<java.lang.reflect.Type>, java.util.Set<java.lang.annotation.Annotation>, java.lang.String, javax.enterprise.inject.spi.BeanManager)">MyBatisBean</a></span>(Class&lt;Type&gt; type, Set&lt;Annotation&gt; qualifiers, String sqlSessionFactoryName, BeanManager beanManager)</nobr>
         
   </td></tr>
 
@@ -472,7 +538,7 @@ Summary:
             
             
             
-            Class</nobr>
+            Class&lt;Type&gt;</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../org/mybatis/cdi/MyBatisBean.html#getBeanClass()">getBeanClass</a></span>()</nobr>
@@ -488,7 +554,7 @@ Summary:
             
             
             
-            Set</nobr>
+            Set&lt;Object&gt;</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../org/mybatis/cdi/MyBatisBean.html#getInjectionPoints()">getInjectionPoints</a></span>()</nobr>
@@ -520,7 +586,7 @@ Summary:
             
             
             
-            Set</nobr>
+            Set&lt;Annotation&gt;</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../org/mybatis/cdi/MyBatisBean.html#getQualifiers()">getQualifiers</a></span>()</nobr>
@@ -536,7 +602,7 @@ Summary:
             
             
             
-            Class</nobr>
+            Class&lt;Dependent&gt;</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../org/mybatis/cdi/MyBatisBean.html#getScope()">getScope</a></span>()</nobr>
@@ -552,7 +618,7 @@ Summary:
             
             
             
-            Set</nobr>
+            Set&lt;Object&gt;</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../org/mybatis/cdi/MyBatisBean.html#getStereotypes()">getStereotypes</a></span>()</nobr>
@@ -568,7 +634,7 @@ Summary:
             
             
             
-            Set</nobr>
+            Set&lt;Type&gt;</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../org/mybatis/cdi/MyBatisBean.html#getTypes()">getTypes</a></span>()</nobr>
@@ -822,6 +888,8 @@ From class
   </div>
 </div>
 </td></tr>
+
+
 
 
 
@@ -1104,6 +1172,133 @@ From interface
 <!-- Fields -->
 
 
+<!-- ========= FIELD DETAIL ======== -->
+<h2>Fields</h2>
+
+
+
+
+<A NAME="beanManager"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+        final 
+        BeanManager
+      </span>
+        beanManager
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    
+    </div>
+</div>
+
+
+
+<A NAME="qualifiers"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+        final 
+        Set&lt;Annotation&gt;
+      </span>
+        qualifiers
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    
+    </div>
+</div>
+
+
+
+<A NAME="sqlSessionFactoryName"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+        final 
+        String
+      </span>
+        sqlSessionFactoryName
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    
+    </div>
+</div>
+
+
+
+<A NAME="type"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+        final 
+        Class&lt;Type&gt;
+      </span>
+        type
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    
+    </div>
+</div>
+
+
+
+
 <!-- Public ctors -->
 
 
@@ -1112,7 +1307,7 @@ From interface
 
 
 
-<A NAME="MyBatisBean(java.lang.Class, java.util.Set<java.lang.annotation.Annotation>, java.lang.String, javax.enterprise.inject.spi.BeanManager)"></A>
+<A NAME="MyBatisBean(java.lang.Class<java.lang.reflect.Type>, java.util.Set<java.lang.annotation.Annotation>, java.lang.String, javax.enterprise.inject.spi.BeanManager)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1125,7 +1320,7 @@ From interface
         
       </span>
       <span class="sympad">MyBatisBean</span>
-      <span class="normal">(Class type, Set&lt;Annotation&gt; qualifiers, String sqlSessionFactoryName, BeanManager beanManager)</span>
+      <span class="normal">(Class&lt;Type&gt; type, Set&lt;Annotation&gt; qualifiers, String sqlSessionFactoryName, BeanManager beanManager)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1230,7 +1425,7 @@ From interface
          
          
          
-        Class
+        Class&lt;Type&gt;
       </span>
       <span class="sympad">getBeanClass</span>
       <span class="normal">()</span>
@@ -1261,7 +1456,7 @@ From interface
          
          
          
-        Set
+        Set&lt;Object&gt;
       </span>
       <span class="sympad">getInjectionPoints</span>
       <span class="normal">()</span>
@@ -1323,7 +1518,7 @@ From interface
          
          
          
-        Set
+        Set&lt;Annotation&gt;
       </span>
       <span class="sympad">getQualifiers</span>
       <span class="normal">()</span>
@@ -1354,7 +1549,7 @@ From interface
          
          
          
-        Class
+        Class&lt;Dependent&gt;
       </span>
       <span class="sympad">getScope</span>
       <span class="normal">()</span>
@@ -1385,7 +1580,7 @@ From interface
          
          
          
-        Set
+        Set&lt;Object&gt;
       </span>
       <span class="sympad">getStereotypes</span>
       <span class="normal">()</span>
@@ -1416,7 +1611,7 @@ From interface
          
          
          
-        Set
+        Set&lt;Type&gt;
       </span>
       <span class="sympad">getTypes</span>
       <span class="normal">()</span>

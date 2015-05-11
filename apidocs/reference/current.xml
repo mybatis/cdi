@@ -5,18 +5,10 @@
  extends="java.lang.Object"
  abstract="false"
  static="false"
- final="false"
+ final="true"
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="CDIUtils"
- type="org.mybatis.cdi.CDIUtils"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
 <method name="findSqlSessionFactory"
  return="org.apache.ibatis.session.SqlSessionFactory"
  abstract="false"
@@ -51,6 +43,44 @@
 <parameter name="creationalContext" type="javax.enterprise.context.spi.CreationalContext">
 </parameter>
 </method>
+</class>
+<class name="CDIUtils.SerializableAnyAnnotationLiteral"
+ extends="javax.enterprise.util.AnnotationLiteral"
+ abstract="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="java.io.Serializable">
+</implements>
+<constructor name="CDIUtils.SerializableAnyAnnotationLiteral"
+ type="org.mybatis.cdi.CDIUtils.SerializableAnyAnnotationLiteral"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+</class>
+<class name="CDIUtils.SerializableDefaultAnnotationLiteral"
+ extends="javax.enterprise.util.AnnotationLiteral"
+ abstract="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="java.io.Serializable">
+</implements>
+<constructor name="CDIUtils.SerializableDefaultAnnotationLiteral"
+ type="org.mybatis.cdi.CDIUtils.SerializableDefaultAnnotationLiteral"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
 </class>
 <class name="Extension"
  extends="java.lang.Object"
@@ -114,7 +144,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="type" type="java.lang.Class&lt;?&gt;">
+<parameter name="type" type="java.lang.Class&lt;java.lang.reflect.Type&gt;">
 </parameter>
 <parameter name="annotations" type="java.util.Set&lt;java.lang.annotation.Annotation&gt;">
 </parameter>
@@ -246,7 +276,9 @@
  deprecated="not deprecated"
  visibility="protected"
 >
-<exception name="Exception" type="java.lang.Exception">
+<exception name="NotSupportedException" type="javax.transaction.NotSupportedException">
+</exception>
+<exception name="SystemException" type="javax.transaction.SystemException">
 </exception>
 </method>
 <method name="endJta"
@@ -263,7 +295,13 @@
 </parameter>
 <parameter name="commit" type="boolean">
 </parameter>
-<exception name="Exception" type="java.lang.Exception">
+<exception name="HeuristicMixedException" type="javax.transaction.HeuristicMixedException">
+</exception>
+<exception name="HeuristicRollbackException" type="javax.transaction.HeuristicRollbackException">
+</exception>
+<exception name="RollbackException" type="javax.transaction.RollbackException">
+</exception>
+<exception name="SystemException" type="javax.transaction.SystemException">
 </exception>
 </method>
 <method name="getTransactionalAnnotation"
@@ -304,7 +342,7 @@
  deprecated="not deprecated"
  visibility="protected"
 >
-<exception name="Exception" type="java.lang.Exception">
+<exception name="SystemException" type="javax.transaction.SystemException">
 </exception>
 </method>
 </class>
@@ -329,6 +367,8 @@
 >
 <implements name="javax.enterprise.inject.spi.Bean">
 </implements>
+<implements name="java.io.Serializable">
+</implements>
 <constructor name="MyBatisBean"
  type="org.mybatis.cdi.MyBatisBean"
  static="false"
@@ -336,7 +376,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="type" type="java.lang.Class">
+<parameter name="type" type="java.lang.Class&lt;java.lang.reflect.Type&gt;">
 </parameter>
 <parameter name="qualifiers" type="java.util.Set&lt;java.lang.annotation.Annotation&gt;">
 </parameter>
@@ -374,7 +414,7 @@
 </parameter>
 </method>
 <method name="getBeanClass"
- return="java.lang.Class"
+ return="java.lang.Class&lt;java.lang.reflect.Type&gt;"
  abstract="false"
  native="false"
  synchronized="false"
@@ -385,7 +425,7 @@
 >
 </method>
 <method name="getInjectionPoints"
- return="java.util.Set"
+ return="java.util.Set&lt;java.lang.Object&gt;"
  abstract="false"
  native="false"
  synchronized="false"
@@ -407,7 +447,7 @@
 >
 </method>
 <method name="getQualifiers"
- return="java.util.Set"
+ return="java.util.Set&lt;java.lang.annotation.Annotation&gt;"
  abstract="false"
  native="false"
  synchronized="false"
@@ -418,7 +458,7 @@
 >
 </method>
 <method name="getScope"
- return="java.lang.Class"
+ return="java.lang.Class&lt;javax.enterprise.context.Dependent&gt;"
  abstract="false"
  native="false"
  synchronized="false"
@@ -429,7 +469,7 @@
 >
 </method>
 <method name="getStereotypes"
- return="java.util.Set"
+ return="java.util.Set&lt;java.lang.Object&gt;"
  abstract="false"
  native="false"
  synchronized="false"
@@ -440,7 +480,7 @@
 >
 </method>
 <method name="getTypes"
- return="java.util.Set"
+ return="java.util.Set&lt;java.lang.reflect.Type&gt;"
  abstract="false"
  native="false"
  synchronized="false"
@@ -472,6 +512,46 @@
  visibility="public"
 >
 </method>
+<field name="beanManager"
+ type="javax.enterprise.inject.spi.BeanManager"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+<field name="qualifiers"
+ type="java.util.Set"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+<field name="sqlSessionFactoryName"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+<field name="type"
+ type="java.lang.Class"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
 </class>
 <class name="MybatisCdiConfigurationException"
  extends="java.lang.RuntimeException"
@@ -491,6 +571,50 @@
 <parameter name="message" type="java.lang.String">
 </parameter>
 </constructor>
+</class>
+<class name="SerializableMapperProxy"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="java.io.Serializable">
+</implements>
+<constructor name="SerializableMapperProxy"
+ type="org.mybatis.cdi.SerializableMapperProxy"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="bean" type="org.mybatis.cdi.MyBatisBean">
+</parameter>
+<parameter name="creationalContext" type="javax.enterprise.context.spi.CreationalContext">
+</parameter>
+</constructor>
+<method name="invoke"
+ return="java.lang.Object"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="proxy" type="java.lang.Object">
+</parameter>
+<parameter name="method" type="java.lang.reflect.Method">
+</parameter>
+<parameter name="args" type="java.lang.Object[]">
+</parameter>
+<exception name="IllegalAccessException" type="java.lang.IllegalAccessException">
+</exception>
+<exception name="InvocationTargetException" type="java.lang.reflect.InvocationTargetException">
+</exception>
+</method>
 </class>
 <class name="SqlSessionManagerRegistry"
  extends="java.lang.Object"
