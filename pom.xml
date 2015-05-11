@@ -123,7 +123,7 @@
               <name>derby.stream.error.file</name>
               <value>target/derby.log</value>
             </property>
-        </systemProperties>
+          </systemProperties>
         </configuration>
       </plugin>
       <plugin>
