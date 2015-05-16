@@ -47,6 +47,7 @@ public class SerializableMapperProxy implements InvocationHandler, Serializable 
     this.mapper = getMapper();
   }
 
+  @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws IllegalAccessException, InvocationTargetException {
     return method.invoke(mapper, args);
   }

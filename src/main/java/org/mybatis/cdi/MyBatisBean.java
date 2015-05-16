@@ -62,44 +62,54 @@ public class MyBatisBean implements Bean, Serializable {
     }
   }
 
+  @Override
   public Set<Type> getTypes() {
     Set<Type> types = new HashSet<Type>();
     types.add(type);
     return types;
   }
 
+  @Override
   public Set<Annotation> getQualifiers() {
     return qualifiers;
   }
 
+  @Override
   public Class<Dependent> getScope() {
     return Dependent.class;
   }
 
+  @Override
   public String getName() {
     return null;
   }
 
+  @Override
   public Set<Object> getStereotypes() {
     return Collections.emptySet();
   }
 
+  @Override
   public Class<Type> getBeanClass() {
     return type;
   }
 
+  @Override
   public boolean isAlternative() {
     return false;
   }
 
+  @Override
   public boolean isNullable() {
     return false;
   }
 
+  @Override
   public Set<Object> getInjectionPoints() {
     return Collections.emptySet();
   }
 
+  @Override
   public Object create(CreationalContext creationalContext) {
     if (SqlSession.class.equals(type)) {
       return findSqlSessionManager(creationalContext);
@@ -111,6 +121,7 @@ public class MyBatisBean implements Bean, Serializable {
     }
   }
 
+  @Override
   public void destroy(Object instance, CreationalContext creationalContext) {
     creationalContext.release();
   }
