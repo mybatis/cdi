@@ -46,8 +46,9 @@
   </ciManagement>
   <distributionManagement>
     <site>
-      <id>github</id>
-      <url>gitsite:git@github.com/mybatis/cdi.git</url>
+      <id>gh-pages</id>
+      <name>Mybatis GitHub Pages</name>
+      <url>git:ssh://git@github.com/mybatis/cdi.git?gh-pages#</url>
     </site>
   </distributionManagement>
 
