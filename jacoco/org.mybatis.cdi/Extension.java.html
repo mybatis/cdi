@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Extension.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mybatis-cdi</a> &gt; <a href="index.source.html" class="el_package">org.mybatis.cdi</a> &gt; <span class="el_source">Extension.java</span></div><h1>Extension.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">/**</span>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Extension.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mybatis-cdi</a> &gt; <a href="index.source.html" class="el_package">org.mybatis.cdi</a> &gt; <span class="el_source">Extension.java</span></div><h1>Extension.java</h1><pre class="source lang-java linenums">/**
  *    Copyright 2013-2015 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
@@ -55,7 +55,7 @@ import org.apache.ibatis.session.SqlSession;
 <span class="pc bpc" id="L55" title="1 of 4 branches missed.">      if (ip.getAnnotated().isAnnotationPresent(Mapper.class) || SqlSession.class.equals(ip.getAnnotated().getBaseType())) {</span>
 <span class="fc" id="L56">        this.mappers.add(new BeanKey((Class&lt;Type&gt;) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));</span>
       }
-    }
+<span class="fc" id="L58">    }</span>
 <span class="fc" id="L59">  }</span>
 
   public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
@@ -63,11 +63,11 @@ import org.apache.ibatis.session.SqlSession;
 <span class="fc bfc" id="L63" title="All 2 branches covered.">    for (BeanKey key : this.mappers) {</span>
 <span class="fc" id="L64">      logger.log(Level.INFO, &quot;MyBatis CDI Module - Mapper dependency discovered: {0}&quot;, key.getKey());</span>
 <span class="fc" id="L65">      abd.addBean(key.createBean(bm));</span>
-    }
+<span class="fc" id="L66">    }</span>
 <span class="fc" id="L67">    this.mappers.clear();</span>
 <span class="fc" id="L68">  }</span>
 
-  public static class BeanKey implements Comparable&lt;BeanKey&gt; {
+<span class="fc" id="L70">  public static class BeanKey implements Comparable&lt;BeanKey&gt; {</span>
 
     private final String key;
 
@@ -88,10 +88,10 @@ import org.apache.ibatis.session.SqlSession;
 <span class="fc bfc" id="L88" title="All 2 branches covered.">      for (Annotation q : this.qualifiers) {</span>
 <span class="fc bfc" id="L89" title="All 2 branches covered.">        if (q instanceof Named) {</span>
 <span class="fc" id="L90">          name = ((Named) q).value();</span>
-<span class="fc" id="L91">        } else {</span>
+        } else {
 <span class="fc" id="L92">          sb.append(&quot;.&quot;).append(q.annotationType().getSimpleName());</span>
         }
-      }
+<span class="fc" id="L94">      }</span>
 <span class="fc bfc" id="L95" title="All 2 branches covered.">      if (name != null) {</span>
 <span class="fc" id="L96">        sb.append(&quot;_&quot;).append(name);</span>
       }
@@ -105,7 +105,7 @@ import org.apache.ibatis.session.SqlSession;
 <span class="fc bfc" id="L105" title="All 2 branches covered.">        if (a.annotationType().isAnnotationPresent(Qualifier.class)) {</span>
 <span class="fc" id="L106">          set.add(a);</span>
         }
-      }
+<span class="fc" id="L108">      }</span>
 <span class="fc" id="L109">      return set;</span>
     }
 

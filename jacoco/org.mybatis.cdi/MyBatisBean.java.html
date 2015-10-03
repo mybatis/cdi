@@ -57,7 +57,7 @@ public class MyBatisBean implements Bean, Serializable {
 <span class="nc" id="L57">      this.qualifiers = new HashSet&lt;Annotation&gt;();</span>
 <span class="nc" id="L58">      this.qualifiers.add(new CDIUtils.SerializableDefaultAnnotationLiteral());</span>
 <span class="nc" id="L59">      this.qualifiers.add(new CDIUtils.SerializableAnyAnnotationLiteral());</span>
-<span class="nc" id="L60">    } else {</span>
+    } else {
 <span class="fc" id="L61">      this.qualifiers = qualifiers;</span>
     }
 <span class="fc" id="L63">  }</span>
@@ -115,9 +115,9 @@ public class MyBatisBean implements Bean, Serializable {
 <span class="fc" id="L115">      return findSqlSessionManager(creationalContext);</span>
     }
 <span class="fc" id="L117">    return Proxy.newProxyInstance(</span>
-<span class="fc" id="L118">        SqlSessionFactory.class.getClassLoader(), </span>
-<span class="fc" id="L119">        new Class[] {this.type}, </span>
-<span class="fc" id="L120">        new SerializableMapperProxy(this, creationalContext));</span>
+        SqlSessionFactory.class.getClassLoader(), 
+        new Class[] {this.type}, 
+        new SerializableMapperProxy(this, creationalContext));
   }
 
   @Override

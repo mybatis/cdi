@@ -67,20 +67,20 @@ import org.apache.ibatis.session.SqlSessionManager;
 <span class="fc" id="L67">      Exception unwrapped = unwrapException(ex); </span>
 <span class="pc bpc" id="L68" title="1 of 4 branches missed.">      needsRollback = needsRollback || needsRollback(transactional, unwrapped);</span>
 <span class="fc" id="L69">      throw unwrapped;</span>
-<span class="fc" id="L70">    } finally {</span>
+    } finally {
 <span class="pc bpc" id="L71" title="2 of 4 branches missed.">      if (isInitiator) {</span>
         try {
 <span class="pc bpc" id="L73" title="1 of 4 branches missed.">          if (needsRollback) {</span>
 <span class="pc" id="L74">            rollback(transactional);</span>
-<span class="pc" id="L75">          } else {</span>
+          } else {
 <span class="fc" id="L76">            commit(transactional);</span>
           }
-<span class="pc" id="L78">        } finally {</span>
+        } finally {
 <span class="pc" id="L79">          close();</span>
 <span class="pc" id="L80">          endJta(isExternalJta, needsRollback);</span>
-<span class="nc" id="L81">        }</span>
+<span class="fc" id="L81">        }</span>
       }
-<span class="fc" id="L83">    }</span>
+    }
 <span class="fc" id="L84">    return result;</span>
   }
 
@@ -123,26 +123,26 @@ import org.apache.ibatis.session.SqlSessionManager;
 <span class="fc" id="L123">        manager.startManagedSession(transactional.executorType(), transactional.isolation().getTransactionIsolationLevel());</span>
 <span class="fc" id="L124">        started = true;</span>
       }
-    }
+<span class="fc" id="L126">    }</span>
 <span class="fc" id="L127">    return started;</span>
   }
 
   private void commit(Transactional transactional) {
 <span class="fc bfc" id="L131" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
 <span class="fc" id="L132">      manager.commit(transactional.force());</span>
-    }
+<span class="fc" id="L133">    }</span>
 <span class="fc" id="L134">  }</span>
 
   private void rollback(Transactional transactional) {
 <span class="fc bfc" id="L137" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
 <span class="fc" id="L138">      manager.rollback(transactional.force());</span>
-    }
+<span class="fc" id="L139">    }</span>
 <span class="fc" id="L140">  }</span>
 
   private void close() {
 <span class="fc bfc" id="L143" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
 <span class="fc" id="L144">      manager.close();</span>
-    }
+<span class="fc" id="L145">    }</span>
 <span class="fc" id="L146">  }</span>
 
   private Exception unwrapException(Exception wrapped) {

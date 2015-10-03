@@ -48,7 +48,7 @@ import org.apache.ibatis.session.SqlSessionManager;
 <span class="fc bfc" id="L48" title="All 2 branches covered.">    for (SqlSessionFactory factory : this.factories) {</span>
 <span class="fc" id="L49">      SqlSessionManager manager = SqlSessionManager.newInstance(factory);</span>
 <span class="fc" id="L50">      m.put(factory, manager);</span>
-    }
+<span class="fc" id="L51">    }</span>
 <span class="fc" id="L52">    this.managers = Collections.unmodifiableMap(m);</span>
 <span class="fc" id="L53">  }</span>
 
