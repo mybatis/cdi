@@ -28,23 +28,25 @@ public class JtaDatasourceFactory implements DataSourceFactory {
   PoolingDataSource ds; 
   
   public JtaDatasourceFactory() {
-    ds = new PoolingDataSource(); 
-  }
-  
-  public void setProperties(Properties props) {
-    ds.setUniqueName(props.getProperty("resourceName"));
-    props.remove("resourceName");
-    ds.setClassName(props.getProperty("driver"));
-    props.remove("driver");
-    ds.setMaxPoolSize(Integer.valueOf(props.getProperty("maxPoolSize")));
-    props.remove("maxPoolSize");
-    ds.setAllowLocalTransactions(Boolean.valueOf(props.getProperty("allowLocalTransactions")));
-    props.remove("allowLocalTransactions");    
-    ds.setDriverProperties(props);
+    this.ds = new PoolingDataSource(); 
   }
 
+  @Override
+  public void setProperties(Properties props) {
+    this.ds.setUniqueName(props.getProperty("resourceName"));
+    props.remove("resourceName");
+    this.ds.setClassName(props.getProperty("driver"));
+    props.remove("driver");
+    this.ds.setMaxPoolSize(Integer.valueOf(props.getProperty("maxPoolSize")));
+    props.remove("maxPoolSize");
+    this.ds.setAllowLocalTransactions(Boolean.valueOf(props.getProperty("allowLocalTransactions")));
+    props.remove("allowLocalTransactions");    
+    this.ds.setDriverProperties(props);
+  }
+
+  @Override
   public DataSource getDataSource() {
-    return ds;
+    return this.ds;
   }
 
 }

@@ -28,4 +28,5 @@ import javax.inject.Qualifier;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({METHOD, FIELD, TYPE, PARAMETER})
 public @interface MySpecialManager {
+    // MySpecialManager Interface
 }

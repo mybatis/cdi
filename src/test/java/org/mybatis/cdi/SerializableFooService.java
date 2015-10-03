@@ -25,11 +25,13 @@ import javax.inject.Named;
  */
 public class SerializableFooService implements Serializable {
 
+  private static final long serialVersionUID = 1L;
+
   @Inject @Mapper @Named("manager1")
   private UserMapper userMapper;
 
   public User getUser(int userId) {
     return this.userMapper.getUser(userId);
   }
-  
+
 }

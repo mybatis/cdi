@@ -19,7 +19,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.transaction.UserTransaction;
 
@@ -32,23 +31,23 @@ public class TestingIoC {
 
   @Inject
   private FooService fooService;
-  
+
   @Inject
   private SerializableFooService serFooService;
-  
+
   @Test
   public void shouldGetAUser() {
-    Assert.assertEquals("1-User1", fooService.getUserFromSqlSession(1).getName());
-    Assert.assertEquals("1-User1", fooService.getUser(1).getName());
-    Assert.assertEquals("2-User2", fooService.getUser2(2).getName());
-    Assert.assertEquals("3-User3", fooService.getUser3(3).getName());
+    Assert.assertEquals("1-User1", this.fooService.getUserFromSqlSession(1).getName());
+    Assert.assertEquals("1-User1", this.fooService.getUser(1).getName());
+    Assert.assertEquals("2-User2", this.fooService.getUser2(2).getName());
+    Assert.assertEquals("3-User3", this.fooService.getUser3(3).getName());
   }
 
   @Test
   public void shouldInjectTheSameMapper() {
-    Assert.assertEquals(fooService.getUser2(1).getName(), fooService.getUserDummy(1).getName());
-    Assert.assertEquals(fooService.getUser2(2).getName(), fooService.getUserDummy(2).getName());
-    Assert.assertEquals(fooService.getUser2(3).getName(), fooService.getUserDummy(3).getName());
+    Assert.assertEquals(this.fooService.getUser2(1).getName(), this.fooService.getUserDummy(1).getName());
+    Assert.assertEquals(this.fooService.getUser2(2).getName(), this.fooService.getUserDummy(2).getName());
+    Assert.assertEquals(this.fooService.getUser2(3).getName(), this.fooService.getUserDummy(3).getName());
   }
 
   @Test
@@ -56,8 +55,8 @@ public class TestingIoC {
     User user = new User();
     user.setId(20);
     user.setName("User20");
-    fooService.insertUser(user);
-    Assert.assertEquals("User20", fooService.getUser(20).getName());
+    this.fooService.insertUser(user);
+    Assert.assertEquals("User20", this.fooService.getUser(20).getName());
   }
 
   @Test
@@ -66,11 +65,11 @@ public class TestingIoC {
     user.setId(30);
     user.setName("User40");
     try {
-      fooService.insertUserAndThrowARuntime(user);
+      this.fooService.insertUserAndThrowARuntime(user);
     } catch (Exception ignore) {
       // ignored
     }
-    Assert.assertNull(fooService.getUser(40));
+    Assert.assertNull(this.fooService.getUser(40));
   }
 
   @Test
@@ -79,11 +78,11 @@ public class TestingIoC {
     user.setId(30);
     user.setName("User30");
     try {
-      fooService.insertUserAndThrowACheckedThatShouldNotRollback(user);
+      this.fooService.insertUserAndThrowACheckedThatShouldNotRollback(user);
     } catch (Exception ignore) {
       // ignored
     }
-    Assert.assertEquals("User30", fooService.getUser(30).getName());
+    Assert.assertEquals("User30", this.fooService.getUser(30).getName());
   }
 
   @Test
@@ -92,11 +91,11 @@ public class TestingIoC {
     user.setId(30);
     user.setName("User30");
     try {
-      fooService.insertUserAndThrowACheckedThatShouldRollback(user);
+      this.fooService.insertUserAndThrowACheckedThatShouldRollback(user);
     } catch (Exception ignore) {
       // ignored
     }
-    Assert.assertNull(fooService.getUser(30));
+    Assert.assertNull(this.fooService.getUser(30));
   }
 
   // TEST JTA
@@ -109,9 +108,9 @@ public class TestingIoC {
 
   @Test
   public void jtaShouldGetAUserWithNoTX() throws Exception {
-    userTransaction.begin();
-    Assert.assertEquals("1-User1", fooServiceJTA.getUserWithNoTransaction(1).getName());
-    userTransaction.commit();
+    this.userTransaction.begin();
+    Assert.assertEquals("1-User1", this.fooServiceJTA.getUserWithNoTransaction(1).getName());
+    this.userTransaction.commit();
   }
 
   @Test
@@ -119,8 +118,8 @@ public class TestingIoC {
     User user = new User();
     user.setId(20);
     user.setName("User20");
-    fooServiceJTA.insertUserWithTransactional(user);
-    Assert.assertEquals(user.getName(), fooServiceJTA.getUserWithNoTransaction(user.getId()).getName());
+    this.fooServiceJTA.insertUserWithTransactional(user);
+    Assert.assertEquals(user.getName(), this.fooServiceJTA.getUserWithNoTransaction(user.getId()).getName());
   }
 
   @Test
@@ -129,11 +128,11 @@ public class TestingIoC {
     user.setId(30);
     user.setName("User30");
     try {
-      fooServiceJTA.insertUserWithTransactionalAndFail(user);
+      this.fooServiceJTA.insertUserWithTransactionalAndFail(user);
     } catch (Exception ignore) {
       // ignored
     }
-    Assert.assertNull(fooServiceJTA.getUserWithNoTransaction(user.getId()));
+    Assert.assertNull(this.fooServiceJTA.getUserWithNoTransaction(user.getId()));
   }
 
   @Test
@@ -141,10 +140,10 @@ public class TestingIoC {
     User user = new User();
     user.setId(40);
     user.setName("User40");
-    userTransaction.begin();
-    fooServiceJTA.insertUserWithTransactional(user);
-    userTransaction.commit();
-    Assert.assertEquals(user.getName(), fooServiceJTA.getUserWithNoTransaction(user.getId()).getName());
+    this.userTransaction.begin();
+    this.fooServiceJTA.insertUserWithTransactional(user);
+    this.userTransaction.commit();
+    Assert.assertEquals(user.getName(), this.fooServiceJTA.getUserWithNoTransaction(user.getId()).getName());
   }
 
   @Test
@@ -152,21 +151,21 @@ public class TestingIoC {
     User user = new User();
     user.setId(50);
     user.setName("User50");
-    userTransaction.begin();
-    fooServiceJTA.insertUserWithTransactional(user);
-    userTransaction.rollback();
-    Assert.assertNull(fooServiceJTA.getUserWithNoTransaction(user.getId()));
+    this.userTransaction.begin();
+    this.fooServiceJTA.insertUserWithTransactional(user);
+    this.userTransaction.rollback();
+    Assert.assertNull(this.fooServiceJTA.getUserWithNoTransaction(user.getId()));
   }
 
   @Test
   public void injectedMappersAreSerializable() throws Exception {
     ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream("mapper.ser"));
-    oout.writeObject(serFooService);
+    oout.writeObject(this.serFooService);
     oout.close();
     ObjectInputStream oin = new ObjectInputStream(new FileInputStream("mapper.ser"));
     SerializableFooService unserialized = (SerializableFooService) oin.readObject();
     oin.close();    
-    Assert.assertEquals(serFooService.getUser(1).getName(), unserialized.getUser(1).getName());
+    Assert.assertEquals(this.serFooService.getUser(1).getName(), unserialized.getUser(1).getName());
   }
   
 }

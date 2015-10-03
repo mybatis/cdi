@@ -26,17 +26,16 @@ public class WeldJUnit4Runner extends BlockJUnit4ClassRunner {
   private final Weld weld;
   private final WeldContainer container;
 
-  public WeldJUnit4Runner(final Class<Object> klass) throws InitializationError {
-    super(klass);
-    this.klass = klass;
+  public WeldJUnit4Runner(final Class<Object> initializerClass) throws InitializationError {
+    super(initializerClass);
+    this.klass = initializerClass;
     this.weld = new Weld();
-    this.container = weld.initialize();
+    this.container = this.weld.initialize();
   }
 
   @Override
   protected Object createTest() throws Exception {
-    final Object test = container.instance().select(klass).get();
-    return test;
+    return this.container.instance().select(this.klass).get();
   }
 
 }
