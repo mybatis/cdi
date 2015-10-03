@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MyBatisBean.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mybatis-cdi</a> &gt; <a href="index.source.html" class="el_package">org.mybatis.cdi</a> &gt; <span class="el_source">MyBatisBean.java</span></div><h1>MyBatisBean.java</h1><pre class="source lang-java linenums">/**
+ *    Copyright 2013-2015 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.mybatis.cdi;
+
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.enterprise.context.Dependent;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionManager;
+
+/**
+ * Internal CDI metadata for a mapper bean.
+ *
+ * @author Frank D. Martinez [mnesarco]
+ */
+public class MyBatisBean implements Bean, Serializable {
+
+  private static final long serialVersionUID = 1L;
+
+  protected final Class&lt;Type&gt; type;
+
+  protected final Set&lt;Annotation&gt; qualifiers;
+
+  protected final BeanManager beanManager;
+
+  protected final String sqlSessionFactoryName;
+  
+<span class="fc" id="L52">  public MyBatisBean(Class&lt;Type&gt; type, Set&lt;Annotation&gt; qualifiers, String sqlSessionFactoryName, BeanManager beanManager) {  </span>
+<span class="fc" id="L53">    this.type = type;</span>
+<span class="fc" id="L54">    this.sqlSessionFactoryName = sqlSessionFactoryName;</span>
+<span class="fc" id="L55">    this.beanManager = beanManager;    </span>
+<span class="pc bpc" id="L56" title="2 of 4 branches missed.">    if (qualifiers == null || qualifiers.isEmpty()) {</span>
+<span class="nc" id="L57">      this.qualifiers = new HashSet&lt;Annotation&gt;();</span>
+<span class="nc" id="L58">      this.qualifiers.add(new CDIUtils.SerializableDefaultAnnotationLiteral());</span>
+<span class="nc" id="L59">      this.qualifiers.add(new CDIUtils.SerializableAnyAnnotationLiteral());</span>
+    } else {
+<span class="fc" id="L61">      this.qualifiers = qualifiers;</span>
+    }
+<span class="fc" id="L63">  }</span>
+
+  @Override
+  public Set&lt;Type&gt; getTypes() {
+<span class="fc" id="L67">    Set&lt;Type&gt; types = new HashSet&lt;Type&gt;();</span>
+<span class="fc" id="L68">    types.add(this.type);</span>
+<span class="fc" id="L69">    return types;</span>
+  }
+
+  @Override
+  public Set&lt;Annotation&gt; getQualifiers() {
+<span class="fc" id="L74">    return this.qualifiers;</span>
+  }
+
+  @Override
+  public Class&lt;Dependent&gt; getScope() {
+<span class="fc" id="L79">    return Dependent.class;</span>
+  }
+
+  @Override
+  public String getName() {
+<span class="fc" id="L84">    return null;</span>
+  }
+
+  @Override
+  public Set&lt;Object&gt; getStereotypes() {
+<span class="fc" id="L89">    return Collections.emptySet();</span>
+  }
+
+  @Override
+  public Class&lt;Type&gt; getBeanClass() {
+<span class="fc" id="L94">    return this.type;</span>
+  }
+
+  @Override
+  public boolean isAlternative() {
+<span class="fc" id="L99">    return false;</span>
+  }
+
+  @Override
+  public boolean isNullable() {
+<span class="nc" id="L104">    return false;</span>
+  }
+
+  @Override
+  public Set&lt;Object&gt; getInjectionPoints() {
+<span class="fc" id="L109">    return Collections.emptySet();</span>
+  }
+
+  @Override
+  public Object create(CreationalContext creationalContext) {
+<span class="fc bfc" id="L114" title="All 2 branches covered.">    if (SqlSession.class.equals(this.type)) {</span>
+<span class="fc" id="L115">      return findSqlSessionManager(creationalContext);</span>
+    }
+<span class="fc" id="L117">    return Proxy.newProxyInstance(</span>
+        SqlSessionFactory.class.getClassLoader(), 
+        new Class[] {this.type}, 
+        new SerializableMapperProxy(this, creationalContext));
+  }
+
+  @Override
+  public void destroy(Object instance, CreationalContext creationalContext) {
+<span class="fc" id="L125">    creationalContext.release();</span>
+<span class="fc" id="L126">  }</span>
+
+  private SqlSessionManager findSqlSessionManager(CreationalContext creationalContext) {
+<span class="fc" id="L129">    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.sqlSessionFactoryName, this.qualifiers, this.beanManager, creationalContext);</span>
+<span class="fc" id="L130">    return CDIUtils.getRegistry(this.beanManager, creationalContext).getManager(factory);</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

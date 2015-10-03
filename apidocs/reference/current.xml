@@ -52,8 +52,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<implements name="java.io.Serializable">
-</implements>
 <constructor name="CDIUtils.SerializableAnyAnnotationLiteral"
  type="org.mybatis.cdi.CDIUtils.SerializableAnyAnnotationLiteral"
  static="false"
@@ -71,8 +69,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<implements name="java.io.Serializable">
-</implements>
 <constructor name="CDIUtils.SerializableDefaultAnnotationLiteral"
  type="org.mybatis.cdi.CDIUtils.SerializableDefaultAnnotationLiteral"
  static="false"
@@ -256,8 +252,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<implements name="java.io.Serializable">
-</implements>
 <constructor name="LocalTransactionInterceptor"
  type="org.mybatis.cdi.LocalTransactionInterceptor"
  static="false"
@@ -366,8 +360,6 @@
  visibility="public"
 >
 <implements name="javax.enterprise.inject.spi.Bean">
-</implements>
-<implements name="java.io.Serializable">
 </implements>
 <constructor name="MyBatisBean"
  type="org.mybatis.cdi.MyBatisBean"
@@ -580,8 +572,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<implements name="java.io.Serializable">
-</implements>
 <constructor name="SerializableMapperProxy"
  type="org.mybatis.cdi.SerializableMapperProxy"
  static="false"
@@ -610,9 +600,7 @@
 </parameter>
 <parameter name="args" type="java.lang.Object[]">
 </parameter>
-<exception name="IllegalAccessException" type="java.lang.IllegalAccessException">
-</exception>
-<exception name="InvocationTargetException" type="java.lang.reflect.InvocationTargetException">
+<exception name="Throwable" type="java.lang.Throwable">
 </exception>
 </method>
 </class>

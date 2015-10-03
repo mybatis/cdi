@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>LocalTransactionInterceptor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mybatis-cdi</a> &gt; <a href="index.source.html" class="el_package">org.mybatis.cdi</a> &gt; <span class="el_source">LocalTransactionInterceptor.java</span></div><h1>LocalTransactionInterceptor.java</h1><pre class="source lang-java linenums">/**
+ *    Copyright 2013-2015 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.mybatis.cdi;
+
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.UndeclaredThrowableException;
+
+import javax.inject.Inject;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptor;
+import javax.interceptor.InvocationContext;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+
+import org.apache.ibatis.session.SqlSessionManager;
+
+/**
+ * Best-effort interceptor for local transactions. It locates all the instances
+ * of {@code SqlSssionManager} and starts transactions on all them. It cannot
+ * guarantee atomiticy if there is more than one {@code SqlSssionManager}. Use
+ * XA drivers, a JTA container and the {@link JtaTransactionInterceptor} in that
+ * case.
+ *
+ * @see JtaTransactionInterceptor
+ *
+ * @author Frank David Martínez
+ */
+@Transactional
+@Interceptor
+<span class="fc" id="L47">public class LocalTransactionInterceptor implements Serializable {</span>
+
+  private static final long serialVersionUID = 1L;
+
+  @Inject
+  private transient SqlSessionManagerRegistry registry;
+
+  @AroundInvoke
+  public Object invoke(InvocationContext ctx) throws Exception {
+<span class="fc" id="L56">    Transactional transactional = getTransactionalAnnotation(ctx);</span>
+<span class="fc" id="L57">    boolean isInitiator = start(transactional);</span>
+<span class="fc" id="L58">    boolean isExternalJta =  isTransactionActive();</span>
+<span class="pc bpc" id="L59" title="1 of 4 branches missed.">    if (isInitiator &amp;&amp; !isExternalJta) {</span>
+<span class="fc" id="L60">      beginJta();</span>
+    }
+<span class="fc" id="L62">    boolean needsRollback = transactional.rollbackOnly();</span>
+    Object result;
+    try {
+<span class="fc" id="L65">      result = ctx.proceed();</span>
+<span class="fc" id="L66">    } catch (Exception ex) {</span>
+<span class="fc" id="L67">      Exception unwrapped = unwrapException(ex); </span>
+<span class="pc bpc" id="L68" title="1 of 4 branches missed.">      needsRollback = needsRollback || needsRollback(transactional, unwrapped);</span>
+<span class="fc" id="L69">      throw unwrapped;</span>
+    } finally {
+<span class="pc bpc" id="L71" title="2 of 4 branches missed.">      if (isInitiator) {</span>
+        try {
+<span class="pc bpc" id="L73" title="1 of 4 branches missed.">          if (needsRollback) {</span>
+<span class="pc" id="L74">            rollback(transactional);</span>
+          } else {
+<span class="fc" id="L76">            commit(transactional);</span>
+          }
+        } finally {
+<span class="pc" id="L79">          close();</span>
+<span class="pc" id="L80">          endJta(isExternalJta, needsRollback);</span>
+<span class="fc" id="L81">        }</span>
+      }
+    }
+<span class="fc" id="L84">    return result;</span>
+  }
+
+  protected boolean isTransactionActive() throws SystemException {
+<span class="fc" id="L88">    return false;</span>
+  }
+    
+  protected void beginJta() throws NotSupportedException, SystemException {
+    // nothing to do
+<span class="fc" id="L93">  }</span>
+
+  protected void endJta(boolean isExternaTransaction, boolean commit) throws SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+    // nothing to do
+<span class="fc" id="L97">  }</span>
+
+  private boolean needsRollback(Transactional transactional, Throwable throwable) {
+<span class="fc bfc" id="L100" title="All 2 branches covered.">    if (RuntimeException.class.isAssignableFrom(throwable.getClass())) {</span>
+<span class="fc" id="L101">      return true;</span>
+    }
+<span class="fc bfc" id="L103" title="All 2 branches covered.">    for (Class&lt;?&gt; exceptionClass : transactional.rollbackFor()) {</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">      if (exceptionClass.isAssignableFrom(throwable.getClass())) {</span>
+<span class="fc" id="L105">        return true;</span>
+      }
+    }
+<span class="fc" id="L108">    return false;</span>
+  }
+
+  protected Transactional getTransactionalAnnotation(InvocationContext ctx) {
+<span class="fc" id="L112">    Transactional t = ctx.getMethod().getAnnotation(Transactional.class);</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">    if (t == null) {</span>
+<span class="fc" id="L114">      t = ctx.getMethod().getDeclaringClass().getAnnotation(Transactional.class);</span>
+    }
+<span class="fc" id="L116">    return t;</span>
+  }
+
+  private boolean start(Transactional transactional) {
+<span class="fc" id="L120">    boolean started = false;</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">      if (!manager.isManagedSessionStarted()) {</span>
+<span class="fc" id="L123">        manager.startManagedSession(transactional.executorType(), transactional.isolation().getTransactionIsolationLevel());</span>
+<span class="fc" id="L124">        started = true;</span>
+      }
+<span class="fc" id="L126">    }</span>
+<span class="fc" id="L127">    return started;</span>
+  }
+
+  private void commit(Transactional transactional) {
+<span class="fc bfc" id="L131" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
+<span class="fc" id="L132">      manager.commit(transactional.force());</span>
+<span class="fc" id="L133">    }</span>
+<span class="fc" id="L134">  }</span>
+
+  private void rollback(Transactional transactional) {
+<span class="fc bfc" id="L137" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
+<span class="fc" id="L138">      manager.rollback(transactional.force());</span>
+<span class="fc" id="L139">    }</span>
+<span class="fc" id="L140">  }</span>
+
+  private void close() {
+<span class="fc bfc" id="L143" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
+<span class="fc" id="L144">      manager.close();</span>
+<span class="fc" id="L145">    }</span>
+<span class="fc" id="L146">  }</span>
+
+  private Exception unwrapException(Exception wrapped) {
+<span class="fc" id="L149">    Throwable unwrapped = wrapped;</span>
+    while (true) {
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">      if (unwrapped instanceof InvocationTargetException) {</span>
+<span class="nc" id="L152">        unwrapped = ((InvocationTargetException) unwrapped).getTargetException();</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">      } else if (unwrapped instanceof UndeclaredThrowableException) {</span>
+<span class="nc" id="L154">        unwrapped = ((UndeclaredThrowableException) unwrapped).getUndeclaredThrowable();</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">      } else if (!(unwrapped instanceof Exception)) {</span>
+<span class="nc" id="L156">        return new RuntimeException(unwrapped);</span>
+      } else {
+<span class="fc" id="L158">       return (Exception) unwrapped; </span>
+      }
+    }
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

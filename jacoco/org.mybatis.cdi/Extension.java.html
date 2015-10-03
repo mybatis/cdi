@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Extension.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mybatis-cdi</a> &gt; <a href="index.source.html" class="el_package">org.mybatis.cdi</a> &gt; <span class="el_source">Extension.java</span></div><h1>Extension.java</h1><pre class="source lang-java linenums">/**
+ *    Copyright 2013-2015 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.mybatis.cdi;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.AfterBeanDiscovery;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.InjectionPoint;
+import javax.enterprise.inject.spi.InjectionTarget;
+import javax.enterprise.inject.spi.ProcessInjectionTarget;
+import javax.inject.Named;
+import javax.inject.Qualifier;
+
+import org.apache.ibatis.session.SqlSession;
+
+/**
+ * MyBatis CDI extension
+ * 
+ * @author Frank D. Martinez [mnesarco]
+ */
+<span class="fc" id="L46">public class Extension implements javax.enterprise.inject.spi.Extension {</span>
+
+<span class="fc" id="L48">  private static final Logger logger = Logger.getLogger(Extension.class.getName());</span>
+
+<span class="fc" id="L50">  private final Set&lt;BeanKey&gt; mappers = new HashSet&lt;BeanKey&gt;();</span>
+
+  public &lt;X&gt; void processInjectionTarget(@Observes ProcessInjectionTarget&lt;X&gt; event) {
+<span class="fc" id="L53">    final InjectionTarget&lt;X&gt; it = event.getInjectionTarget();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">    for (final InjectionPoint ip : it.getInjectionPoints()) {</span>
+<span class="pc bpc" id="L55" title="1 of 4 branches missed.">      if (ip.getAnnotated().isAnnotationPresent(Mapper.class) || SqlSession.class.equals(ip.getAnnotated().getBaseType())) {</span>
+<span class="fc" id="L56">        this.mappers.add(new BeanKey((Class&lt;Type&gt;) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));</span>
+      }
+<span class="fc" id="L58">    }</span>
+<span class="fc" id="L59">  }</span>
+
+  public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
+<span class="fc" id="L62">    logger.log(Level.INFO, &quot;MyBatis CDI Module - Activated&quot;);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">    for (BeanKey key : this.mappers) {</span>
+<span class="fc" id="L64">      logger.log(Level.INFO, &quot;MyBatis CDI Module - Mapper dependency discovered: {0}&quot;, key.getKey());</span>
+<span class="fc" id="L65">      abd.addBean(key.createBean(bm));</span>
+<span class="fc" id="L66">    }</span>
+<span class="fc" id="L67">    this.mappers.clear();</span>
+<span class="fc" id="L68">  }</span>
+
+<span class="fc" id="L70">  public static class BeanKey implements Comparable&lt;BeanKey&gt; {</span>
+
+    private final String key;
+
+    private final List&lt;Annotation&gt; qualifiers;
+
+    private final Class&lt;Type&gt; type;
+
+    private final String sqlSessionManagerName;
+
+<span class="fc" id="L80">    public BeanKey(Class&lt;Type&gt; type, Set&lt;Annotation&gt; annotations) {</span>
+<span class="fc" id="L81">      this.type = type;</span>
+<span class="fc" id="L82">      this.qualifiers = sort(filterQualifiers(annotations));</span>
+
+      // Create key = type(.qualifier)*(.name)?
+<span class="fc" id="L85">      final StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L86">      String name = null;</span>
+<span class="fc" id="L87">      sb.append(type.getName());</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">      for (Annotation q : this.qualifiers) {</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (q instanceof Named) {</span>
+<span class="fc" id="L90">          name = ((Named) q).value();</span>
+        } else {
+<span class="fc" id="L92">          sb.append(&quot;.&quot;).append(q.annotationType().getSimpleName());</span>
+        }
+<span class="fc" id="L94">      }</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">      if (name != null) {</span>
+<span class="fc" id="L96">        sb.append(&quot;_&quot;).append(name);</span>
+      }
+<span class="fc" id="L98">      this.key = sb.toString();</span>
+<span class="fc" id="L99">      this.sqlSessionManagerName = name;</span>
+<span class="fc" id="L100">    }</span>
+
+    private Set&lt;Annotation&gt; filterQualifiers(Set&lt;Annotation&gt; annotations) {
+<span class="fc" id="L103">      final Set&lt;Annotation&gt; set = new HashSet&lt;Annotation&gt;();</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">      for (Annotation a : annotations) {</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        if (a.annotationType().isAnnotationPresent(Qualifier.class)) {</span>
+<span class="fc" id="L106">          set.add(a);</span>
+        }
+<span class="fc" id="L108">      }</span>
+<span class="fc" id="L109">      return set;</span>
+    }
+
+    private List&lt;Annotation&gt; sort(Set&lt;Annotation&gt; annotations) {
+<span class="fc" id="L113">      final List&lt;Annotation&gt; list = new ArrayList&lt;Annotation&gt;(annotations);</span>
+<span class="fc" id="L114">      Collections.sort(list, new Comparator&lt;Annotation&gt;() {</span>
+        @Override
+        public int compare(Annotation a, Annotation b) {
+<span class="fc" id="L117">          return a.getClass().getName().compareTo(b.getClass().getName());</span>
+        }
+      });
+<span class="fc" id="L120">      return list;</span>
+    }
+
+    @Override
+    public int compareTo(BeanKey o) {
+<span class="nc" id="L125">      return this.key.compareTo(o.key);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L130">      int hash = 3;</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">      hash = 43 * hash + (this.key != null ? this.key.hashCode() : 0);</span>
+<span class="fc" id="L132">      return hash;</span>
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">      if (obj == null) {</span>
+<span class="nc" id="L138">        return false;</span>
+      }
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">      if (getClass() != obj.getClass()) {</span>
+<span class="nc" id="L141">        return false;</span>
+      }
+<span class="fc" id="L143">      final BeanKey other = (BeanKey) obj;</span>
+<span class="pc bpc" id="L144" title="4 of 6 branches missed.">      return !(this.key == null ? other.key != null : !this.key.equals(other.key));</span>
+    }
+
+    public Bean createBean(BeanManager bm) {
+<span class="fc" id="L148">      return new MyBatisBean(this.type, new HashSet&lt;Annotation&gt;(this.qualifiers), this.sqlSessionManagerName, bm);</span>
+    }
+
+    public String getKey() {
+<span class="fc" id="L152">      return this.key;</span>
+    }
+
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

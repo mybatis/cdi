@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SerializableMapperProxy.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mybatis-cdi</a> &gt; <a href="index.source.html" class="el_package">org.mybatis.cdi</a> &gt; <span class="el_source">SerializableMapperProxy.java</span></div><h1>SerializableMapperProxy.java</h1><pre class="source lang-java linenums">/**
+ *    Copyright 2013-2015 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.mybatis.cdi;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import javax.enterprise.context.spi.CreationalContext;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+
+/**
+ *
+ * @author Frank D. Martinez [mnesarco]
+ */
+public class SerializableMapperProxy implements InvocationHandler, Serializable {
+
+  private static final long serialVersionUID = 1L;
+
+  private transient Object mapper;
+
+  private final MyBatisBean bean;
+
+  private final CreationalContext creationalContext;
+
+<span class="fc" id="L44">  public SerializableMapperProxy(MyBatisBean bean, CreationalContext creationalContext) {</span>
+<span class="fc" id="L45">    this.bean = bean;</span>
+<span class="fc" id="L46">    this.creationalContext = creationalContext;</span>
+<span class="fc" id="L47">    this.mapper = getMapper();</span>
+<span class="fc" id="L48">  }</span>
+
+  @Override
+  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    try {
+<span class="fc" id="L53">      return method.invoke(this.mapper, args);</span>
+<span class="nc" id="L54">    } catch (InvocationTargetException e) {</span>
+<span class="nc" id="L55">      throw e.getTargetException();</span>
+    }
+  }
+
+  private Object getMapper() {
+<span class="fc" id="L60">    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.bean.sqlSessionFactoryName, this.bean.qualifiers, this.bean.beanManager, this.creationalContext);</span>
+<span class="fc" id="L61">    return CDIUtils.getRegistry(this.bean.beanManager, this.creationalContext).getManager(factory).getMapper(this.bean.type);</span>
+  }
+
+  private void readObject(ObjectInputStream is) throws ClassNotFoundException, IOException {
+<span class="fc" id="L65">    is.defaultReadObject();</span>
+<span class="fc" id="L66">    this.mapper = getMapper();</span>
+<span class="fc" id="L67">  }</span>
+
+  private void writeObject(ObjectOutputStream os) throws IOException {
+<span class="fc" id="L70">    os.defaultWriteObject();</span>
+<span class="fc" id="L71">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
