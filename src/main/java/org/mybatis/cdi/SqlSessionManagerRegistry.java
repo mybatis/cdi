@@ -41,24 +41,23 @@ public class SqlSessionManagerRegistry {
   
   @PostConstruct
   public void init() {
-    if (factories.isUnsatisfied()) {
+    if (this.factories.isUnsatisfied()) {
       throw new MybatisCdiConfigurationException("There are no SqlSessionFactory producers properly configured.");
-    } else {
-      Map<SqlSessionFactory, SqlSessionManager> m = new HashMap<SqlSessionFactory, SqlSessionManager>();
-      for (SqlSessionFactory factory : factories) {
-        SqlSessionManager manager = SqlSessionManager.newInstance(factory);
-        m.put(factory, manager);
-      }
-      managers = Collections.unmodifiableMap(m);
     }
+    Map<SqlSessionFactory, SqlSessionManager> m = new HashMap<SqlSessionFactory, SqlSessionManager>();
+    for (SqlSessionFactory factory : this.factories) {
+      SqlSessionManager manager = SqlSessionManager.newInstance(factory);
+      m.put(factory, manager);
+    }
+    this.managers = Collections.unmodifiableMap(m);
   }
 
   public SqlSessionManager getManager(SqlSessionFactory factory) {
-    return managers.get(factory);
+    return this.managers.get(factory);
   }
 
   public Collection<SqlSessionManager> getManagers() {
-    return managers.values();
+    return this.managers.values();
   }
 
 }

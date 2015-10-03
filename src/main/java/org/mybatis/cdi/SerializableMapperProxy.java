@@ -50,20 +50,20 @@ public class SerializableMapperProxy implements InvocationHandler, Serializable 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     try {
-      return method.invoke(mapper, args);
+      return method.invoke(this.mapper, args);
     } catch (InvocationTargetException e) {
       throw e.getTargetException();
     }
   }
 
   private Object getMapper() {
-    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(bean.sqlSessionFactoryName, bean.qualifiers, bean.beanManager, creationalContext);
-    return CDIUtils.getRegistry(bean.beanManager, creationalContext).getManager(factory).getMapper(bean.type);
+    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.bean.sqlSessionFactoryName, this.bean.qualifiers, this.bean.beanManager, this.creationalContext);
+    return CDIUtils.getRegistry(this.bean.beanManager, this.creationalContext).getManager(factory).getMapper(this.bean.type);
   }
 
   private void readObject(ObjectInputStream is) throws ClassNotFoundException, IOException {
     is.defaultReadObject();
-    mapper = getMapper();
+    this.mapper = getMapper();
   }
 
   private void writeObject(ObjectOutputStream os) throws IOException {

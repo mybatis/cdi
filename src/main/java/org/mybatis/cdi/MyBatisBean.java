@@ -65,13 +65,13 @@ public class MyBatisBean implements Bean, Serializable {
   @Override
   public Set<Type> getTypes() {
     Set<Type> types = new HashSet<Type>();
-    types.add(type);
+    types.add(this.type);
     return types;
   }
 
   @Override
   public Set<Annotation> getQualifiers() {
-    return qualifiers;
+    return this.qualifiers;
   }
 
   @Override
@@ -91,7 +91,7 @@ public class MyBatisBean implements Bean, Serializable {
 
   @Override
   public Class<Type> getBeanClass() {
-    return type;
+    return this.type;
   }
 
   @Override
@@ -111,14 +111,13 @@ public class MyBatisBean implements Bean, Serializable {
 
   @Override
   public Object create(CreationalContext creationalContext) {
-    if (SqlSession.class.equals(type)) {
+    if (SqlSession.class.equals(this.type)) {
       return findSqlSessionManager(creationalContext);
-    } else {
-      return Proxy.newProxyInstance(
-        SqlSessionFactory.class.getClassLoader(), 
-        new Class[] {type}, 
-        new SerializableMapperProxy(this, creationalContext));
     }
+    return Proxy.newProxyInstance(
+        SqlSessionFactory.class.getClassLoader(), 
+        new Class[] {this.type}, 
+        new SerializableMapperProxy(this, creationalContext));
   }
 
   @Override
@@ -127,8 +126,8 @@ public class MyBatisBean implements Bean, Serializable {
   }
 
   private SqlSessionManager findSqlSessionManager(CreationalContext creationalContext) {
-    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(sqlSessionFactoryName, qualifiers, beanManager, creationalContext);
-    return CDIUtils.getRegistry(beanManager, creationalContext).getManager(factory);
+    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.sqlSessionFactoryName, this.qualifiers, this.beanManager, creationalContext);
+    return CDIUtils.getRegistry(this.beanManager, creationalContext).getManager(factory);
   }
 
 }

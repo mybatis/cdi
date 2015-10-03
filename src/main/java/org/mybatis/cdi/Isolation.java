@@ -35,12 +35,12 @@ public enum Isolation {
 
   private final TransactionIsolationLevel transactionIsolationLevel;
 
-  private Isolation(TransactionIsolationLevel transactionIsolationLevel) {
-    this.transactionIsolationLevel = transactionIsolationLevel;
+  private Isolation(TransactionIsolationLevel value) {
+    this.transactionIsolationLevel = value;
   }
 
   public TransactionIsolationLevel getTransactionIsolationLevel() {
-    return transactionIsolationLevel;
+    return this.transactionIsolationLevel;
   }
 
 }
