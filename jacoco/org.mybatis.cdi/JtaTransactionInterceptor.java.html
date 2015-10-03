@@ -57,10 +57,10 @@ import javax.transaction.UserTransaction;
 <span class="pc bpc" id="L57" title="1 of 2 branches missed.">      if (needsRollback) {</span>
 <span class="nc" id="L58">        this.userTransaction.get().setRollbackOnly();</span>
       }
-    } else {
+<span class="nc" id="L60">    } else {</span>
 <span class="fc bfc" id="L61" title="All 2 branches covered.">      if (needsRollback) {</span>
 <span class="fc" id="L62">        this.userTransaction.get().rollback();</span>
-      } else {
+<span class="fc" id="L63">      } else {</span>
 <span class="fc" id="L64">        this.userTransaction.get().commit();</span>
       }
     }

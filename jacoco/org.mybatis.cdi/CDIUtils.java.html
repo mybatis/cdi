@@ -45,7 +45,7 @@ public final class CDIUtils {
     Set&lt;Bean&lt;?&gt;&gt; beans;
 <span class="fc bfc" id="L46" title="All 2 branches covered.">    if (name != null) {</span>
 <span class="fc" id="L47">      beans = beanManager.getBeans(name);</span>
-    } else {
+<span class="fc" id="L48">    } else {</span>
 <span class="fc" id="L49">      beans = beanManager.getBeans(SqlSessionFactory.class, qualifiers.toArray(new Annotation[]{}));</span>
     }
 <span class="fc" id="L51">    Bean bean = beanManager.resolve(beans);</span>
