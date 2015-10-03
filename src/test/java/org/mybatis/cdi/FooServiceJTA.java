@@ -19,9 +19,12 @@ import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 
 public class FooServiceJTA {  
-  
-  @Inject @Mapper @JtaManager private UserMapper userMapper;
-  
+
+  @Inject
+  @Mapper
+  @JtaManager
+  private UserMapper userMapper;
+
   @Interceptors(JtaTransactionInterceptor.class)
   @Transactional
   public User getUserWithNoTransaction(int userId) {
@@ -40,5 +43,5 @@ public class FooServiceJTA {
     this.userMapper.insertUser(user);
     throw new RuntimeException("fail");
   }
-  
+
 }

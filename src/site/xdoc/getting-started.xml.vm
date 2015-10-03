@@ -34,7 +34,7 @@
 
     <subsection name="Installation">
       <p>
-        To use the MyBatis-CDI module, you just need to include the <code>mybatis-cdi-x.x.x.jar</code> 
+        To use the MyBatis-CDI module, you just need to include the <code>mybatis-cdi-${project.version}.jar</code> 
         file and its dependencies in the classpath.
       </p>
       <p>
@@ -44,7 +44,7 @@
 <dependency>
   <groupId>org.mybatis</groupId>
   <artifactId>mybatis-cdi</artifactId>
-  <version>x.x.x</version>
+  <version>${project.version}</version>
 </dependency>]]></source>
     </subsection>
 

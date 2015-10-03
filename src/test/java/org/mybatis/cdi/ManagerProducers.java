@@ -48,7 +48,6 @@ public class ManagerProducers {
     return manager;
   }
 
-
   private SqlSessionFactory createSessionManagerJTA() throws IOException {
     Reader reader = Resources.getResourceAsReader("org/mybatis/cdi/mybatis-config_jta.xml");
     SqlSessionFactory manager = new SqlSessionFactoryBuilder().build(reader);
@@ -65,7 +64,6 @@ public class ManagerProducers {
 
     return manager;
   }
- 
 
   @ApplicationScoped
   @Named("manager1")
@@ -94,6 +92,6 @@ public class ManagerProducers {
   @JtaManager
   public SqlSessionFactory createManagerJTA() throws IOException {
     return createSessionManagerJTA();
-  }  
-  
+  }
+
 }

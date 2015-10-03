@@ -21,18 +21,18 @@ public class User {
   private String name;
 
   public Integer getId() {
-    return id;
+    return this.id;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
+  public void setId(Integer value) {
+    this.id = value;
   }
 
   public String getName() {
-    return name;
+    return this.name;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setName(String value) {
+    this.name = value;
   }
 }

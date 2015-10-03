@@ -28,5 +28,5 @@ import javax.inject.Qualifier;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({METHOD, FIELD, TYPE, PARAMETER})
 public @interface OtherQualifier {
-  
+  // OtherQualifier Interface
 }

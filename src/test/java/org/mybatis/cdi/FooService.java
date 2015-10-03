@@ -27,13 +27,13 @@ public class FooService {
 
   @Inject @Mapper @Named("manager1")
   private SqlSession sqlSession;
-  
+
   @Inject @Mapper @Named("manager1")
   private UserMapper userMapper;
-  
+
   @Inject @Mapper @MySpecialManager @OtherQualifier
   private UserMapper userMapper3;
-  
+
   @Inject @Mapper @Named("manager2")
   private UserMapper userMapper2;
 
@@ -43,7 +43,7 @@ public class FooService {
   public User getUserFromSqlSession(int userId) {
     return this.sqlSession.selectOne("getUser", userId);
   }
-  
+
   public User getUser(int userId) {
     return this.userMapper.getUser(userId);
   }
@@ -63,7 +63,7 @@ public class FooService {
   public void insertUser(User user) {
     this.userMapper.insertUser(user);
   }
-  
+
   public void insertUserAndThrowARuntime(User user) {
     this.userMapper.insertUser(user);
     throw new RuntimeException("fail");
@@ -73,10 +73,10 @@ public class FooService {
     this.userMapper.insertUser(user);
     throw new NoRollbackException();
   }
-  
+
   public void insertUserAndThrowACheckedThatShouldRollback(User user) throws RollbackException {
     this.userMapper.insertUser(user);
     throw new RollbackException();
   }
-  
+
 }

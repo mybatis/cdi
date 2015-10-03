@@ -2,6 +2,7 @@ MyBatis CDI Extension
 =====================
 
 [![Build Status](https://travis-ci.org/mybatis/cdi.svg?branch=master)](https://travis-ci.org/mybatis/cdi)
+[![Dependency Status](https://www.versioneye.com/user/projects/560f3aa85a262f001e0008cf/badge.svg?style=flat)](https://www.versioneye.com/user/projects/560f3aa85a262f001e0008cf)
 [![Maven central](https://maven-badges.herokuapp.com/maven-central/org.mybatis/mybatis-cdi/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.mybatis/mybatis-cdi)
 
 ![mybatis-cdi](http://mybatis.github.io/images/mybatis-logo.png)

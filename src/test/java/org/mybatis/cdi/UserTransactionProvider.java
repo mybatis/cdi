@@ -22,7 +22,7 @@ import javax.transaction.UserTransaction;
 import bitronix.tm.TransactionManagerServices;
 
 public class UserTransactionProvider {
-  
+
   @Produces @ApplicationScoped
   public UserTransaction initTX() {
     return  TransactionManagerServices.getTransactionManager();

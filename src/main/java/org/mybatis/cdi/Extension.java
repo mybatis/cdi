@@ -53,18 +53,18 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
     final InjectionTarget<X> it = event.getInjectionTarget();
     for (final InjectionPoint ip : it.getInjectionPoints()) {
       if (ip.getAnnotated().isAnnotationPresent(Mapper.class) || SqlSession.class.equals(ip.getAnnotated().getBaseType())) {
-        mappers.add(new BeanKey((Class<Type>) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));
+        this.mappers.add(new BeanKey((Class<Type>) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));
       }
     }
   }
 
   public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
     logger.log(Level.INFO, "MyBatis CDI Module - Activated");
-    for (BeanKey key : mappers) {
+    for (BeanKey key : this.mappers) {
       logger.log(Level.INFO, "MyBatis CDI Module - Mapper dependency discovered: {0}", key.getKey());
       abd.addBean(key.createBean(bm));
     }
-    mappers.clear();
+    this.mappers.clear();
   }
 
   public static class BeanKey implements Comparable<BeanKey> {
@@ -122,7 +122,7 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
 
     @Override
     public int compareTo(BeanKey o) {
-      return key.compareTo(o.key);
+      return this.key.compareTo(o.key);
     }
 
     @Override
@@ -145,11 +145,11 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
     }
 
     public Bean createBean(BeanManager bm) {
-      return new MyBatisBean(type, new HashSet<Annotation>(qualifiers), sqlSessionManagerName, bm);
+      return new MyBatisBean(this.type, new HashSet<Annotation>(this.qualifiers), this.sqlSessionManagerName, bm);
     }
 
     public String getKey() {
-      return key;
+      return this.key;
     }
 
   }

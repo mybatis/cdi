@@ -118,7 +118,7 @@ public class LocalTransactionInterceptor implements Serializable {
 
   private boolean start(Transactional transactional) {
     boolean started = false;
-    for (SqlSessionManager manager : registry.getManagers()) {
+    for (SqlSessionManager manager : this.registry.getManagers()) {
       if (!manager.isManagedSessionStarted()) {
         manager.startManagedSession(transactional.executorType(), transactional.isolation().getTransactionIsolationLevel());
         started = true;
@@ -128,19 +128,19 @@ public class LocalTransactionInterceptor implements Serializable {
   }
 
   private void commit(Transactional transactional) {
-    for (SqlSessionManager manager : registry.getManagers()) {
+    for (SqlSessionManager manager : this.registry.getManagers()) {
       manager.commit(transactional.force());
     }
   }
 
   private void rollback(Transactional transactional) {
-    for (SqlSessionManager manager : registry.getManagers()) {
+    for (SqlSessionManager manager : this.registry.getManagers()) {
       manager.rollback(transactional.force());
     }
   }
 
   private void close() {
-    for (SqlSessionManager manager : registry.getManagers()) {
+    for (SqlSessionManager manager : this.registry.getManagers()) {
       manager.close();
     }
   }

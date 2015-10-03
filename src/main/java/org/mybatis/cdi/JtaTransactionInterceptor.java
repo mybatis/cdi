@@ -43,25 +43,25 @@ public class JtaTransactionInterceptor extends LocalTransactionInterceptor {
 
   @Override
   protected boolean isTransactionActive() throws SystemException {
-    return userTransaction.get().getStatus() != Status.STATUS_NO_TRANSACTION;
+    return this.userTransaction.get().getStatus() != Status.STATUS_NO_TRANSACTION;
   }
 
   @Override
   protected void beginJta() throws NotSupportedException, SystemException {
-    userTransaction.get().begin();
+    this.userTransaction.get().begin();
   }
 
   @Override
   protected void endJta(boolean isExternaTransaction, boolean needsRollback) throws SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
     if (isExternaTransaction) {
       if (needsRollback) {
-        userTransaction.get().setRollbackOnly();
+        this.userTransaction.get().setRollbackOnly();
       }
     } else {
       if (needsRollback) {
-        userTransaction.get().rollback();
+        this.userTransaction.get().rollback();
       } else {
-        userTransaction.get().commit();
+        this.userTransaction.get().commit();
       }
     }
   }

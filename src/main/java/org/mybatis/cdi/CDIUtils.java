@@ -15,7 +15,6 @@
  */
 package org.mybatis.cdi;
 
-import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Iterator;
 import java.util.Set;
@@ -56,11 +55,11 @@ public final class CDIUtils {
     return (SqlSessionFactory) beanManager.getReference(bean, SqlSessionFactory.class, creationalContext);
   }
 
-  public static class SerializableDefaultAnnotationLiteral extends AnnotationLiteral<Default> implements Serializable {
+  public static class SerializableDefaultAnnotationLiteral extends AnnotationLiteral<Default> {
     private static final long serialVersionUID = 1L;
   }
 
-  public static class SerializableAnyAnnotationLiteral extends AnnotationLiteral<Any> implements Serializable {
+  public static class SerializableAnyAnnotationLiteral extends AnnotationLiteral<Any> {
     private static final long serialVersionUID = 1L;
   }
 
