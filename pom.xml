@@ -134,6 +134,14 @@
               <name>derby.stream.error.file</name>
               <value>${project.build.directory}/derby.log</value>
             </property>
+            <property>
+              <name>bitronix.tm.journal.disk.logPart1Filename</name>
+              <value>${project.build.directory}/btm1.tlog</value>
+            </property>
+            <property>
+              <name>bitronix.tm.journal.disk.logPart2Filename</name>
+              <value>${project.build.directory}/btm2.tlog</value>
+            </property>
           </systemProperties>
         </configuration>
       </plugin>
