@@ -159,10 +159,10 @@ public class TestingIoC {
 
   @Test
   public void injectedMappersAreSerializable() throws Exception {
-    ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream("mapper.ser"));
+    ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream("target/mapper.ser"));
     oout.writeObject(this.serFooService);
     oout.close();
-    ObjectInputStream oin = new ObjectInputStream(new FileInputStream("mapper.ser"));
+    ObjectInputStream oin = new ObjectInputStream(new FileInputStream("target/mapper.ser"));
     SerializableFooService unserialized = (SerializableFooService) oin.readObject();
     oin.close();    
     Assert.assertEquals(this.serFooService.getUser(1).getName(), unserialized.getUser(1).getName());
