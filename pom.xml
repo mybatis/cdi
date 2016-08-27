@@ -68,7 +68,7 @@
     <dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis</artifactId>
-      <version>3.3.1</version>
+      <version>3.4.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -133,6 +133,14 @@
             <property>
               <name>derby.stream.error.file</name>
               <value>${project.build.directory}/derby.log</value>
+            </property>
+            <property>
+              <name>bitronix.tm.journal.disk.logPart1Filename</name>
+              <value>${project.build.directory}/btm1.tlog</value>
+            </property>
+            <property>
+              <name>bitronix.tm.journal.disk.logPart2Filename</name>
+              <value>${project.build.directory}/btm2.tlog</value>
             </property>
           </systemProperties>
         </configuration>
