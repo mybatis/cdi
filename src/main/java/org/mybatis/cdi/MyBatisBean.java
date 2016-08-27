@@ -28,6 +28,7 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 
+import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionManager;
@@ -114,6 +115,7 @@ public class MyBatisBean implements Bean, Serializable {
     if (SqlSession.class.equals(this.type)) {
       return findSqlSessionManager(creationalContext);
     }
+    ErrorContext.instance().reset();
     return Proxy.newProxyInstance(
         SqlSessionFactory.class.getClassLoader(), 
         new Class[] {this.type}, 
