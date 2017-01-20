@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013-2016 the original author or authors.
+ *    Copyright 2013-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -46,14 +46,11 @@ public class MyBatisBean implements Bean, Serializable {
 
   protected final Set<Annotation> qualifiers;
 
-  protected final BeanManager beanManager;
-
   protected final String sqlSessionFactoryName;
   
-  public MyBatisBean(Class<Type> type, Set<Annotation> qualifiers, String sqlSessionFactoryName, BeanManager beanManager) {  
+  public MyBatisBean(Class<Type> type, Set<Annotation> qualifiers, String sqlSessionFactoryName) {  
     this.type = type;
     this.sqlSessionFactoryName = sqlSessionFactoryName;
-    this.beanManager = beanManager;    
     if (qualifiers == null || qualifiers.isEmpty()) {
       this.qualifiers = new HashSet<Annotation>();
       this.qualifiers.add(new CDIUtils.SerializableDefaultAnnotationLiteral());
@@ -128,8 +125,8 @@ public class MyBatisBean implements Bean, Serializable {
   }
 
   private SqlSessionManager findSqlSessionManager(CreationalContext creationalContext) {
-    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.sqlSessionFactoryName, this.qualifiers, this.beanManager, creationalContext);
-    return CDIUtils.getRegistry(this.beanManager, creationalContext).getManager(factory);
+    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.sqlSessionFactoryName, this.qualifiers, creationalContext);
+    return CDIUtils.getRegistry(creationalContext).getManager(factory);
   }
 
 }

@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013-2016 the original author or authors.
+ *    Copyright 2013-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.util.AnnotationLiteral;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -33,15 +34,17 @@ import org.apache.ibatis.session.SqlSessionFactory;
 public final class CDIUtils {
 
   private CDIUtils() {
-      // this class cannot be instantiated
+      // this class cannot be instantiated      
   }
 
-  public static SqlSessionManagerRegistry getRegistry(BeanManager beanManager, CreationalContext creationalContext) {
+  public static SqlSessionManagerRegistry getRegistry(CreationalContext creationalContext) {
+    final BeanManager beanManager = CDI.current().getBeanManager();
     Iterator<Bean<?>> beans = beanManager.getBeans(SqlSessionManagerRegistry.class).iterator();
     return (SqlSessionManagerRegistry) beanManager.getReference(beans.next(), SqlSessionManagerRegistry.class, creationalContext);
   }
 
-  public static SqlSessionFactory findSqlSessionFactory(String name, Set<Annotation> qualifiers, BeanManager beanManager, CreationalContext creationalContext) {
+  public static SqlSessionFactory findSqlSessionFactory(String name, Set<Annotation> qualifiers, CreationalContext creationalContext) {
+    final BeanManager beanManager = CDI.current().getBeanManager();
     Set<Bean<?>> beans;
     if (name != null) {
       beans = beanManager.getBeans(name);
