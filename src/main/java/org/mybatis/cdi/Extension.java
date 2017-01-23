@@ -28,45 +28,130 @@ import java.util.logging.Logger;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
+import javax.enterprise.inject.spi.AnnotatedMember;
+import javax.enterprise.inject.spi.AnnotatedType;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.InjectionTarget;
+import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.enterprise.inject.spi.ProcessInjectionTarget;
+import javax.enterprise.inject.spi.ProcessProducer;
 import javax.inject.Named;
 import javax.inject.Qualifier;
-
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 /**
  * MyBatis CDI extension
- * 
+ *
  * @author Frank D. Martinez [mnesarco]
  */
 public class Extension implements javax.enterprise.inject.spi.Extension {
 
-  private static final Logger logger = Logger.getLogger(Extension.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(Extension.class.getName());
 
   private final Set<BeanKey> mappers = new HashSet<BeanKey>();
 
+  private final Set<BeanKey> sessionTargets = new HashSet<BeanKey>();
+  
+  private final Set<BeanKey> sessionProducers = new HashSet<BeanKey>();
+
+  private final Set<Type> mapperTypes = new HashSet<Type>();
+
+  /**
+   * Collect types of all mappers annotated with Mapper.
+   * @param <T>
+   * @param pat 
+   */
+  @SuppressWarnings("UnusedDeclaration")
+  private <T> void processAnnotatedType(@Observes final ProcessAnnotatedType<T> pat) {
+    final AnnotatedType<T> at = pat.getAnnotatedType();
+    if (at.isAnnotationPresent(Mapper.class)) {
+      LOGGER.log(Level.INFO, "MyBatis CDI Module - Mapper type {0}", at.getJavaClass().getSimpleName());
+      this.mapperTypes.add(at.getBaseType());
+    }
+  }
+
+  /**
+   * Collect all SqlSessionFactory producers annotated with SessionFactoryProvider.
+   * @param <T>
+   * @param <X>
+   * @param pp 
+   */
+  @SuppressWarnings("UnusedDeclaration")
+  private <T, X> void processProducer(@Observes final ProcessProducer<T, X> pp) {
+    final AnnotatedMember<T> am = pp.getAnnotatedMember();
+    final boolean isAnnotated = am.isAnnotationPresent(SessionFactoryProvider.class), 
+        isSqlSessionFactory = am.getBaseType().equals(SqlSessionFactory.class);
+    final Object[] logData = {am.getJavaMember().getDeclaringClass().getSimpleName(), am.getJavaMember().getName()};
+    if (isAnnotated && isSqlSessionFactory) {
+      LOGGER.log(Level.INFO, "MyBatis CDI Module - SqlSessionFactory producer {0}.{1}", logData);      
+      this.sessionProducers.add(new BeanKey((Class<Type>) (Type)SqlSession.class, am.getAnnotations()));      
+    }
+    else if (isAnnotated && !isSqlSessionFactory) {
+      LOGGER.log(Level.SEVERE, "MyBatis CDI Module - Invalid return type (Must be SqlSessionFactory): {0}.{1}", logData);
+      pp.addDefinitionError(
+          new MybatisCdiConfigurationException(
+              String.format("SessionFactoryProvider producers must return SqlSessionFactory (%s.%s)", logData[0], logData[1])));
+    }
+    else if (!isAnnotated && isSqlSessionFactory) {
+      LOGGER.log(Level.WARNING, "MyBatis CDI Module - Ignored SqlSessionFactory producer because it is not annotated with @SessionFactoryProvider: {0}.{1}", logData);
+    }
+  }
+
+  /**
+   * Collect all targets to match Mappers and Session providers dependency.
+   * @param <X>
+   * @param event 
+   */
   public <X> void processInjectionTarget(@Observes ProcessInjectionTarget<X> event) {
     final InjectionTarget<X> it = event.getInjectionTarget();
     for (final InjectionPoint ip : it.getInjectionPoints()) {
-      if (ip.getAnnotated().isAnnotationPresent(Mapper.class) || SqlSession.class.equals(ip.getAnnotated().getBaseType())) {
+      if (mapperTypes.contains(ip.getAnnotated().getBaseType())) {
         this.mappers.add(new BeanKey((Class<Type>) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));
+      }
+      else if (SqlSession.class.equals(ip.getAnnotated().getBaseType())) {
+        this.sessionTargets.add(new BeanKey((Class<Type>) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));
       }
     }
   }
 
+  /**
+   * Register all mybatis injectable beans.
+   * @param abd
+   * @param bm 
+   */
   public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
-    logger.log(Level.INFO, "MyBatis CDI Module - Activated");
+    LOGGER.log(Level.INFO, "MyBatis CDI Module - Activated");
+    
+    // Mappers -----------------------------------------------------------------
     for (BeanKey key : this.mappers) {
-      logger.log(Level.INFO, "MyBatis CDI Module - Mapper dependency discovered: {0}", key.getKey());
+      LOGGER.log(Level.INFO, "MyBatis CDI Module - Managed Mapper dependency: {0}, {1}", new Object[]{key.getKey(), key.type.getName()});
       abd.addBean(key.createBean(bm));
     }
     this.mappers.clear();
+    this.mapperTypes.clear();
+
+    // SqlSessionFactories -----------------------------------------------------
+    for (BeanKey key : this.sessionProducers) {
+      LOGGER.log(Level.INFO, "MyBatis CDI Module - Managed SqlSession: {0}, {1}", new Object[]{key.getKey(), key.type.getName()});
+      abd.addBean(key.createBean(bm));
+      this.sessionTargets.remove(key);
+    }
+    this.sessionProducers.clear();
+    
+    // Unmanaged SqlSession targets --------------------------------------------
+    for (BeanKey key : this.sessionTargets) {
+      LOGGER.log(Level.WARNING, "MyBatis CDI Module - Unmanaged SqlSession: {0}, {1}", new Object[]{key.getKey(), key.type.getName()});
+    }
+    this.sessionTargets.clear();
+    
   }
 
+  /**
+   * Unique key for fully qualified Mappers and Sessions.
+   */
   public static class BeanKey implements Comparable<BeanKey> {
 
     private final String key;
@@ -88,7 +173,8 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
       for (Annotation q : this.qualifiers) {
         if (q instanceof Named) {
           name = ((Named) q).value();
-        } else {
+        }
+        else {
           sb.append(".").append(q.annotationType().getSimpleName());
         }
       }
@@ -149,6 +235,11 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
     }
 
     public String getKey() {
+      return this.key;
+    }
+
+    @Override
+    public String toString() {
       return this.key;
     }
 

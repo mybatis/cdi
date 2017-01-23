@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013-2016 the original author or authors.
+ *    Copyright 2013-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.io.Reader;
 import java.sql.Connection;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Named;
 
@@ -28,6 +29,7 @@ import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.session.SqlSessionManager;
 
 public class ManagerProducers {
 
@@ -68,6 +70,7 @@ public class ManagerProducers {
   @ApplicationScoped
   @Named("manager1")
   @Produces
+  @SessionFactoryProvider
   public SqlSessionFactory createManager1() throws IOException {
     return createSessionManager(1);
   }
@@ -75,6 +78,7 @@ public class ManagerProducers {
   @ApplicationScoped
   @Named("manager2")
   @Produces
+  @SessionFactoryProvider
   public SqlSessionFactory createManager2() throws IOException {
     return createSessionManager(2);
   }
@@ -83,6 +87,7 @@ public class ManagerProducers {
   @Produces
   @MySpecialManager
   @OtherQualifier
+  @SessionFactoryProvider
   public SqlSessionFactory createManager3() throws IOException {
     return createSessionManager(3);
   }
@@ -90,8 +95,22 @@ public class ManagerProducers {
   @ApplicationScoped
   @Produces
   @JtaManager
+  @SessionFactoryProvider
   public SqlSessionFactory createManagerJTA() throws IOException {
     return createSessionManagerJTA();
   }
 
+  @ApplicationScoped
+  @Produces
+  @Named("unmanaged")
+  public SqlSession createNonCdiManagedSession() throws IOException {
+    return SqlSessionManager.newInstance(createSessionManager(4));
+  }
+  
+  @ApplicationScoped
+  @Named("unmanaged")
+  public void closeNonCdiManagedSession(@Disposes SqlSession session) {
+    session.close();
+  }
+  
 }

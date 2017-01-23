@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013-2016 the original author or authors.
+ *    Copyright 2013-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,26 +22,40 @@ import javax.interceptor.Interceptors;
 import org.apache.ibatis.session.SqlSession;
 
 @Interceptors(LocalTransactionInterceptor.class)
-@Transactional(rollbackFor=RollbackException.class)
+@Transactional(rollbackFor = RollbackException.class)
 public class FooService {
 
-  @Inject @Mapper @Named("manager1")
+  @Inject
+  @Named("manager1")
   private SqlSession sqlSession;
 
-  @Inject @Mapper @Named("manager1")
+  @Inject
+  @Named("manager1")
   private UserMapper userMapper;
 
-  @Inject @Mapper @MySpecialManager @OtherQualifier
+  @Inject
+  @MySpecialManager
+  @OtherQualifier
   private UserMapper userMapper3;
 
-  @Inject @Mapper @Named("manager2")
+  @Inject
+  @Named("manager2")
   private UserMapper userMapper2;
 
-  @Inject @Mapper @Named("manager2")
+  @Inject
+  @Named("manager2")
   private UserMapper dummyUserMapper;
 
+  @Inject
+  @Named("unmanaged")
+  private SqlSession unmanagedSqlSession;
+  
   public User getUserFromSqlSession(int userId) {
     return this.sqlSession.selectOne("getUser", userId);
+  }
+
+  public User getUserFromUnmanagedSqlSession(int userId) {
+    return this.unmanagedSqlSession.selectOne("getUser", userId);
   }
 
   public User getUser(int userId) {

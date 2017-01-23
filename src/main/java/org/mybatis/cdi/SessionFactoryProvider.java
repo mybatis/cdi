@@ -15,23 +15,19 @@
  */
 package org.mybatis.cdi;
 
-import java.io.Serializable;
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
 
 /**
- *
- * @author Frank D. Martinez [mnesarco]
+ * Qualifies an SqlSessionFactory provider method as usable by mybatis-cdi.
+ * @author Frank David Martínez
  */
-public class SerializableFooService implements Serializable {
-
-  private static final long serialVersionUID = 1L;
-
-  @Inject @Named("manager1")
-  private UserMapper userMapper;
-
-  public User getUser(int userId) {
-    return this.userMapper.getUser(userId);
-  }
+@Inherited
+@Retention(RUNTIME)
+@Target({ElementType.METHOD})
+public @interface SessionFactoryProvider {
 
 }

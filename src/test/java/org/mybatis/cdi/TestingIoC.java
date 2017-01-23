@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013-2016 the original author or authors.
+ *    Copyright 2013-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ public class TestingIoC {
     Assert.assertEquals("1-User1", this.fooService.getUser(1).getName());
     Assert.assertEquals("2-User2", this.fooService.getUser2(2).getName());
     Assert.assertEquals("3-User3", this.fooService.getUser3(3).getName());
+    Assert.assertEquals("4-User1", this.fooService.getUserFromUnmanagedSqlSession(1).getName());
   }
 
   @Test
