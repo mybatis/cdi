@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2013-2016 the original author or authors.
+       Copyright 2013-2017 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -59,17 +59,19 @@
       </p>
 
       <p>
-        Create a producer method that returns an application scoped <code>SqlSessionFactory</code>:
+        Create a producer method that returns an application scoped <code>SqlSessionFactory</code> annotated with <code>@SessionFactoryProvider</code>:
       </p>
 
         <source><![CDATA[
 import javax.enterprise.inject.Produces;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.cdi.SessionFactoryProvider;
         
 public class SqlSessionFactoryProvider {
 
   @Produces
   @ApplicationScoped
+  @SessionFactoryProvider
   public SqlSessionFactory produceFactory() {
     SqlSessionFactory factory = create the factory instance ....
     return factory;
@@ -78,28 +80,33 @@ public class SqlSessionFactoryProvider {
 }]]></source>
 
       <p>
-        Assume you have a mapper interface defined like the following:
+        Assume you have a mapper interface defined like the following (Note that the mapper must be annotated with <code>@Mapper</code>):
       </p>
-        <source><![CDATA[public interface UserMapper {
+        <source><![CDATA[
+@Mapper
+public interface UserMapper {
   @Select("SELECT * FROM users WHERE id = #{userId}")
   User getUser(@Param("userId") String userId);
-} ]]></source>
+} 
+
+]]></source>
 
       <p>
-        You can inject it into a CDI bean by just adding the <code>@Mapper</code> annotation to the injection point:
+        You can inject it into a CDI bean just as any other dependency using @Inject. :
       </p>
 
         <source><![CDATA[
 import javax.inject.Inject;
-import org.mybatis.cdi.Mapper;
         
 public class FooServiceImpl implements FooService {
 
-@Inject @Mapper private UserMapper userMapper;
+@Inject UserMapper userMapper;
 
 public User doSomeStuff(String userId) {
   return this.userMapper.getUser(userId);
-}]]></source>
+}
+
+]]></source>
       </subsection>
     </section>
   </body>
