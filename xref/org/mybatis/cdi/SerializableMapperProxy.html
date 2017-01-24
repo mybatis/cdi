@@ -7,7 +7,7 @@
 <body>
 <div id="overview"><a href="../../../../apidocs/org/mybatis/cdi/SerializableMapperProxy.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_javadoccomment"> *    Copyright 2013-2016 the original author or authors.</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_javadoccomment"> *    Copyright 2013-2017 the original author or authors.</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_javadoccomment"> *    Licensed under the Apache License, Version 2.0 (the "License");</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_javadoccomment"> *    you may not use this file except in compliance with the License.</em>
@@ -65,8 +65,8 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>    }
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>    <strong class="jxr_keyword">private</strong> Object getMapper() {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(<strong class="jxr_keyword">this</strong>.bean.sqlSessionFactoryName, <strong class="jxr_keyword">this</strong>.bean.qualifiers, <strong class="jxr_keyword">this</strong>.bean.beanManager, <strong class="jxr_keyword">this</strong>.creationalContext);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">return</strong> CDIUtils.getRegistry(<strong class="jxr_keyword">this</strong>.bean.beanManager, <strong class="jxr_keyword">this</strong>.creationalContext).getManager(factory).getMapper(<strong class="jxr_keyword">this</strong>.bean.type);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(<strong class="jxr_keyword">this</strong>.bean.sqlSessionFactoryName, <strong class="jxr_keyword">this</strong>.bean.qualifiers, <strong class="jxr_keyword">this</strong>.creationalContext);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">return</strong> CDIUtils.getRegistry(<strong class="jxr_keyword">this</strong>.creationalContext).getManager(factory).getMapper(<strong class="jxr_keyword">this</strong>.bean.type);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>    }
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> readObject(ObjectInputStream is) <strong class="jxr_keyword">throws</strong> ClassNotFoundException, IOException {
@@ -81,6 +81,6 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2013&#x2013;2016 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2013&#x2013;2017 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
 </body>
 </html>
