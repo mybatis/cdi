@@ -5,3 +5,5 @@
 nb-configuration.xml
 *.log
 *.tlog
+*.iml
+/.idea
