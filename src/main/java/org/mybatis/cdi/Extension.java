@@ -15,16 +15,8 @@
  */
 package org.mybatis.cdi;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
@@ -39,8 +31,16 @@ import javax.enterprise.inject.spi.ProcessInjectionTarget;
 import javax.enterprise.inject.spi.ProcessProducer;
 import javax.inject.Named;
 import javax.inject.Qualifier;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * MyBatis CDI extension
@@ -51,13 +51,11 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
 
   private static final Logger LOGGER = Logger.getLogger(Extension.class.getName());
 
-  private final Set<BeanKey> mappers = new HashSet<BeanKey>();
-
-  private final Set<BeanKey> sessionTargets = new HashSet<BeanKey>();
-  
   private final Set<BeanKey> sessionProducers = new HashSet<BeanKey>();
 
   private final Set<Type> mapperTypes = new HashSet<Type>();
+
+  private final Set<InjectionPoint> injectionPoints = new HashSet<InjectionPoint>();
 
   /**
    * Collect types of all mappers annotated with Mapper.
@@ -65,10 +63,10 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
    * @param pat 
    */
   @SuppressWarnings("UnusedDeclaration")
-  private <T> void processAnnotatedType(@Observes final ProcessAnnotatedType<T> pat) {
+  protected <T> void processAnnotatedType(@Observes final ProcessAnnotatedType<T> pat) {
     final AnnotatedType<T> at = pat.getAnnotatedType();
     if (at.isAnnotationPresent(Mapper.class)) {
-      LOGGER.log(Level.INFO, "MyBatis CDI Module - Mapper type {0}", at.getJavaClass().getSimpleName());
+      LOGGER.log(Level.INFO, "MyBatis CDI Module - Found class with @Mapper-annotation: {0}", at.getJavaClass().getSimpleName());
       this.mapperTypes.add(at.getBaseType());
     }
   }
@@ -108,12 +106,7 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
   public <X> void processInjectionTarget(@Observes ProcessInjectionTarget<X> event) {
     final InjectionTarget<X> it = event.getInjectionTarget();
     for (final InjectionPoint ip : it.getInjectionPoints()) {
-      if (mapperTypes.contains(ip.getAnnotated().getBaseType())) {
-        this.mappers.add(new BeanKey((Class<Type>) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));
-      }
-      else if (SqlSession.class.equals(ip.getAnnotated().getBaseType())) {
-        this.sessionTargets.add(new BeanKey((Class<Type>) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));
-      }
+      injectionPoints.add(ip);
     }
   }
 
@@ -124,29 +117,43 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
    */
   public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
     LOGGER.log(Level.INFO, "MyBatis CDI Module - Activated");
-    
+
+    Set<BeanKey> mappers = new HashSet<BeanKey>();
+    Set<BeanKey> sessionTargets = new HashSet<BeanKey>();
+
+    for (InjectionPoint ip : injectionPoints) {
+      if (this.mapperTypes.contains(ip.getAnnotated().getBaseType())) {
+        LOGGER.log(Level.INFO, "MyBatis CDI Module - Found a bean, which needs a Mapper {0}", new Object[] {
+                ip.getAnnotated().getBaseType()
+        });
+        mappers.add(new BeanKey((Class<Type>) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));
+      }
+      else if (SqlSession.class.equals(ip.getAnnotated().getBaseType())) {
+        sessionTargets.add(new BeanKey((Class<Type>) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));
+      }
+    }
+    this.injectionPoints.clear();
+
     // Mappers -----------------------------------------------------------------
-    for (BeanKey key : this.mappers) {
+    for (BeanKey key : mappers) {
       LOGGER.log(Level.INFO, "MyBatis CDI Module - Managed Mapper dependency: {0}, {1}", new Object[]{key.getKey(), key.type.getName()});
       abd.addBean(key.createBean(bm));
     }
-    this.mappers.clear();
     this.mapperTypes.clear();
 
     // SqlSessionFactories -----------------------------------------------------
     for (BeanKey key : this.sessionProducers) {
       LOGGER.log(Level.INFO, "MyBatis CDI Module - Managed SqlSession: {0}, {1}", new Object[]{key.getKey(), key.type.getName()});
       abd.addBean(key.createBean(bm));
-      this.sessionTargets.remove(key);
+      sessionTargets.remove(key);
     }
     this.sessionProducers.clear();
     
     // Unmanaged SqlSession targets --------------------------------------------
-    for (BeanKey key : this.sessionTargets) {
+    for (BeanKey key : sessionTargets) {
       LOGGER.log(Level.WARNING, "MyBatis CDI Module - Unmanaged SqlSession: {0}, {1}", new Object[]{key.getKey(), key.type.getName()});
     }
-    this.sessionTargets.clear();
-    
+
   }
 
   /**
