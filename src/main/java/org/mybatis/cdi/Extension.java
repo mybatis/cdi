@@ -78,7 +78,7 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
    * @param pp 
    */
   @SuppressWarnings("UnusedDeclaration")
-  private <T, X> void processProducer(@Observes final ProcessProducer<T, X> pp) {
+  protected <T, X> void processProducer(@Observes final ProcessProducer<T, X> pp) {
     final AnnotatedMember<T> am = pp.getAnnotatedMember();
     final boolean isAnnotated = am.isAnnotationPresent(SessionFactoryProvider.class), 
         isSqlSessionFactory = am.getBaseType().equals(SqlSessionFactory.class);
@@ -103,7 +103,7 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
    * @param <X>
    * @param event 
    */
-  public <X> void processInjectionTarget(@Observes ProcessInjectionTarget<X> event) {
+  protected <X> void processInjectionTarget(@Observes ProcessInjectionTarget<X> event) {
     final InjectionTarget<X> it = event.getInjectionTarget();
     for (final InjectionPoint ip : it.getInjectionPoints()) {
       injectionPoints.add(ip);
@@ -115,7 +115,7 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
    * @param abd
    * @param bm 
    */
-  public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
+  protected void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
     LOGGER.log(Level.INFO, "MyBatis CDI Module - Activated");
 
     Set<BeanKey> mappers = new HashSet<BeanKey>();
@@ -159,7 +159,7 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
   /**
    * Unique key for fully qualified Mappers and Sessions.
    */
-  public static class BeanKey implements Comparable<BeanKey> {
+  private static final class BeanKey implements Comparable<BeanKey> {
 
     private final String key;
 
