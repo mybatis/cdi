@@ -56,7 +56,7 @@ public class MyProducers {
     return sqlSessionFactory;
   }
 
-}]]></source>      
+}]]></source>
       
       <p><span class="label important">NOTE</span>
         If you forget the <code>@ApplicationScoped</code> the factory will be created on each injection, what implies 
@@ -66,14 +66,14 @@ public class MyProducers {
       <p><span class="label important">NOTE</span>
         If you forget the <code>@SessionFactoryProvider</code> the factory will be ignored by mybatis-cdi.
       </p>
-      
+
     </subsection>
     <subsection name="Disvovering and injecting Mappers">
 
       <p>
         There is nothing special more than injecting the mapper as any other CDI dependecy:
       </p>
-      
+
         <source><![CDATA[
 public class FooService {
 
@@ -82,7 +82,7 @@ public class FooService {
   public User doSomeStuff(String userId) {
     return this.userMapper.getUser(userId);
   }
-          
+
 }
 ]]></source>
 
@@ -97,9 +97,9 @@ public class FooService {
         <code>MyBatisCdiConfiurationException</code>. Given that there is not much to configure, this
         exception is only thrown when the <code>SqlSessionFactory</code> cannot be found or is misconfigured.
       </p>
-      
+
     </subsection>
-      
+
     <subsection name="Resolving ambiguities">
 
       <p>
@@ -126,7 +126,7 @@ public class FooService {
 public SqlSessionFactory createManagerFoo() throws IOException {
   ...
 }
-  
+
 @ApplicationScoped
 @Produces
 @BarQualifier
@@ -134,11 +134,11 @@ public SqlSessionFactory createManagerFoo() throws IOException {
 public SqlSessionFactory createManagerBar() throws IOException {
   ...
 }]]></source>
-    
+
       <p>
         Now that there is no ambiguity you can select what factory you want to inject by adding the qualifier to it:
       </p>
-    
+
         <source><![CDATA[
 @Inject @FooQualifier UserMapper userMapper;
 ]]></source>    
@@ -155,33 +155,33 @@ public SqlSessionFactory createManagerBar() throws IOException {
 public SqlSessionFactory createManager() throws IOException {
   ...
 }]]></source>
-      
+
       <p>
         And refer to it by its name in an injection point:
       </p>
-      
+
         <source><![CDATA[
 @Inject @Named("fooManager") UserMapper userMapper;
-]]></source>    
-      
+]]></source>
+
     </subsection>
-      
+
     <subsection name="Injecting an SqlSession">
 
-	  <p>You can inject a thread safe <code>SqlSession</code> by requesting its injection as follows:</p>
-	  
+      <p>You can inject a thread safe <code>SqlSession</code> by requesting its injection as follows:</p>
+
         <source><![CDATA[
 @Inject SqlSession sqlSession;
-]]></source>    
+]]></source>
 
-	  <p>The factory selection criteria we saw for mappers apply also to <code>SqlSession</code> injection.</p>
-	  
+      <p>The factory selection criteria we saw for mappers apply also to <code>SqlSession</code> injection.</p>
+
       <p><span class="label important">NOTE</span>
         MyBatis-CDI controls the lifecycle of the injected <code>SqlSession</code> so you must not call any transactional method
         like <code>commit()</code> or <code>rollback()</code>, nor any lifecycle method like <code>close()</code>.
       </p>
-	  
-	</subsection>      
+
+    </subsection>
     </section>
   </body>
 </document>
