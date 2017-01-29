@@ -25,7 +25,7 @@
     <author email="mnesarco@gmail.com">Frank Martinez</author>
     <author email="eduardo.macarron@gmail.com">Eduardo Macarron</author>
   </properties>
-                             
+
   <body>
     <section name="Transactions">
       <p>
@@ -36,13 +36,13 @@
         By default, each method call will use an isolated session but if you want to enclose many method calls in a transaction, 
         annotate the method with <code>@Transactional</code>.
       </p>
-      
+
         <source><![CDATA[@Transactional
 public void doSomethingInATransaction() {
   ...
   mapper.insertMyBean(...);
   mapper.updateMyBean(...);
-  ...  
+  ...
 }]]></source>
 
       <p><span class="label important">NOTE</span>
@@ -96,15 +96,15 @@ public void doSomethingInATransaction() {
       <class>org.mybatis.cdi.JtaTransactionInterceptor</class>
    </interceptors>
 </beans>]]></source>
-      
+
       <p>
         And configure MyBatis to to use the MANAGED transaction manager in mybatis-config.xml file.
       </p>
 
       <source><![CDATA[<transactionManager type="MANAGED" />]]></source>
-      
-	</subsection>
-	
+
+    </subsection>
+
     <subsection name="The @Transactional annotation">
         <p>
             The <code>@Transactional</code> annotation supports the following parameters:</p>

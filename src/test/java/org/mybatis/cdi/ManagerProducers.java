@@ -112,5 +112,5 @@ public class ManagerProducers {
   public void closeNonCdiManagedSession(@Disposes SqlSession session) {
     session.close();
   }
-  
+
 }

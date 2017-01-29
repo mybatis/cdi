@@ -32,16 +32,14 @@
         was moved to the Mapper interfaces itself and a new annotation <code>@SessionFactoryProvider</code>
         is now mandatory for SqlSessionFactory producers.
       </p>
-      <p>
-        <ol>
-          <li>
-            <code>@Mapper</code> annotation is now mandatory in Mapper Interfaces and forbidden in injection points.
-          </li>
-          <li>
-            <code>@SessionFactoryProvider</code> is now mandatory in SqlSessionFactory producers.
-          </li>
-        </ol>        
-      </p>
+      <ol>
+        <li>
+          <code>@Mapper</code> annotation is now mandatory in Mapper Interfaces and forbidden in injection points.
+        </li>
+        <li>
+          <code>@SessionFactoryProvider</code> is now mandatory in SqlSessionFactory producers.
+        </li>
+      </ol>
     </section>
   </body>
   

@@ -16,8 +16,6 @@
 package org.mybatis.cdi;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import javax.enterprise.context.spi.CreationalContext;
@@ -36,7 +34,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 public final class CDIUtils {
 
   private CDIUtils() {
-      // this class cannot be instantiated      
+      // this class cannot be instantiated
   }
 
   public static SqlSessionManagerRegistry getRegistry(CreationalContext creationalContext) {
@@ -67,5 +65,5 @@ public final class CDIUtils {
   public static class SerializableAnyAnnotationLiteral extends AnnotationLiteral<Any> {
     private static final long serialVersionUID = 1L;
   }
-  
+
 }
