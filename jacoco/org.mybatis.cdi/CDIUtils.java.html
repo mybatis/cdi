@@ -16,8 +16,6 @@
 package org.mybatis.cdi;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import javax.enterprise.context.spi.CreationalContext;
@@ -35,38 +33,38 @@ import org.apache.ibatis.session.SqlSessionFactory;
  */
 public final class CDIUtils {
 
-<span class="nc" id="L38">  private CDIUtils() {</span>
-      // this class cannot be instantiated      
-<span class="nc" id="L40">  }</span>
+<span class="nc" id="L36">  private CDIUtils() {</span>
+      // this class cannot be instantiated
+<span class="nc" id="L38">  }</span>
 
   public static SqlSessionManagerRegistry getRegistry(CreationalContext creationalContext) {
-<span class="fc" id="L43">    final BeanManager beanManager = CDI.current().getBeanManager();</span>
-<span class="fc" id="L44">    Iterator&lt;Bean&lt;?&gt;&gt; beans = beanManager.getBeans(SqlSessionManagerRegistry.class).iterator();</span>
-<span class="fc" id="L45">    return (SqlSessionManagerRegistry) beanManager.getReference(beans.next(), SqlSessionManagerRegistry.class, creationalContext);</span>
+<span class="fc" id="L41">    final BeanManager beanManager = CDI.current().getBeanManager();</span>
+<span class="fc" id="L42">    Iterator&lt;Bean&lt;?&gt;&gt; beans = beanManager.getBeans(SqlSessionManagerRegistry.class).iterator();</span>
+<span class="fc" id="L43">    return (SqlSessionManagerRegistry) beanManager.getReference(beans.next(), SqlSessionManagerRegistry.class, creationalContext);</span>
   }
 
   public static SqlSessionFactory findSqlSessionFactory(String name, Set&lt;Annotation&gt; qualifiers, CreationalContext creationalContext) {
-<span class="fc" id="L49">    final BeanManager beanManager = CDI.current().getBeanManager();</span>
+<span class="fc" id="L47">    final BeanManager beanManager = CDI.current().getBeanManager();</span>
     Set&lt;Bean&lt;?&gt;&gt; beans;
-<span class="fc bfc" id="L51" title="All 2 branches covered.">    if (name != null) {</span>
-<span class="fc" id="L52">      beans = beanManager.getBeans(name);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">    if (name != null) {</span>
+<span class="fc" id="L50">      beans = beanManager.getBeans(name);</span>
     } else {
-<span class="fc" id="L54">      beans = beanManager.getBeans(SqlSessionFactory.class, qualifiers.toArray(new Annotation[]{}));</span>
+<span class="fc" id="L52">      beans = beanManager.getBeans(SqlSessionFactory.class, qualifiers.toArray(new Annotation[]{}));</span>
     }
-<span class="fc" id="L56">    Bean bean = beanManager.resolve(beans);</span>
-<span class="pc bpc" id="L57" title="1 of 2 branches missed.">    if (bean == null) {</span>
-<span class="nc" id="L58">      throw new MybatisCdiConfigurationException(&quot;There are no SqlSessionFactory producers properly configured.&quot;);</span>
+<span class="fc" id="L54">    Bean bean = beanManager.resolve(beans);</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">    if (bean == null) {</span>
+<span class="nc" id="L56">      throw new MybatisCdiConfigurationException(&quot;There are no SqlSessionFactory producers properly configured.&quot;);</span>
     }
-<span class="fc" id="L60">    return (SqlSessionFactory) beanManager.getReference(bean, SqlSessionFactory.class, creationalContext);</span>
+<span class="fc" id="L58">    return (SqlSessionFactory) beanManager.getReference(bean, SqlSessionFactory.class, creationalContext);</span>
   }
 
-<span class="nc" id="L63">  public static class SerializableDefaultAnnotationLiteral extends AnnotationLiteral&lt;Default&gt; {</span>
+<span class="fc" id="L61">  public static class SerializableDefaultAnnotationLiteral extends AnnotationLiteral&lt;Default&gt; {</span>
     private static final long serialVersionUID = 1L;
   }
 
-<span class="nc" id="L67">  public static class SerializableAnyAnnotationLiteral extends AnnotationLiteral&lt;Any&gt; {</span>
+<span class="fc" id="L65">  public static class SerializableAnyAnnotationLiteral extends AnnotationLiteral&lt;Any&gt; {</span>
     private static final long serialVersionUID = 1L;
   }
-  
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

@@ -26,7 +26,6 @@ import java.util.Set;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
 
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.session.SqlSession;
@@ -48,85 +47,85 @@ public class MyBatisBean implements Bean, Serializable {
 
   protected final String sqlSessionFactoryName;
   
-<span class="fc" id="L51">  public MyBatisBean(Class&lt;Type&gt; type, Set&lt;Annotation&gt; qualifiers, String sqlSessionFactoryName) {  </span>
-<span class="fc" id="L52">    this.type = type;</span>
-<span class="fc" id="L53">    this.sqlSessionFactoryName = sqlSessionFactoryName;</span>
-<span class="pc bpc" id="L54" title="2 of 4 branches missed.">    if (qualifiers == null || qualifiers.isEmpty()) {</span>
-<span class="nc" id="L55">      this.qualifiers = new HashSet&lt;Annotation&gt;();</span>
-<span class="nc" id="L56">      this.qualifiers.add(new CDIUtils.SerializableDefaultAnnotationLiteral());</span>
-<span class="nc" id="L57">      this.qualifiers.add(new CDIUtils.SerializableAnyAnnotationLiteral());</span>
+<span class="fc" id="L50">  public MyBatisBean(Class&lt;Type&gt; type, Set&lt;Annotation&gt; qualifiers, String sqlSessionFactoryName) {  </span>
+<span class="fc" id="L51">    this.type = type;</span>
+<span class="fc" id="L52">    this.sqlSessionFactoryName = sqlSessionFactoryName;</span>
+<span class="pc bpc" id="L53" title="1 of 4 branches missed.">    if (qualifiers == null || qualifiers.isEmpty()) {</span>
+<span class="fc" id="L54">      this.qualifiers = new HashSet&lt;Annotation&gt;();</span>
+<span class="fc" id="L55">      this.qualifiers.add(new CDIUtils.SerializableDefaultAnnotationLiteral());</span>
+<span class="fc" id="L56">      this.qualifiers.add(new CDIUtils.SerializableAnyAnnotationLiteral());</span>
     } else {
-<span class="fc" id="L59">      this.qualifiers = qualifiers;</span>
+<span class="fc" id="L58">      this.qualifiers = qualifiers;</span>
     }
-<span class="fc" id="L61">  }</span>
+<span class="fc" id="L60">  }</span>
 
   @Override
   public Set&lt;Type&gt; getTypes() {
-<span class="fc" id="L65">    Set&lt;Type&gt; types = new HashSet&lt;Type&gt;();</span>
-<span class="fc" id="L66">    types.add(this.type);</span>
-<span class="fc" id="L67">    return types;</span>
+<span class="fc" id="L64">    Set&lt;Type&gt; types = new HashSet&lt;Type&gt;();</span>
+<span class="fc" id="L65">    types.add(this.type);</span>
+<span class="fc" id="L66">    return types;</span>
   }
 
   @Override
   public Set&lt;Annotation&gt; getQualifiers() {
-<span class="fc" id="L72">    return this.qualifiers;</span>
+<span class="fc" id="L71">    return this.qualifiers;</span>
   }
 
   @Override
   public Class&lt;Dependent&gt; getScope() {
-<span class="fc" id="L77">    return Dependent.class;</span>
+<span class="fc" id="L76">    return Dependent.class;</span>
   }
 
   @Override
   public String getName() {
-<span class="fc" id="L82">    return null;</span>
+<span class="fc" id="L81">    return null;</span>
   }
 
   @Override
   public Set&lt;Object&gt; getStereotypes() {
-<span class="fc" id="L87">    return Collections.emptySet();</span>
+<span class="fc" id="L86">    return Collections.emptySet();</span>
   }
 
   @Override
   public Class&lt;Type&gt; getBeanClass() {
-<span class="fc" id="L92">    return this.type;</span>
+<span class="fc" id="L91">    return this.type;</span>
   }
 
   @Override
   public boolean isAlternative() {
-<span class="fc" id="L97">    return false;</span>
+<span class="fc" id="L96">    return false;</span>
   }
 
   @Override
   public boolean isNullable() {
-<span class="nc" id="L102">    return false;</span>
+<span class="nc" id="L101">    return false;</span>
   }
 
   @Override
   public Set&lt;Object&gt; getInjectionPoints() {
-<span class="fc" id="L107">    return Collections.emptySet();</span>
+<span class="fc" id="L106">    return Collections.emptySet();</span>
   }
 
   @Override
   public Object create(CreationalContext creationalContext) {
-<span class="fc bfc" id="L112" title="All 2 branches covered.">    if (SqlSession.class.equals(this.type)) {</span>
-<span class="fc" id="L113">      return findSqlSessionManager(creationalContext);</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">    if (SqlSession.class.equals(this.type)) {</span>
+<span class="fc" id="L112">      return findSqlSessionManager(creationalContext);</span>
     }
-<span class="fc" id="L115">    ErrorContext.instance().reset();</span>
-<span class="fc" id="L116">    return Proxy.newProxyInstance(</span>
-<span class="fc" id="L117">        SqlSessionFactory.class.getClassLoader(), </span>
+<span class="fc" id="L114">    ErrorContext.instance().reset();</span>
+<span class="fc" id="L115">    return Proxy.newProxyInstance(</span>
+<span class="fc" id="L116">        SqlSessionFactory.class.getClassLoader(), </span>
         new Class[] {this.type}, 
         new SerializableMapperProxy(this, creationalContext));
   }
 
   @Override
   public void destroy(Object instance, CreationalContext creationalContext) {
-<span class="fc" id="L124">    creationalContext.release();</span>
-<span class="fc" id="L125">  }</span>
+<span class="fc" id="L123">    creationalContext.release();</span>
+<span class="fc" id="L124">  }</span>
 
   private SqlSessionManager findSqlSessionManager(CreationalContext creationalContext) {
-<span class="fc" id="L128">    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.sqlSessionFactoryName, this.qualifiers, creationalContext);</span>
-<span class="fc" id="L129">    return CDIUtils.getRegistry(creationalContext).getManager(factory);</span>
+<span class="fc" id="L127">    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.sqlSessionFactoryName, this.qualifiers, creationalContext);</span>
+<span class="fc" id="L128">    return CDIUtils.getRegistry(creationalContext).getManager(factory);</span>
   }
 
 }

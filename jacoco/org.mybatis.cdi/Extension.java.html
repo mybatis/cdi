@@ -15,16 +15,8 @@
  */
 package org.mybatis.cdi;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
@@ -39,8 +31,16 @@ import javax.enterprise.inject.spi.ProcessInjectionTarget;
 import javax.enterprise.inject.spi.ProcessProducer;
 import javax.inject.Named;
 import javax.inject.Qualifier;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * MyBatis CDI extension
@@ -51,13 +51,11 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 <span class="fc" id="L52">  private static final Logger LOGGER = Logger.getLogger(Extension.class.getName());</span>
 
-<span class="fc" id="L54">  private final Set&lt;BeanKey&gt; mappers = new HashSet&lt;BeanKey&gt;();</span>
+<span class="fc" id="L54">  private final Set&lt;BeanKey&gt; sessionProducers = new HashSet&lt;BeanKey&gt;();</span>
 
-<span class="fc" id="L56">  private final Set&lt;BeanKey&gt; sessionTargets = new HashSet&lt;BeanKey&gt;();</span>
-  
-<span class="fc" id="L58">  private final Set&lt;BeanKey&gt; sessionProducers = new HashSet&lt;BeanKey&gt;();</span>
+<span class="fc" id="L56">  private final Set&lt;Type&gt; mapperTypes = new HashSet&lt;Type&gt;();</span>
 
-<span class="fc" id="L60">  private final Set&lt;Type&gt; mapperTypes = new HashSet&lt;Type&gt;();</span>
+<span class="fc" id="L58">  private final Set&lt;InjectionPoint&gt; injectionPoints = new HashSet&lt;InjectionPoint&gt;();</span>
 
   /**
    * Collect types of all mappers annotated with Mapper.
@@ -65,13 +63,13 @@ import org.apache.ibatis.session.SqlSessionFactory;
    * @param pat 
    */
   @SuppressWarnings(&quot;UnusedDeclaration&quot;)
-  private &lt;T&gt; void processAnnotatedType(@Observes final ProcessAnnotatedType&lt;T&gt; pat) {
-<span class="fc" id="L69">    final AnnotatedType&lt;T&gt; at = pat.getAnnotatedType();</span>
-<span class="fc bfc" id="L70" title="All 2 branches covered.">    if (at.isAnnotationPresent(Mapper.class)) {</span>
-<span class="fc" id="L71">      LOGGER.log(Level.INFO, &quot;MyBatis CDI Module - Mapper type {0}&quot;, at.getJavaClass().getSimpleName());</span>
-<span class="fc" id="L72">      this.mapperTypes.add(at.getBaseType());</span>
+  protected &lt;T&gt; void processAnnotatedType(@Observes final ProcessAnnotatedType&lt;T&gt; pat) {
+<span class="fc" id="L67">    final AnnotatedType&lt;T&gt; at = pat.getAnnotatedType();</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">    if (at.isAnnotationPresent(Mapper.class)) {</span>
+<span class="fc" id="L69">      LOGGER.log(Level.INFO, &quot;MyBatis CDI Module - Found class with @Mapper-annotation: {0}&quot;, at.getJavaClass().getSimpleName());</span>
+<span class="fc" id="L70">      this.mapperTypes.add(at.getBaseType());</span>
     }
-<span class="fc" id="L74">  }</span>
+<span class="fc" id="L72">  }</span>
 
   /**
    * Collect all SqlSessionFactory producers annotated with SessionFactoryProvider.
@@ -80,79 +78,88 @@ import org.apache.ibatis.session.SqlSessionFactory;
    * @param pp 
    */
   @SuppressWarnings(&quot;UnusedDeclaration&quot;)
-  private &lt;T, X&gt; void processProducer(@Observes final ProcessProducer&lt;T, X&gt; pp) {
-<span class="fc" id="L84">    final AnnotatedMember&lt;T&gt; am = pp.getAnnotatedMember();</span>
-<span class="fc" id="L85">    final boolean isAnnotated = am.isAnnotationPresent(SessionFactoryProvider.class), </span>
-<span class="fc" id="L86">        isSqlSessionFactory = am.getBaseType().equals(SqlSessionFactory.class);</span>
-<span class="fc" id="L87">    final Object[] logData = {am.getJavaMember().getDeclaringClass().getSimpleName(), am.getJavaMember().getName()};</span>
-<span class="pc bpc" id="L88" title="1 of 4 branches missed.">    if (isAnnotated &amp;&amp; isSqlSessionFactory) {</span>
-<span class="fc" id="L89">      LOGGER.log(Level.INFO, &quot;MyBatis CDI Module - SqlSessionFactory producer {0}.{1}&quot;, logData);      </span>
-<span class="fc" id="L90">      this.sessionProducers.add(new BeanKey((Class&lt;Type&gt;) (Type)SqlSession.class, am.getAnnotations()));      </span>
+  protected &lt;T, X&gt; void processProducer(@Observes final ProcessProducer&lt;T, X&gt; pp) {
+<span class="fc" id="L82">    final AnnotatedMember&lt;T&gt; am = pp.getAnnotatedMember();</span>
+<span class="fc" id="L83">    final boolean isAnnotated = am.isAnnotationPresent(SessionFactoryProvider.class), </span>
+<span class="fc" id="L84">        isSqlSessionFactory = am.getBaseType().equals(SqlSessionFactory.class);</span>
+<span class="fc" id="L85">    final Object[] logData = {am.getJavaMember().getDeclaringClass().getSimpleName(), am.getJavaMember().getName()};</span>
+<span class="pc bpc" id="L86" title="1 of 4 branches missed.">    if (isAnnotated &amp;&amp; isSqlSessionFactory) {</span>
+<span class="fc" id="L87">      LOGGER.log(Level.INFO, &quot;MyBatis CDI Module - SqlSessionFactory producer {0}.{1}&quot;, logData);      </span>
+<span class="fc" id="L88">      this.sessionProducers.add(new BeanKey((Class&lt;Type&gt;) (Type)SqlSession.class, am.getAnnotations()));      </span>
     }
-<span class="pc bpc" id="L92" title="3 of 4 branches missed.">    else if (isAnnotated &amp;&amp; !isSqlSessionFactory) {</span>
-<span class="nc" id="L93">      LOGGER.log(Level.SEVERE, &quot;MyBatis CDI Module - Invalid return type (Must be SqlSessionFactory): {0}.{1}&quot;, logData);</span>
-<span class="nc" id="L94">      pp.addDefinitionError(</span>
+<span class="pc bpc" id="L90" title="3 of 4 branches missed.">    else if (isAnnotated &amp;&amp; !isSqlSessionFactory) {</span>
+<span class="nc" id="L91">      LOGGER.log(Level.SEVERE, &quot;MyBatis CDI Module - Invalid return type (Must be SqlSessionFactory): {0}.{1}&quot;, logData);</span>
+<span class="nc" id="L92">      pp.addDefinitionError(</span>
           new MybatisCdiConfigurationException(
-<span class="nc" id="L96">              String.format(&quot;SessionFactoryProvider producers must return SqlSessionFactory (%s.%s)&quot;, logData[0], logData[1])));</span>
+<span class="nc" id="L94">              String.format(&quot;SessionFactoryProvider producers must return SqlSessionFactory (%s.%s)&quot;, logData[0], logData[1])));</span>
     }
-<span class="pc bpc" id="L98" title="2 of 4 branches missed.">    else if (!isAnnotated &amp;&amp; isSqlSessionFactory) {</span>
-<span class="nc" id="L99">      LOGGER.log(Level.WARNING, &quot;MyBatis CDI Module - Ignored SqlSessionFactory producer because it is not annotated with @SessionFactoryProvider: {0}.{1}&quot;, logData);</span>
+<span class="pc bpc" id="L96" title="2 of 4 branches missed.">    else if (!isAnnotated &amp;&amp; isSqlSessionFactory) {</span>
+<span class="nc" id="L97">      LOGGER.log(Level.WARNING, &quot;MyBatis CDI Module - Ignored SqlSessionFactory producer because it is not annotated with @SessionFactoryProvider: {0}.{1}&quot;, logData);</span>
     }
-<span class="fc" id="L101">  }</span>
+<span class="fc" id="L99">  }</span>
 
   /**
    * Collect all targets to match Mappers and Session providers dependency.
    * @param &lt;X&gt;
    * @param event 
    */
-  public &lt;X&gt; void processInjectionTarget(@Observes ProcessInjectionTarget&lt;X&gt; event) {
-<span class="fc" id="L109">    final InjectionTarget&lt;X&gt; it = event.getInjectionTarget();</span>
-<span class="fc bfc" id="L110" title="All 2 branches covered.">    for (final InjectionPoint ip : it.getInjectionPoints()) {</span>
-<span class="fc bfc" id="L111" title="All 2 branches covered.">      if (mapperTypes.contains(ip.getAnnotated().getBaseType())) {</span>
-<span class="fc" id="L112">        this.mappers.add(new BeanKey((Class&lt;Type&gt;) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));</span>
-      }
-<span class="fc bfc" id="L114" title="All 2 branches covered.">      else if (SqlSession.class.equals(ip.getAnnotated().getBaseType())) {</span>
-<span class="fc" id="L115">        this.sessionTargets.add(new BeanKey((Class&lt;Type&gt;) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));</span>
-      }
-<span class="fc" id="L117">    }</span>
-<span class="fc" id="L118">  }</span>
+  protected &lt;X&gt; void processInjectionTarget(@Observes ProcessInjectionTarget&lt;X&gt; event) {
+<span class="fc" id="L107">    final InjectionTarget&lt;X&gt; it = event.getInjectionTarget();</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">    for (final InjectionPoint ip : it.getInjectionPoints()) {</span>
+<span class="fc" id="L109">      injectionPoints.add(ip);</span>
+<span class="fc" id="L110">    }</span>
+<span class="fc" id="L111">  }</span>
 
   /**
    * Register all mybatis injectable beans.
    * @param abd
    * @param bm 
    */
-  public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
-<span class="fc" id="L126">    LOGGER.log(Level.INFO, &quot;MyBatis CDI Module - Activated&quot;);</span>
-    
+  protected void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
+<span class="fc" id="L119">    LOGGER.log(Level.INFO, &quot;MyBatis CDI Module - Activated&quot;);</span>
+
+<span class="fc" id="L121">    Set&lt;BeanKey&gt; mappers = new HashSet&lt;BeanKey&gt;();</span>
+<span class="fc" id="L122">    Set&lt;BeanKey&gt; sessionTargets = new HashSet&lt;BeanKey&gt;();</span>
+
+<span class="fc bfc" id="L124" title="All 2 branches covered.">    for (InjectionPoint ip : injectionPoints) {</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">      if (this.mapperTypes.contains(ip.getAnnotated().getBaseType())) {</span>
+<span class="fc" id="L126">        LOGGER.log(Level.INFO, &quot;MyBatis CDI Module - Found a bean, which needs a Mapper {0}&quot;, new Object[] {</span>
+<span class="fc" id="L127">                ip.getAnnotated().getBaseType()</span>
+        });
+<span class="fc" id="L129">        mappers.add(new BeanKey((Class&lt;Type&gt;) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));</span>
+      }
+<span class="fc bfc" id="L131" title="All 2 branches covered.">      else if (SqlSession.class.equals(ip.getAnnotated().getBaseType())) {</span>
+<span class="fc" id="L132">        sessionTargets.add(new BeanKey((Class&lt;Type&gt;) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));</span>
+      }
+<span class="fc" id="L134">    }</span>
+<span class="fc" id="L135">    this.injectionPoints.clear();</span>
+
     // Mappers -----------------------------------------------------------------
-<span class="fc bfc" id="L129" title="All 2 branches covered.">    for (BeanKey key : this.mappers) {</span>
-<span class="fc" id="L130">      LOGGER.log(Level.INFO, &quot;MyBatis CDI Module - Managed Mapper dependency: {0}, {1}&quot;, new Object[]{key.getKey(), key.type.getName()});</span>
-<span class="fc" id="L131">      abd.addBean(key.createBean(bm));</span>
-<span class="fc" id="L132">    }</span>
-<span class="fc" id="L133">    this.mappers.clear();</span>
-<span class="fc" id="L134">    this.mapperTypes.clear();</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">    for (BeanKey key : mappers) {</span>
+<span class="fc" id="L139">      LOGGER.log(Level.INFO, &quot;MyBatis CDI Module - Managed Mapper dependency: {0}, {1}&quot;, new Object[]{key.getKey(), key.type.getName()});</span>
+<span class="fc" id="L140">      abd.addBean(key.createBean(bm));</span>
+<span class="fc" id="L141">    }</span>
+<span class="fc" id="L142">    this.mapperTypes.clear();</span>
 
     // SqlSessionFactories -----------------------------------------------------
-<span class="fc bfc" id="L137" title="All 2 branches covered.">    for (BeanKey key : this.sessionProducers) {</span>
-<span class="fc" id="L138">      LOGGER.log(Level.INFO, &quot;MyBatis CDI Module - Managed SqlSession: {0}, {1}&quot;, new Object[]{key.getKey(), key.type.getName()});</span>
-<span class="fc" id="L139">      abd.addBean(key.createBean(bm));</span>
-<span class="fc" id="L140">      this.sessionTargets.remove(key);</span>
-<span class="fc" id="L141">    }</span>
-<span class="fc" id="L142">    this.sessionProducers.clear();</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">    for (BeanKey key : this.sessionProducers) {</span>
+<span class="fc" id="L146">      LOGGER.log(Level.INFO, &quot;MyBatis CDI Module - Managed SqlSession: {0}, {1}&quot;, new Object[]{key.getKey(), key.type.getName()});</span>
+<span class="fc" id="L147">      abd.addBean(key.createBean(bm));</span>
+<span class="fc" id="L148">      sessionTargets.remove(key);</span>
+<span class="fc" id="L149">    }</span>
+<span class="fc" id="L150">    this.sessionProducers.clear();</span>
     
     // Unmanaged SqlSession targets --------------------------------------------
-<span class="fc bfc" id="L145" title="All 2 branches covered.">    for (BeanKey key : this.sessionTargets) {</span>
-<span class="fc" id="L146">      LOGGER.log(Level.WARNING, &quot;MyBatis CDI Module - Unmanaged SqlSession: {0}, {1}&quot;, new Object[]{key.getKey(), key.type.getName()});</span>
-<span class="fc" id="L147">    }</span>
-<span class="fc" id="L148">    this.sessionTargets.clear();</span>
-    
-<span class="fc" id="L150">  }</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">    for (BeanKey key : sessionTargets) {</span>
+<span class="fc" id="L154">      LOGGER.log(Level.WARNING, &quot;MyBatis CDI Module - Unmanaged SqlSession: {0}, {1}&quot;, new Object[]{key.getKey(), key.type.getName()});</span>
+<span class="fc" id="L155">    }</span>
+
+<span class="fc" id="L157">  }</span>
 
   /**
    * Unique key for fully qualified Mappers and Sessions.
    */
-  public static class BeanKey implements Comparable&lt;BeanKey&gt; {
+  private static final class BeanKey implements Comparable&lt;BeanKey&gt; {
 
     private final String key;
 
@@ -162,85 +169,85 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
     private final String sqlSessionManagerName;
 
-<span class="fc" id="L165">    public BeanKey(Class&lt;Type&gt; type, Set&lt;Annotation&gt; annotations) {</span>
-<span class="fc" id="L166">      this.type = type;</span>
-<span class="fc" id="L167">      this.qualifiers = sort(filterQualifiers(annotations));</span>
+<span class="fc" id="L172">    public BeanKey(Class&lt;Type&gt; type, Set&lt;Annotation&gt; annotations) {</span>
+<span class="fc" id="L173">      this.type = type;</span>
+<span class="fc" id="L174">      this.qualifiers = sort(filterQualifiers(annotations));</span>
 
       // Create key = type(.qualifier)*(.name)?
-<span class="fc" id="L170">      final StringBuilder sb = new StringBuilder();</span>
-<span class="fc" id="L171">      String name = null;</span>
-<span class="fc" id="L172">      sb.append(type.getName());</span>
-<span class="fc bfc" id="L173" title="All 2 branches covered.">      for (Annotation q : this.qualifiers) {</span>
-<span class="fc bfc" id="L174" title="All 2 branches covered.">        if (q instanceof Named) {</span>
-<span class="fc" id="L175">          name = ((Named) q).value();</span>
+<span class="fc" id="L177">      final StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L178">      String name = null;</span>
+<span class="fc" id="L179">      sb.append(type.getName());</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">      for (Annotation q : this.qualifiers) {</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        if (q instanceof Named) {</span>
+<span class="fc" id="L182">          name = ((Named) q).value();</span>
         }
         else {
-<span class="fc" id="L178">          sb.append(&quot;.&quot;).append(q.annotationType().getSimpleName());</span>
+<span class="fc" id="L185">          sb.append(&quot;.&quot;).append(q.annotationType().getSimpleName());</span>
         }
-<span class="fc" id="L180">      }</span>
-<span class="fc bfc" id="L181" title="All 2 branches covered.">      if (name != null) {</span>
-<span class="fc" id="L182">        sb.append(&quot;_&quot;).append(name);</span>
+<span class="fc" id="L187">      }</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">      if (name != null) {</span>
+<span class="fc" id="L189">        sb.append(&quot;_&quot;).append(name);</span>
       }
-<span class="fc" id="L184">      this.key = sb.toString();</span>
-<span class="fc" id="L185">      this.sqlSessionManagerName = name;</span>
-<span class="fc" id="L186">    }</span>
+<span class="fc" id="L191">      this.key = sb.toString();</span>
+<span class="fc" id="L192">      this.sqlSessionManagerName = name;</span>
+<span class="fc" id="L193">    }</span>
 
     private Set&lt;Annotation&gt; filterQualifiers(Set&lt;Annotation&gt; annotations) {
-<span class="fc" id="L189">      final Set&lt;Annotation&gt; set = new HashSet&lt;Annotation&gt;();</span>
-<span class="fc bfc" id="L190" title="All 2 branches covered.">      for (Annotation a : annotations) {</span>
-<span class="fc bfc" id="L191" title="All 2 branches covered.">        if (a.annotationType().isAnnotationPresent(Qualifier.class)) {</span>
-<span class="fc" id="L192">          set.add(a);</span>
+<span class="fc" id="L196">      final Set&lt;Annotation&gt; set = new HashSet&lt;Annotation&gt;();</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">      for (Annotation a : annotations) {</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        if (a.annotationType().isAnnotationPresent(Qualifier.class)) {</span>
+<span class="fc" id="L199">          set.add(a);</span>
         }
-<span class="fc" id="L194">      }</span>
-<span class="fc" id="L195">      return set;</span>
+<span class="fc" id="L201">      }</span>
+<span class="fc" id="L202">      return set;</span>
     }
 
     private List&lt;Annotation&gt; sort(Set&lt;Annotation&gt; annotations) {
-<span class="fc" id="L199">      final List&lt;Annotation&gt; list = new ArrayList&lt;Annotation&gt;(annotations);</span>
-<span class="fc" id="L200">      Collections.sort(list, new Comparator&lt;Annotation&gt;() {</span>
+<span class="fc" id="L206">      final List&lt;Annotation&gt; list = new ArrayList&lt;Annotation&gt;(annotations);</span>
+<span class="fc" id="L207">      Collections.sort(list, new Comparator&lt;Annotation&gt;() {</span>
         @Override
         public int compare(Annotation a, Annotation b) {
-<span class="fc" id="L203">          return a.getClass().getName().compareTo(b.getClass().getName());</span>
+<span class="fc" id="L210">          return a.getClass().getName().compareTo(b.getClass().getName());</span>
         }
       });
-<span class="fc" id="L206">      return list;</span>
+<span class="fc" id="L213">      return list;</span>
     }
 
     @Override
     public int compareTo(BeanKey o) {
-<span class="nc" id="L211">      return this.key.compareTo(o.key);</span>
+<span class="nc" id="L218">      return this.key.compareTo(o.key);</span>
     }
 
     @Override
     public int hashCode() {
-<span class="fc" id="L216">      int hash = 3;</span>
-<span class="pc bpc" id="L217" title="1 of 2 branches missed.">      hash = 43 * hash + (this.key != null ? this.key.hashCode() : 0);</span>
-<span class="fc" id="L218">      return hash;</span>
+<span class="fc" id="L223">      int hash = 3;</span>
+<span class="pc bpc" id="L224" title="1 of 2 branches missed.">      hash = 43 * hash + (this.key != null ? this.key.hashCode() : 0);</span>
+<span class="fc" id="L225">      return hash;</span>
     }
 
     @Override
     public boolean equals(Object obj) {
-<span class="pc bpc" id="L223" title="1 of 2 branches missed.">      if (obj == null) {</span>
-<span class="nc" id="L224">        return false;</span>
+<span class="pc bpc" id="L230" title="1 of 2 branches missed.">      if (obj == null) {</span>
+<span class="nc" id="L231">        return false;</span>
       }
-<span class="pc bpc" id="L226" title="1 of 2 branches missed.">      if (getClass() != obj.getClass()) {</span>
-<span class="nc" id="L227">        return false;</span>
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">      if (getClass() != obj.getClass()) {</span>
+<span class="nc" id="L234">        return false;</span>
       }
-<span class="fc" id="L229">      final BeanKey other = (BeanKey) obj;</span>
-<span class="pc bpc" id="L230" title="4 of 6 branches missed.">      return !(this.key == null ? other.key != null : !this.key.equals(other.key));</span>
+<span class="fc" id="L236">      final BeanKey other = (BeanKey) obj;</span>
+<span class="pc bpc" id="L237" title="4 of 6 branches missed.">      return !(this.key == null ? other.key != null : !this.key.equals(other.key));</span>
     }
 
     public Bean createBean(BeanManager bm) {
-<span class="fc" id="L234">      return new MyBatisBean(this.type, new HashSet&lt;Annotation&gt;(this.qualifiers), this.sqlSessionManagerName);</span>
+<span class="fc" id="L241">      return new MyBatisBean(this.type, new HashSet&lt;Annotation&gt;(this.qualifiers), this.sqlSessionManagerName);</span>
     }
 
     public String getKey() {
-<span class="fc" id="L238">      return this.key;</span>
+<span class="fc" id="L245">      return this.key;</span>
     }
 
     @Override
     public String toString() {
-<span class="nc" id="L243">      return this.key;</span>
+<span class="nc" id="L250">      return this.key;</span>
     }
 
   }
