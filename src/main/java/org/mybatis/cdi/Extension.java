@@ -238,7 +238,7 @@ public class Extension implements javax.enterprise.inject.spi.Extension {
     }
 
     public Bean createBean(BeanManager bm) {
-      return new MyBatisBean(this.type, new HashSet<Annotation>(this.qualifiers), this.sqlSessionManagerName);
+      return new MyBatisBean(this.key, this.type, new HashSet<Annotation>(this.qualifiers), this.sqlSessionManagerName);
     }
 
     public String getKey() {

@@ -15,7 +15,6 @@
  */
 package org.mybatis.cdi;
 
-import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
@@ -26,6 +25,7 @@ import java.util.Set;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.PassivationCapable;
 
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.session.SqlSession;
@@ -37,7 +37,7 @@ import org.apache.ibatis.session.SqlSessionManager;
  *
  * @author Frank D. Martinez [mnesarco]
  */
-public class MyBatisBean implements Bean, Serializable {
+public class MyBatisBean implements Bean, PassivationCapable {
 
   private static final long serialVersionUID = 1L;
 
@@ -47,7 +47,10 @@ public class MyBatisBean implements Bean, Serializable {
 
   protected final String sqlSessionFactoryName;
   
-  public MyBatisBean(Class<Type> type, Set<Annotation> qualifiers, String sqlSessionFactoryName) {  
+  protected final String id;
+  
+  public MyBatisBean(String id, Class<Type> type, Set<Annotation> qualifiers, String sqlSessionFactoryName) {  
+    this.id = id;
     this.type = type;
     this.sqlSessionFactoryName = sqlSessionFactoryName;
     if (qualifiers == null || qualifiers.isEmpty()) {
@@ -126,6 +129,11 @@ public class MyBatisBean implements Bean, Serializable {
   private SqlSessionManager findSqlSessionManager(CreationalContext creationalContext) {
     SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.sqlSessionFactoryName, this.qualifiers, creationalContext);
     return CDIUtils.getRegistry(creationalContext).getManager(factory);
+  }
+
+  @Override
+  public String getId() {
+    return this.id;    
   }
 
 }
