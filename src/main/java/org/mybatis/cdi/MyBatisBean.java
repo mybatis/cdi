@@ -15,6 +15,7 @@
  */
 package org.mybatis.cdi;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
@@ -37,7 +38,7 @@ import org.apache.ibatis.session.SqlSessionManager;
  *
  * @author Frank D. Martinez [mnesarco]
  */
-public class MyBatisBean implements Bean, PassivationCapable {
+public class MyBatisBean implements Bean, Serializable, PassivationCapable {
 
   private static final long serialVersionUID = 1L;
 
