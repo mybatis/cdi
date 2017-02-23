@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013-2016 the original author or authors.
+ *    Copyright 2013-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -32,11 +32,9 @@ import javax.transaction.SystemException;
 import org.apache.ibatis.session.SqlSessionManager;
 
 /**
- * Best-effort interceptor for local transactions. It locates all the instances
- * of {@code SqlSssionManager} and starts transactions on all them. It cannot
- * guarantee atomiticy if there is more than one {@code SqlSssionManager}. Use
- * XA drivers, a JTA container and the {@link JtaTransactionInterceptor} in that
- * case.
+ * Best-effort interceptor for local transactions. It locates all the instances of {@code SqlSssionManager} and starts
+ * transactions on all them. It cannot guarantee atomiticy if there is more than one {@code SqlSssionManager}. Use XA
+ * drivers, a JTA container and the {@link JtaTransactionInterceptor} in that case.
  *
  * @see JtaTransactionInterceptor
  *
@@ -55,7 +53,7 @@ public class LocalTransactionInterceptor implements Serializable {
   public Object invoke(InvocationContext ctx) throws Exception {
     Transactional transactional = getTransactionalAnnotation(ctx);
     boolean isInitiator = start(transactional);
-    boolean isExternalJta =  isTransactionActive();
+    boolean isExternalJta = isTransactionActive();
     if (isInitiator && !isExternalJta) {
       beginJta();
     }
@@ -64,7 +62,7 @@ public class LocalTransactionInterceptor implements Serializable {
     try {
       result = ctx.proceed();
     } catch (Exception ex) {
-      Exception unwrapped = unwrapException(ex); 
+      Exception unwrapped = unwrapException(ex);
       needsRollback = needsRollback || needsRollback(transactional, unwrapped);
       throw unwrapped;
     } finally {
@@ -87,12 +85,13 @@ public class LocalTransactionInterceptor implements Serializable {
   protected boolean isTransactionActive() throws SystemException {
     return false;
   }
-    
+
   protected void beginJta() throws NotSupportedException, SystemException {
     // nothing to do
   }
 
-  protected void endJta(boolean isExternaTransaction, boolean commit) throws SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+  protected void endJta(boolean isExternaTransaction, boolean commit) throws SystemException, RollbackException,
+      HeuristicMixedException, HeuristicRollbackException {
     // nothing to do
   }
 
@@ -120,7 +119,8 @@ public class LocalTransactionInterceptor implements Serializable {
     boolean started = false;
     for (SqlSessionManager manager : this.registry.getManagers()) {
       if (!manager.isManagedSessionStarted()) {
-        manager.startManagedSession(transactional.executorType(), transactional.isolation().getTransactionIsolationLevel());
+        manager.startManagedSession(transactional.executorType(), transactional.isolation()
+            .getTransactionIsolationLevel());
         started = true;
       }
     }
@@ -155,7 +155,7 @@ public class LocalTransactionInterceptor implements Serializable {
       } else if (!(unwrapped instanceof Exception)) {
         return new RuntimeException(unwrapped);
       } else {
-       return (Exception) unwrapped; 
+        return (Exception) unwrapped;
       }
     }
   }

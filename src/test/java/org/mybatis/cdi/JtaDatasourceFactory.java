@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013-2016 the original author or authors.
+ *    Copyright 2013-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,10 +25,10 @@ import bitronix.tm.resource.jdbc.PoolingDataSource;
 
 public class JtaDatasourceFactory implements DataSourceFactory {
 
-  PoolingDataSource ds; 
-  
+  PoolingDataSource ds;
+
   public JtaDatasourceFactory() {
-    this.ds = new PoolingDataSource(); 
+    this.ds = new PoolingDataSource();
   }
 
   @Override
@@ -40,7 +40,7 @@ public class JtaDatasourceFactory implements DataSourceFactory {
     this.ds.setMaxPoolSize(Integer.valueOf(props.getProperty("maxPoolSize")));
     props.remove("maxPoolSize");
     this.ds.setAllowLocalTransactions(Boolean.valueOf(props.getProperty("allowLocalTransactions")));
-    props.remove("allowLocalTransactions");    
+    props.remove("allowLocalTransactions");
     this.ds.setDriverProperties(props);
   }
 

@@ -31,7 +31,7 @@ import javax.enterprise.inject.Stereotype;
 @Stereotype
 @Inherited
 @Retention(RUNTIME)
-@Target({TYPE})
+@Target({ TYPE })
 public @interface Mapper {
-    // Interface Mapper
+  // Interface Mapper
 }

@@ -106,7 +106,7 @@ public class ManagerProducers {
   public SqlSession createNonCdiManagedSession() throws IOException {
     return SqlSessionManager.newInstance(createSessionManager(4));
   }
-  
+
   @ApplicationScoped
   @Named("unmanaged")
   public void closeNonCdiManagedSession(@Disposes SqlSession session) {

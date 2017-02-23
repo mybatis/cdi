@@ -16,18 +16,7 @@
        limitations under the License.
 
 -->
-<!DOCTYPE mapper
-    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
-<mapper namespace="org.mybatis.cdi.UserMapper">
-
-    <select id="getUser" resultType="org.mybatis.cdi.User">
-        select * from users where id = #{id}
-    </select>
-
-    <insert id="insertUser">
-        insert into users values(#{id}, #{name})
-    </insert>
-
-</mapper>
+<!DOCTYPE Format>
+<Format>
+ <!-- Dummy format file -->
+</Format>

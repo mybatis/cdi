@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013-2016 the original author or authors.
+ *    Copyright 2013-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import org.apache.ibatis.session.ExecutorType;
  * @author Frank David Martínez
  */
 @InterceptorBinding
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Transactional {
 
@@ -68,13 +68,12 @@ public @interface Transactional {
   boolean rollbackOnly() default false;
 
   /**
-   * Defines zero (0) or more exception {@code Class classes}, which must be a
-   * subclass of {@code Throwable}, indicating which exception types must cause
-   * a transaction rollback.
+   * Defines zero (0) or more exception {@code Class classes}, which must be a subclass of {@code Throwable}, indicating
+   * which exception types must cause a transaction rollback.
    * 
-   * @return an empty array by default, user defined otherwise. 
+   * @return an empty array by default, user defined otherwise.
    */
-  @Nonbinding  
+  @Nonbinding
   Class<? extends Throwable>[] rollbackFor() default {};
 
 }

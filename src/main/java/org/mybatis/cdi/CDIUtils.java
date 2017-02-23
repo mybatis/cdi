@@ -34,22 +34,24 @@ import org.apache.ibatis.session.SqlSessionFactory;
 public final class CDIUtils {
 
   private CDIUtils() {
-      // this class cannot be instantiated
+    // this class cannot be instantiated
   }
 
   public static SqlSessionManagerRegistry getRegistry(CreationalContext creationalContext) {
     final BeanManager beanManager = CDI.current().getBeanManager();
     Iterator<Bean<?>> beans = beanManager.getBeans(SqlSessionManagerRegistry.class).iterator();
-    return (SqlSessionManagerRegistry) beanManager.getReference(beans.next(), SqlSessionManagerRegistry.class, creationalContext);
+    return (SqlSessionManagerRegistry) beanManager.getReference(beans.next(), SqlSessionManagerRegistry.class,
+        creationalContext);
   }
 
-  public static SqlSessionFactory findSqlSessionFactory(String name, Set<Annotation> qualifiers, CreationalContext creationalContext) {
+  public static SqlSessionFactory findSqlSessionFactory(String name, Set<Annotation> qualifiers,
+      CreationalContext creationalContext) {
     final BeanManager beanManager = CDI.current().getBeanManager();
     Set<Bean<?>> beans;
     if (name != null) {
       beans = beanManager.getBeans(name);
     } else {
-      beans = beanManager.getBeans(SqlSessionFactory.class, qualifiers.toArray(new Annotation[]{}));
+      beans = beanManager.getBeans(SqlSessionFactory.class, qualifiers.toArray(new Annotation[] {}));
     }
     Bean bean = beanManager.resolve(beans);
     if (bean == null) {

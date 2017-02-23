@@ -23,11 +23,12 @@ import java.lang.annotation.Target;
 
 /**
  * Qualifies an SqlSessionFactory provider method as usable by mybatis-cdi.
+ * 
  * @author Frank David Martínez
  */
 @Inherited
 @Retention(RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ ElementType.METHOD })
 public @interface SessionFactoryProvider {
 
 }
