@@ -57,7 +57,8 @@ public class SerializableMapperProxy implements InvocationHandler, Serializable 
   }
 
   private Object getMapper() {
-    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.bean.sqlSessionFactoryName, this.bean.qualifiers, this.creationalContext);
+    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.bean.sqlSessionFactoryName, this.bean.qualifiers,
+        this.creationalContext);
     return CDIUtils.getRegistry(this.creationalContext).getManager(factory).getMapper(this.bean.type);
   }
 

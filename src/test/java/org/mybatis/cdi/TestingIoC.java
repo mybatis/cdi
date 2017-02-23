@@ -165,8 +165,8 @@ public class TestingIoC {
     oout.close();
     ObjectInputStream oin = new ObjectInputStream(new FileInputStream("target/mapper.ser"));
     SerializableFooService unserialized = (SerializableFooService) oin.readObject();
-    oin.close();    
+    oin.close();
     Assert.assertEquals(this.serFooService.getUser(1).getName(), unserialized.getUser(1).getName());
   }
-  
+
 }

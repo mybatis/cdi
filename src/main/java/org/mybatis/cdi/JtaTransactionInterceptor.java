@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013-2016 the original author or authors.
+ *    Copyright 2013-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -27,8 +27,7 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 /**
- * Interceptor for JTA transactions. MyBatis should be configured to use the
- * {@code MANAGED} transaction manager.
+ * Interceptor for JTA transactions. MyBatis should be configured to use the {@code MANAGED} transaction manager.
  *
  * @author Eduardo Macarrón
  */
@@ -52,7 +51,8 @@ public class JtaTransactionInterceptor extends LocalTransactionInterceptor {
   }
 
   @Override
-  protected void endJta(boolean isExternaTransaction, boolean needsRollback) throws SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+  protected void endJta(boolean isExternaTransaction, boolean needsRollback) throws SystemException, RollbackException,
+      HeuristicMixedException, HeuristicRollbackException {
     if (isExternaTransaction) {
       if (needsRollback) {
         this.userTransaction.get().setRollbackOnly();

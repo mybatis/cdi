@@ -49,7 +49,7 @@ public class FooService {
   @Inject
   @Named("unmanaged")
   private SqlSession unmanagedSqlSession;
-  
+
   public User getUserFromSqlSession(int userId) {
     return this.sqlSession.selectOne("getUser", userId);
   }

@@ -27,7 +27,8 @@ public class SerializableFooService implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @Inject @Named("manager1")
+  @Inject
+  @Named("manager1")
   private UserMapper userMapper;
 
   public User getUser(int userId) {

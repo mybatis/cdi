@@ -41,61 +41,56 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ExtensionTest {
 
+  @Test
+  public <T> void mappersFoundAfterTheBeanUsingTheMapperInAnInjectionPointHasBeenScannedShouldBeInstantiated()
+      throws Exception {
 
+    Extension extension = new Extension();
+    Type type = UserMapper.class;
 
-    @Test
-    public <T> void mappersFoundAfterTheBeanUsingTheMapperInAnInjectionPointHasBeenScannedShouldBeInstantiated() throws Exception {
+    projectInjectionTarget(extension, type);
 
-        Extension extension = new Extension();
-        Type type = UserMapper.class;
+    processAnnotatedType(extension, type);
 
-        projectInjectionTarget(extension, type);
+    AfterBeanDiscovery afterBeanDiscovery = mock(AfterBeanDiscovery.class);
+    BeanManager beanManager = mock(BeanManager.class);
+    extension.afterBeanDiscovery(afterBeanDiscovery, beanManager);
 
-        processAnnotatedType(extension, type);
+    verify(afterBeanDiscovery).addBean((Bean<?>) any());
 
-        AfterBeanDiscovery afterBeanDiscovery = mock(AfterBeanDiscovery.class);
-        BeanManager beanManager = mock(BeanManager.class);
-        extension.afterBeanDiscovery(afterBeanDiscovery, beanManager);
+  }
 
+  private <T> void projectInjectionTarget(Extension extension, Type type) {
+    ProcessInjectionTarget<T> event = mock(ProcessInjectionTarget.class);
+    InjectionTarget<T> injectTarget = mock(InjectionTarget.class);
+    Set<InjectionPoint> injectionPoints = new HashSet<InjectionPoint>();
 
-        verify(afterBeanDiscovery).addBean((Bean<?>) any());
+    InjectionPoint injectionPoint = mock(InjectionPoint.class);
+    Annotated annotated = mock(Annotated.class);
 
+    when(injectionPoint.getAnnotated()).thenReturn(annotated);
 
-    }
+    when(annotated.getBaseType()).thenReturn(type);
+    when(annotated.getAnnotations()).thenReturn(new HashSet<Annotation>());
 
-    private <T> void projectInjectionTarget(Extension extension, Type type) {
-        ProcessInjectionTarget<T> event = mock(ProcessInjectionTarget.class);
-        InjectionTarget<T> injectTarget = mock(InjectionTarget.class);
-        Set<InjectionPoint> injectionPoints = new HashSet<InjectionPoint>();
+    injectionPoints.add(injectionPoint);
 
-        InjectionPoint injectionPoint = mock(InjectionPoint.class);
-        Annotated annotated = mock(Annotated.class);
+    when(event.getInjectionTarget()).thenReturn(injectTarget);
+    when(injectTarget.getInjectionPoints()).thenReturn(injectionPoints);
 
-        when(injectionPoint.getAnnotated()).thenReturn(annotated);
+    extension.processInjectionTarget(event);
+  }
 
-        when(annotated.getBaseType()).thenReturn(type);
-        when(annotated.getAnnotations()).thenReturn(new HashSet<Annotation>());
+  private <T> void processAnnotatedType(Extension extension, Type type) {
+    ProcessAnnotatedType<T> pat = mock(ProcessAnnotatedType.class);
+    AnnotatedType<T> annotatedType = mock(AnnotatedType.class);
 
-        injectionPoints.add(injectionPoint);
+    when(annotatedType.isAnnotationPresent(Mapper.class)).thenReturn(true);
+    when(pat.getAnnotatedType()).thenReturn(annotatedType);
+    when(annotatedType.getBaseType()).thenReturn(type);
+    when(annotatedType.getJavaClass()).thenReturn((Class<T>) UserMapper.class);
 
-
-        when(event.getInjectionTarget()).thenReturn(injectTarget);
-        when(injectTarget.getInjectionPoints()).thenReturn(injectionPoints);
-
-        extension.processInjectionTarget(event);
-    }
-
-    private <T> void processAnnotatedType(Extension extension, Type type) {
-        ProcessAnnotatedType<T> pat = mock(ProcessAnnotatedType.class);
-        AnnotatedType<T> annotatedType = mock(AnnotatedType.class);
-
-
-        when(annotatedType.isAnnotationPresent(Mapper.class)).thenReturn(true);
-        when(pat.getAnnotatedType()).thenReturn(annotatedType);
-        when(annotatedType.getBaseType()).thenReturn(type);
-        when(annotatedType.getJavaClass()).thenReturn((Class<T>) UserMapper.class);
-
-        extension.processAnnotatedType(pat);
-    }
+    extension.processAnnotatedType(pat);
+  }
 
 }

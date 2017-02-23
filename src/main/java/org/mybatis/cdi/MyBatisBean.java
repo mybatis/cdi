@@ -46,10 +46,10 @@ public class MyBatisBean implements Bean, PassivationCapable {
   protected final Set<Annotation> qualifiers;
 
   protected final String sqlSessionFactoryName;
-  
+
   protected final String id;
-  
-  public MyBatisBean(String id, Class<Type> type, Set<Annotation> qualifiers, String sqlSessionFactoryName) {  
+
+  public MyBatisBean(String id, Class<Type> type, Set<Annotation> qualifiers, String sqlSessionFactoryName) {
     this.id = id;
     this.type = type;
     this.sqlSessionFactoryName = sqlSessionFactoryName;
@@ -115,9 +115,7 @@ public class MyBatisBean implements Bean, PassivationCapable {
       return findSqlSessionManager(creationalContext);
     }
     ErrorContext.instance().reset();
-    return Proxy.newProxyInstance(
-        SqlSessionFactory.class.getClassLoader(), 
-        new Class[] {this.type}, 
+    return Proxy.newProxyInstance(SqlSessionFactory.class.getClassLoader(), new Class[] { this.type },
         new SerializableMapperProxy(this, creationalContext));
   }
 
@@ -127,13 +125,14 @@ public class MyBatisBean implements Bean, PassivationCapable {
   }
 
   private SqlSessionManager findSqlSessionManager(CreationalContext creationalContext) {
-    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.sqlSessionFactoryName, this.qualifiers, creationalContext);
+    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.sqlSessionFactoryName, this.qualifiers,
+        creationalContext);
     return CDIUtils.getRegistry(creationalContext).getManager(factory);
   }
 
   @Override
   public String getId() {
-    return this.id;    
+    return this.id;
   }
 
 }
