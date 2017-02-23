@@ -39,13 +39,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ExtensionTest {
+public class MybatisExtensionTest {
 
   @Test
   public <T> void mappersFoundAfterTheBeanUsingTheMapperInAnInjectionPointHasBeenScannedShouldBeInstantiated()
       throws Exception {
 
-    Extension extension = new Extension();
+    MybatisExtension extension = new MybatisExtension();
     Type type = UserMapper.class;
 
     projectInjectionTarget(extension, type);
@@ -60,7 +60,7 @@ public class ExtensionTest {
 
   }
 
-  private <T> void projectInjectionTarget(Extension extension, Type type) {
+  private <T> void projectInjectionTarget(MybatisExtension extension, Type type) {
     ProcessInjectionTarget<T> event = mock(ProcessInjectionTarget.class);
     InjectionTarget<T> injectTarget = mock(InjectionTarget.class);
     Set<InjectionPoint> injectionPoints = new HashSet<InjectionPoint>();
@@ -81,7 +81,7 @@ public class ExtensionTest {
     extension.processInjectionTarget(event);
   }
 
-  private <T> void processAnnotatedType(Extension extension, Type type) {
+  private <T> void processAnnotatedType(MybatisExtension extension, Type type) {
     ProcessAnnotatedType<T> pat = mock(ProcessAnnotatedType.class);
     AnnotatedType<T> annotatedType = mock(AnnotatedType.class);
 
