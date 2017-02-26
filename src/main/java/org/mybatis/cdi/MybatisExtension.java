@@ -24,6 +24,7 @@ import javax.enterprise.inject.spi.AnnotatedMember;
 import javax.enterprise.inject.spi.AnnotatedType;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.InjectionTarget;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
@@ -47,9 +48,9 @@ import java.util.logging.Logger;
  *
  * @author Frank D. Martinez [mnesarco]
  */
-public class Extension implements javax.enterprise.inject.spi.Extension {
+public class MybatisExtension implements Extension {
 
-  private static final Logger LOGGER = Logger.getLogger(Extension.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(MybatisExtension.class.getName());
 
   private final Set<BeanKey> sessionProducers = new HashSet<BeanKey>();
 
