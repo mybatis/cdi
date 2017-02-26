@@ -173,10 +173,10 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a>     oout.close();
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>     ObjectInputStream oin = <strong class="jxr_keyword">new</strong> ObjectInputStream(<strong class="jxr_keyword">new</strong> FileInputStream(<span class="jxr_string">"target/mapper.ser"</span>));
 <a class="jxr_linenumber" name="L167" href="#L167">167</a>     <a href="../../../org/mybatis/cdi/SerializableFooService.html">SerializableFooService</a> unserialized = (SerializableFooService) oin.readObject();
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>     oin.close();    
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>     oin.close();
 <a class="jxr_linenumber" name="L169" href="#L169">169</a>     Assert.assertEquals(<strong class="jxr_keyword">this</strong>.serFooService.getUser(1).getName(), unserialized.getUser(1).getName());
 <a class="jxr_linenumber" name="L170" href="#L170">170</a>   }
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>   
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> }
 </pre>
 <hr/>
