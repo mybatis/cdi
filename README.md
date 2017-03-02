@@ -13,6 +13,11 @@ MyBatis-CDI extension takes care of the lifecycle of MyBatis mappers and SqlSess
 CDI beans ready to be used, there is no need to create or destroy them. It also provides local and JTA transaction support based on the
 @Transactional annotation.
 
+Important
+---------
+
+CDI 1.0 is not supported. This extension requieres minimum CDI 1.1, CDI 1.2 is prefered.
+
 Essentials
 ----------
 
