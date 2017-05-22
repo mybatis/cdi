@@ -68,8 +68,8 @@ public class MybatisExtension implements Extension {
   protected <T> void processAnnotatedType(@Observes final ProcessAnnotatedType<T> pat) {
     final AnnotatedType<T> at = pat.getAnnotatedType();
     if (at.isAnnotationPresent(Mapper.class)) {
-      LOGGER.log(Level.INFO, "MyBatis CDI Module - Found class with @Mapper-annotation: {0}", at.getJavaClass()
-          .getSimpleName());
+      LOGGER.log(Level.INFO, "MyBatis CDI Module - Found class with @Mapper-annotation: {0}",
+          at.getJavaClass().getSimpleName());
       this.mapperTypes.add(at.getBaseType());
     }
   }
@@ -84,23 +84,21 @@ public class MybatisExtension implements Extension {
   @SuppressWarnings("UnusedDeclaration")
   protected <T, X> void processProducer(@Observes final ProcessProducer<T, X> pp) {
     final AnnotatedMember<T> am = pp.getAnnotatedMember();
-    final boolean isAnnotated = am.isAnnotationPresent(SessionFactoryProvider.class), isSqlSessionFactory = am
-        .getBaseType().equals(SqlSessionFactory.class);
+    final boolean isAnnotated = am.isAnnotationPresent(SessionFactoryProvider.class),
+        isSqlSessionFactory = am.getBaseType().equals(SqlSessionFactory.class);
     final Object[] logData = { am.getJavaMember().getDeclaringClass().getSimpleName(), am.getJavaMember().getName() };
     if (isAnnotated && isSqlSessionFactory) {
       LOGGER.log(Level.INFO, "MyBatis CDI Module - SqlSessionFactory producer {0}.{1}", logData);
       this.sessionProducers.add(new BeanKey((Class<Type>) (Type) SqlSession.class, am.getAnnotations()));
     } else if (isAnnotated && !isSqlSessionFactory) {
-      LOGGER
-          .log(Level.SEVERE, "MyBatis CDI Module - Invalid return type (Must be SqlSessionFactory): {0}.{1}", logData);
-      pp.addDefinitionError(new MybatisCdiConfigurationException(String.format(
-          "SessionFactoryProvider producers must return SqlSessionFactory (%s.%s)", logData[0], logData[1])));
+      LOGGER.log(Level.SEVERE, "MyBatis CDI Module - Invalid return type (Must be SqlSessionFactory): {0}.{1}",
+          logData);
+      pp.addDefinitionError(new MybatisCdiConfigurationException(String
+          .format("SessionFactoryProvider producers must return SqlSessionFactory (%s.%s)", logData[0], logData[1])));
     } else if (!isAnnotated && isSqlSessionFactory) {
-      LOGGER
-          .log(
-              Level.WARNING,
-              "MyBatis CDI Module - Ignored SqlSessionFactory producer because it is not annotated with @SessionFactoryProvider: {0}.{1}",
-              logData);
+      LOGGER.log(Level.WARNING,
+          "MyBatis CDI Module - Ignored SqlSessionFactory producer because it is not annotated with @SessionFactoryProvider: {0}.{1}",
+          logData);
     }
   }
 
@@ -131,20 +129,20 @@ public class MybatisExtension implements Extension {
 
     for (InjectionPoint ip : injectionPoints) {
       if (this.mapperTypes.contains(ip.getAnnotated().getBaseType())) {
-        LOGGER.log(Level.INFO, "MyBatis CDI Module - Found a bean, which needs a Mapper {0}", new Object[] { ip
-            .getAnnotated().getBaseType() });
+        LOGGER.log(Level.INFO, "MyBatis CDI Module - Found a bean, which needs a Mapper {0}",
+            new Object[] { ip.getAnnotated().getBaseType() });
         mappers.add(new BeanKey((Class<Type>) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));
       } else if (SqlSession.class.equals(ip.getAnnotated().getBaseType())) {
-        sessionTargets.add(new BeanKey((Class<Type>) ip.getAnnotated().getBaseType(), ip.getAnnotated()
-            .getAnnotations()));
+        sessionTargets
+            .add(new BeanKey((Class<Type>) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));
       }
     }
     this.injectionPoints.clear();
 
     // Mappers -----------------------------------------------------------------
     for (BeanKey key : mappers) {
-      LOGGER.log(Level.INFO, "MyBatis CDI Module - Managed Mapper dependency: {0}, {1}", new Object[] { key.getKey(),
-          key.type.getName() });
+      LOGGER.log(Level.INFO, "MyBatis CDI Module - Managed Mapper dependency: {0}, {1}",
+          new Object[] { key.getKey(), key.type.getName() });
       abd.addBean(key.createBean(bm));
     }
     this.mapperTypes.clear();
@@ -160,8 +158,8 @@ public class MybatisExtension implements Extension {
 
     // Unmanaged SqlSession targets --------------------------------------------
     for (BeanKey key : sessionTargets) {
-      LOGGER.log(Level.WARNING, "MyBatis CDI Module - Unmanaged SqlSession: {0}, {1}", new Object[] { key.getKey(),
-          key.type.getName() });
+      LOGGER.log(Level.WARNING, "MyBatis CDI Module - Unmanaged SqlSession: {0}, {1}",
+          new Object[] { key.getKey(), key.type.getName() });
     }
 
   }
