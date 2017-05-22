@@ -51,8 +51,8 @@ public class JtaTransactionInterceptor extends LocalTransactionInterceptor {
   }
 
   @Override
-  protected void endJta(boolean isExternaTransaction, boolean needsRollback) throws SystemException, RollbackException,
-      HeuristicMixedException, HeuristicRollbackException {
+  protected void endJta(boolean isExternaTransaction, boolean needsRollback)
+      throws SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
     if (isExternaTransaction) {
       if (needsRollback) {
         this.userTransaction.get().setRollbackOnly();

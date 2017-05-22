@@ -90,8 +90,8 @@ public class LocalTransactionInterceptor implements Serializable {
     // nothing to do
   }
 
-  protected void endJta(boolean isExternaTransaction, boolean commit) throws SystemException, RollbackException,
-      HeuristicMixedException, HeuristicRollbackException {
+  protected void endJta(boolean isExternaTransaction, boolean commit)
+      throws SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
     // nothing to do
   }
 
@@ -119,8 +119,8 @@ public class LocalTransactionInterceptor implements Serializable {
     boolean started = false;
     for (SqlSessionManager manager : this.registry.getManagers()) {
       if (!manager.isManagedSessionStarted()) {
-        manager.startManagedSession(transactional.executorType(), transactional.isolation()
-            .getTransactionIsolationLevel());
+        manager.startManagedSession(transactional.executorType(),
+            transactional.isolation().getTransactionIsolationLevel());
         started = true;
       }
     }
