@@ -8,9 +8,9 @@ jdk:
 
 after_success:
   - chmod -R 777 ./travis/after_success.sh
-  - ./travis/after_success.sh
+  - "./travis/after_success.sh"
 
 env:
   global:
-    - secure: "jWLfOryabB89R5v7nD3V/8ke6+B26UW8E5wjwKj7dDhjfmGUg+KbOShqWrq4\nEAnyE4GltwDLxKErZ5aAPWcT47C3GJYocKtmTcec2sblqMdVVUd3udylrM1d\n66Yb0XZoqri9JJ9pb8ObDp5XRV+ZQ5xP0w1gboNY6SynJg/1FKk="
-    - secure: "UV14rAITDqou5jObPInlIS3IYdf45LihGal9/+C4TLyhXLaVktbT/arFAAIF\ndpv9OM+YgeA7ZeRZLJ8vbgipO+rxizPNL1DqK1rp9s5B2F2y9+ir47nTwayL\n0RN7TgdswjzZZKOukWF2CVK1hjk+n8iFkCrorU22trmXlHc0aoE="
+    - secure: Yt0S6+G81okW0/575CBg9pP2CcNnilyar2KKDw+4bPnFxlMS0t4y1YyX08p/Zvj5/1q7n88NrPDFdnr/qwZ0gKjmKcYMm4WTCfy+UOPtYhyQSxX6aTYOhYDMpbAQ84jB3Gh70mG52ULXxF56Hc5bNAXT0lSNfIAOndrF/LIBJAU=
+    - secure: QAeXjP+BabMYAHSivnbYaxrcr9pj6+FBEO/fpTlB4M0W5nALBoj8nVTOVYGv6zQHV1cxDv4DOLUxg/2sDcrWPyHV+8xbXbHvXK80T4wgeTc/SFEGOINMm/oXGdTGtY6lJ6i5VEDGwJDMRUt+M/W22HD0lqUZNDJ8xL5PAwKVr6g=
