@@ -16,7 +16,7 @@
 package org.mybatis.cdi;
 
 /**
- * Generic exception
+ * Generic exception.
  * 
  * @author Frank David Martínez
  */

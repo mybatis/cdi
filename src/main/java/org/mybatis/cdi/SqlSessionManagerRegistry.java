@@ -40,6 +40,9 @@ public class SqlSessionManagerRegistry {
   @Any
   private Instance<SqlSessionFactory> factories;
 
+  /**
+   * Inits the SqlSessionManagerRegistry.
+   */
   @PostConstruct
   public void init() {
     if (this.factories.isUnsatisfied()) {

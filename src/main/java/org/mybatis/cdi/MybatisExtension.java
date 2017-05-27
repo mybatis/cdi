@@ -15,8 +15,16 @@
  */
 package org.mybatis.cdi;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
@@ -32,19 +40,12 @@ import javax.enterprise.inject.spi.ProcessInjectionTarget;
 import javax.enterprise.inject.spi.ProcessProducer;
 import javax.inject.Named;
 import javax.inject.Qualifier;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 /**
- * MyBatis CDI extension
+ * MyBatis CDI extension.
  *
  * @author Frank D. Martinez [mnesarco]
  */
@@ -60,9 +61,9 @@ public class MybatisExtension implements Extension {
 
   /**
    * Collect types of all mappers annotated with Mapper.
-   * 
-   * @param <T>
-   * @param pat
+   *
+   * @param <T> the generic type
+   * @param pat the pat
    */
   @SuppressWarnings("UnusedDeclaration")
   protected <T> void processAnnotatedType(@Observes final ProcessAnnotatedType<T> pat) {
@@ -76,16 +77,16 @@ public class MybatisExtension implements Extension {
 
   /**
    * Collect all SqlSessionFactory producers annotated with SessionFactoryProvider.
-   * 
-   * @param <T>
-   * @param <X>
-   * @param pp
+   *
+   * @param <T> the generic type
+   * @param <X> the generic type
+   * @param pp the pp
    */
   @SuppressWarnings("UnusedDeclaration")
   protected <T, X> void processProducer(@Observes final ProcessProducer<T, X> pp) {
     final AnnotatedMember<T> am = pp.getAnnotatedMember();
-    final boolean isAnnotated = am.isAnnotationPresent(SessionFactoryProvider.class),
-        isSqlSessionFactory = am.getBaseType().equals(SqlSessionFactory.class);
+    final boolean isAnnotated = am.isAnnotationPresent(SessionFactoryProvider.class);
+    final boolean isSqlSessionFactory = am.getBaseType().equals(SqlSessionFactory.class);
     final Object[] logData = { am.getJavaMember().getDeclaringClass().getSimpleName(), am.getJavaMember().getName() };
     if (isAnnotated && isSqlSessionFactory) {
       LOGGER.log(Level.INFO, "MyBatis CDI Module - SqlSessionFactory producer {0}.{1}", logData);
@@ -104,9 +105,9 @@ public class MybatisExtension implements Extension {
 
   /**
    * Collect all targets to match Mappers and Session providers dependency.
-   * 
-   * @param <X>
-   * @param event
+   *
+   * @param <X> the generic type
+   * @param event the event
    */
   protected <X> void processInjectionTarget(@Observes ProcessInjectionTarget<X> event) {
     final InjectionTarget<X> it = event.getInjectionTarget();
@@ -117,9 +118,9 @@ public class MybatisExtension implements Extension {
 
   /**
    * Register all mybatis injectable beans.
-   * 
-   * @param abd
-   * @param bm
+   *
+   * @param abd the abd
+   * @param bm the bm
    */
   protected void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
     LOGGER.log(Level.INFO, "MyBatis CDI Module - Activated");
