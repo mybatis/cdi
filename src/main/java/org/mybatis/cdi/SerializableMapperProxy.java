@@ -41,6 +41,12 @@ public class SerializableMapperProxy implements InvocationHandler, Serializable 
 
   private final CreationalContext creationalContext;
 
+  /**
+   * Instantiates a new serializable mapper proxy.
+   *
+   * @param bean the bean
+   * @param creationalContext the creational context
+   */
   public SerializableMapperProxy(MyBatisBean bean, CreationalContext creationalContext) {
     this.bean = bean;
     this.creationalContext = creationalContext;

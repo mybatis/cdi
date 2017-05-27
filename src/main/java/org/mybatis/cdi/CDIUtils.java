@@ -37,6 +37,12 @@ public final class CDIUtils {
     // this class cannot be instantiated
   }
 
+  /**
+   * Gets the registry.
+   *
+   * @param creationalContext the creational context
+   * @return the registry
+   */
   public static SqlSessionManagerRegistry getRegistry(CreationalContext creationalContext) {
     final BeanManager beanManager = CDI.current().getBeanManager();
     Iterator<Bean<?>> beans = beanManager.getBeans(SqlSessionManagerRegistry.class).iterator();
@@ -44,6 +50,14 @@ public final class CDIUtils {
         creationalContext);
   }
 
+  /**
+   * Find sql session factory.
+   *
+   * @param name the name
+   * @param qualifiers the qualifiers
+   * @param creationalContext the creational context
+   * @return the sql session factory
+   */
   public static SqlSessionFactory findSqlSessionFactory(String name, Set<Annotation> qualifiers,
       CreationalContext creationalContext) {
     final BeanManager beanManager = CDI.current().getBeanManager();

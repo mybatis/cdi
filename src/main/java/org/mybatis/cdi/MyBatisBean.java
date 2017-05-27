@@ -50,6 +50,14 @@ public class MyBatisBean implements Bean, Serializable, PassivationCapable {
 
   protected final String id;
 
+  /**
+   * Instantiates a new my batis bean.
+   *
+   * @param id the id
+   * @param type the type
+   * @param qualifiers the qualifiers
+   * @param sqlSessionFactoryName the sql session factory name
+   */
   public MyBatisBean(String id, Class<Type> type, Set<Annotation> qualifiers, String sqlSessionFactoryName) {
     this.id = id;
     this.type = type;

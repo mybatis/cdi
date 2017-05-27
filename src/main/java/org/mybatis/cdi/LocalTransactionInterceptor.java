@@ -49,6 +49,13 @@ public class LocalTransactionInterceptor implements Serializable {
   @Inject
   private transient SqlSessionManagerRegistry registry;
 
+  /**
+   * Invoke.
+   *
+   * @param ctx the ctx
+   * @return the object
+   * @throws Exception the exception
+   */
   @AroundInvoke
   public Object invoke(InvocationContext ctx) throws Exception {
     Transactional transactional = getTransactionalAnnotation(ctx);
