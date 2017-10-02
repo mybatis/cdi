@@ -15,10 +15,13 @@
  */
 package org.mybatis.cdi;
 
+import javax.naming.InitialContext;
+
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
+import org.mockito.Mockito;
 
 public class WeldJUnit4Runner extends BlockJUnit4ClassRunner {
 
@@ -35,6 +38,7 @@ public class WeldJUnit4Runner extends BlockJUnit4ClassRunner {
 
   @Override
   protected Object createTest() throws Exception {
+    Mockito.when(new InitialContext().doLookup("java:comp/BeanManager")).thenReturn(container.getBeanManager());
     return this.container.instance().select(this.klass).get();
   }
 
