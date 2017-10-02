@@ -13,10 +13,16 @@ MyBatis-CDI extension takes care of the lifecycle of MyBatis mappers and SqlSess
 CDI beans ready to be used, there is no need to create or destroy them. It also provides local and JTA transaction support based on the
 @Transactional annotation.
 
-Important
----------
+Compatibility
+-------------
 
-CDI 1.0 is not supported. This extension requieres minimum CDI 1.1, CDI 1.2 is prefered.
+| CDI API VERSION     | Oracle JDK 8 | OpenJDK 8 | OpenJDK 7 |
+| ------------------- | ------------ | --------- | --------- |
+| cdi-1.0             | Y            | Y         | Y         |
+| cdi-1.1             | Y            | Y         | Y         |
+| cdi-1.2 (preferred) | Y            | Y         | Y         |
+| cdi-2.0             | Y            | Y         | N         |
+
 
 Essentials
 ----------

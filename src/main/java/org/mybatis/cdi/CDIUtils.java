@@ -23,8 +23,10 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.util.AnnotationLiteral;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 
 /**
@@ -38,13 +40,26 @@ public final class CDIUtils {
   }
 
   /**
+   * Gets a CDI BeanManager instance
+   *
+   * @return BeanManager instance
+   */
+  private static BeanManager getBeanManager() {
+    try {
+      return InitialContext.doLookup("java:comp/BeanManager");
+    } catch (NamingException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
    * Gets the registry.
    *
    * @param creationalContext the creational context
    * @return the registry
    */
   public static SqlSessionManagerRegistry getRegistry(CreationalContext creationalContext) {
-    final BeanManager beanManager = CDI.current().getBeanManager();
+    final BeanManager beanManager = getBeanManager();
     Iterator<Bean<?>> beans = beanManager.getBeans(SqlSessionManagerRegistry.class).iterator();
     return (SqlSessionManagerRegistry) beanManager.getReference(beans.next(), SqlSessionManagerRegistry.class,
         creationalContext);
@@ -60,7 +75,7 @@ public final class CDIUtils {
    */
   public static SqlSessionFactory findSqlSessionFactory(String name, Set<Annotation> qualifiers,
       CreationalContext creationalContext) {
-    final BeanManager beanManager = CDI.current().getBeanManager();
+    final BeanManager beanManager = getBeanManager();
     Set<Bean<?>> beans;
     if (name != null) {
       beans = beanManager.getBeans(name);
