@@ -21,12 +21,14 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import javax.enterprise.inject.Stereotype;
 
 /**
  * Qualifies an SqlSessionFactory provider method as usable by mybatis-cdi.
  * 
  * @author Frank David Martínez
  */
+@Stereotype
 @Inherited
 @Retention(RUNTIME)
 @Target({ ElementType.METHOD })
