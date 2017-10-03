@@ -39,27 +39,30 @@ public class SqlSessionManagerRegistry {
   @Inject
   @Any
   private Instance&lt;SqlSessionFactory&gt; factories;
-<span class="pc bpc" id="L42" title="1 of 2 branches missed."></span>
-<span class="nc" id="L43">  @PostConstruct</span>
+
+  /**
+   * Inits the SqlSessionManagerRegistry.
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">   */</span>
+<span class="nc" id="L46">  @PostConstruct</span>
   public void init() {
-<span class="fc" id="L45">    if (this.factories.isUnsatisfied()) {</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">      throw new MybatisCdiConfigurationException(&quot;There are no SqlSessionFactory producers properly configured.&quot;);</span>
-<span class="fc" id="L47">    }</span>
-<span class="fc" id="L48">    Map&lt;SqlSessionFactory, SqlSessionManager&gt; m = new HashMap&lt;SqlSessionFactory, SqlSessionManager&gt;();</span>
-<span class="fc" id="L49">    for (SqlSessionFactory factory : this.factories) {</span>
-<span class="fc" id="L50">      SqlSessionManager manager = SqlSessionManager.newInstance(factory);</span>
-<span class="fc" id="L51">      m.put(factory, manager);</span>
+<span class="fc" id="L48">    if (this.factories.isUnsatisfied()) {</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">      throw new MybatisCdiConfigurationException(&quot;There are no SqlSessionFactory producers properly configured.&quot;);</span>
+<span class="fc" id="L50">    }</span>
+<span class="fc" id="L51">    Map&lt;SqlSessionFactory, SqlSessionManager&gt; m = new HashMap&lt;SqlSessionFactory, SqlSessionManager&gt;();</span>
+<span class="fc" id="L52">    for (SqlSessionFactory factory : this.factories) {</span>
+<span class="fc" id="L53">      SqlSessionManager manager = SqlSessionManager.newInstance(factory);</span>
+<span class="fc" id="L54">      m.put(factory, manager);</span>
     }
     this.managers = Collections.unmodifiableMap(m);
-<span class="fc" id="L54">  }</span>
+<span class="fc" id="L57">  }</span>
 
   public SqlSessionManager getManager(SqlSessionFactory factory) {
     return this.managers.get(factory);
-<span class="fc" id="L58">  }</span>
+<span class="fc" id="L61">  }</span>
 
   public Collection&lt;SqlSessionManager&gt; getManagers() {
     return this.managers.values();
   }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

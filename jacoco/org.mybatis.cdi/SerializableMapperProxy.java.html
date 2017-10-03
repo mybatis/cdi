@@ -38,38 +38,44 @@ public class SerializableMapperProxy implements InvocationHandler, Serializable 
   private transient Object mapper;
 
   private final MyBatisBean bean;
-<span class="fc" id="L41"></span>
-<span class="fc" id="L42">  private final CreationalContext creationalContext;</span>
-<span class="fc" id="L43"></span>
-<span class="fc" id="L44">  public SerializableMapperProxy(MyBatisBean bean, CreationalContext creationalContext) {</span>
-<span class="fc" id="L45">    this.bean = bean;</span>
+
+  private final CreationalContext creationalContext;
+
+  /**
+   * Instantiates a new serializable mapper proxy.
+   *
+<span class="fc" id="L47">   * @param bean the bean</span>
+<span class="fc" id="L48">   * @param creationalContext the creational context</span>
+<span class="fc" id="L49">   */</span>
+<span class="fc" id="L50">  public SerializableMapperProxy(MyBatisBean bean, CreationalContext creationalContext) {</span>
+<span class="fc" id="L51">    this.bean = bean;</span>
     this.creationalContext = creationalContext;
     this.mapper = getMapper();
   }
 
-<span class="fc" id="L50">  @Override</span>
-<span class="nc" id="L51">  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {</span>
-<span class="nc" id="L52">    try {</span>
+<span class="fc" id="L56">  @Override</span>
+<span class="nc" id="L57">  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {</span>
+<span class="nc" id="L58">    try {</span>
       return method.invoke(this.mapper, args);
     } catch (InvocationTargetException e) {
       throw e.getTargetException();
     }
-<span class="fc" id="L57">  }</span>
+<span class="fc" id="L63">  }</span>
 
-<span class="fc" id="L59">  private Object getMapper() {</span>
+<span class="fc" id="L65">  private Object getMapper() {</span>
     SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.bean.sqlSessionFactoryName, this.bean.qualifiers,
         this.creationalContext);
     return CDIUtils.getRegistry(this.creationalContext).getManager(factory).getMapper(this.bean.type);
-<span class="fc" id="L63">  }</span>
-<span class="fc" id="L64"></span>
-<span class="fc" id="L65">  private void readObject(ObjectInputStream is) throws ClassNotFoundException, IOException {</span>
+<span class="fc" id="L69">  }</span>
+<span class="fc" id="L70"></span>
+<span class="fc" id="L71">  private void readObject(ObjectInputStream is) throws ClassNotFoundException, IOException {</span>
     is.defaultReadObject();
     this.mapper = getMapper();
-<span class="fc" id="L68">  }</span>
-<span class="fc" id="L69"></span>
+<span class="fc" id="L74">  }</span>
+<span class="fc" id="L75"></span>
   private void writeObject(ObjectOutputStream os) throws IOException {
     os.defaultWriteObject();
   }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -59,8 +59,8 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>    }
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>    @Override
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> endJta(<strong class="jxr_keyword">boolean</strong> isExternaTransaction, <strong class="jxr_keyword">boolean</strong> needsRollback) <strong class="jxr_keyword">throws</strong> SystemException, RollbackException,
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>        HeuristicMixedException, HeuristicRollbackException {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> endJta(<strong class="jxr_keyword">boolean</strong> isExternaTransaction, <strong class="jxr_keyword">boolean</strong> needsRollback)
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>        <strong class="jxr_keyword">throws</strong> SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">if</strong> (isExternaTransaction) {
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>        <strong class="jxr_keyword">if</strong> (needsRollback) {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>          <strong class="jxr_keyword">this</strong>.userTransaction.get().setRollbackOnly();
