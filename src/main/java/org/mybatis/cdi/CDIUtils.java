@@ -35,6 +35,25 @@ import org.apache.ibatis.session.SqlSessionFactory;
  */
 public final class CDIUtils {
 
+  private static class JNDI {
+
+    private static final String DEFAULT_JNDI_NAME = "java:comp/BeanManager";
+    static final String NAME;
+
+    static {
+      String jndiName = DEFAULT_JNDI_NAME;
+      try {
+        if (InitialContext.doLookup("java:comp/env/BeanManager") != null) {
+          jndiName = "java:comp/env/BeanManager";
+        }
+      } catch (NamingException e) {
+        // Fallback to default, do nothing
+      }
+      NAME = jndiName;
+    }
+
+  }
+
   private CDIUtils() {
     // this class cannot be instantiated
   }
@@ -46,7 +65,7 @@ public final class CDIUtils {
    */
   private static BeanManager getBeanManager() {
     try {
-      return InitialContext.doLookup("java:comp/BeanManager");
+      return InitialContext.doLookup(JNDI.NAME);
     } catch (NamingException e) {
       throw new RuntimeException(e);
     }
