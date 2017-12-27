@@ -31,7 +31,6 @@
                 <property name="driver" value="org.apache.derby.jdbc.EmbeddedXADataSource" />
                 <property name="resourceName" value="unique" />
                 <property name="maxPoolSize" value="1" />
-                <property name="allowLocalTransactions" value="true" />
                 <property name="databaseName" value="memory:dbJTA" />
                 <property name="createDatabase" value="create" />
             </dataSource>

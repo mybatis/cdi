@@ -15,18 +15,18 @@
  */
 package org.mybatis.cdi;
 
+import com.atomikos.icatch.jta.UserTransactionManager;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.transaction.UserTransaction;
-
-import bitronix.tm.TransactionManagerServices;
 
 public class UserTransactionProvider {
 
   @Produces
   @ApplicationScoped
   public UserTransaction initTX() {
-    return TransactionManagerServices.getTransactionManager();
+    return new UserTransactionManager();
   }
 
 }
