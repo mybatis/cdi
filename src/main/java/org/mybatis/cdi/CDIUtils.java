@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013-2017 the original author or authors.
+ *    Copyright 2013-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package org.mybatis.cdi;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Set;
 import javax.enterprise.context.spi.CreationalContext;
@@ -35,21 +36,61 @@ import org.apache.ibatis.session.SqlSessionFactory;
  */
 public final class CDIUtils {
 
-  private static class JNDI {
+  private static class CDI {
+
+    private static final Method getBeanManager;
+
+    private static final Method current;
 
     private static final String DEFAULT_JNDI_NAME = "java:comp/BeanManager";
-    static final String NAME;
+
+    private static final String NAME;
 
     static {
-      String jndiName = DEFAULT_JNDI_NAME;
+
+      // Portable 1.1+ CDI Lookup ----------------------------------------------
+      Method currentM, getBeanManagerM;
       try {
-        if (InitialContext.doLookup("java:comp/env/BeanManager") != null) {
-          jndiName = "java:comp/env/BeanManager";
-        }
-      } catch (NamingException e) {
-        // Fallback to default, do nothing
+        Class c = Class.forName("javax.enterprise.inject.spi.CDI");
+        currentM = c.getMethod("current");
+        getBeanManagerM = c.getMethod("getBeanManager");
+      } catch (Exception ex) {
+        currentM = null;
+        getBeanManagerM = null;
       }
-      NAME = jndiName;
+      current = currentM;
+      getBeanManager = getBeanManagerM;
+
+      // JNDI Based Lookup fallback --------------------------------------------
+      if (current == null) {
+        String jndiName = DEFAULT_JNDI_NAME;
+        try {
+          if (InitialContext.doLookup("java:comp/env/BeanManager") != null) {
+            jndiName = "java:comp/env/BeanManager";
+          }
+        } catch (NamingException e) {
+          // Fallback to default, do nothing
+        }
+        NAME = jndiName;
+      } else {
+        NAME = null;
+      }
+    }
+
+    static BeanManager getBeanManager() {
+      if (current != null) {
+        try {
+          Object cdi = current.invoke(null);
+          return (BeanManager) getBeanManager.invoke(cdi);
+        } catch (Exception ex) {
+          throw new RuntimeException(ex);
+        }
+      }
+      try {
+        return InitialContext.doLookup(NAME);
+      } catch (NamingException e) {
+        throw new RuntimeException(e);
+      }
     }
 
   }
@@ -64,11 +105,7 @@ public final class CDIUtils {
    * @return BeanManager instance
    */
   private static BeanManager getBeanManager() {
-    try {
-      return InitialContext.doLookup(JNDI.NAME);
-    } catch (NamingException e) {
-      throw new RuntimeException(e);
-    }
+    return CDI.getBeanManager();
   }
 
   /**
