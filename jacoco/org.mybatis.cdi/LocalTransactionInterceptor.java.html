@@ -39,10 +39,10 @@ import org.apache.ibatis.session.SqlSessionManager;
  * @see JtaTransactionInterceptor
  *
  * @author Frank David Martínez
-<span class="fc" id="L42"> */</span>
+ */
 @Transactional
 @Interceptor
-public class LocalTransactionInterceptor implements Serializable {
+<span class="fc" id="L45">public class LocalTransactionInterceptor implements Serializable {</span>
 
   private static final long serialVersionUID = 1L;
 
@@ -55,114 +55,114 @@ public class LocalTransactionInterceptor implements Serializable {
    * @param ctx the ctx
    * @return the object
    * @throws Exception the exception
-<span class="fc" id="L58">   */</span>
-<span class="fc" id="L59">  @AroundInvoke</span>
-<span class="fc" id="L60">  public Object invoke(InvocationContext ctx) throws Exception {</span>
-<span class="pc bpc" id="L61" title="1 of 4 branches missed.">    Transactional transactional = getTransactionalAnnotation(ctx);</span>
+   */
+  @AroundInvoke
+  public Object invoke(InvocationContext ctx) throws Exception {
+<span class="fc" id="L61">    Transactional transactional = getTransactionalAnnotation(ctx);</span>
 <span class="fc" id="L62">    boolean isInitiator = start(transactional);</span>
-    boolean isExternalJta = isTransactionActive();
-<span class="fc" id="L64">    if (isInitiator &amp;&amp; !isExternalJta) {</span>
-      beginJta();
+<span class="fc" id="L63">    boolean isExternalJta = isTransactionActive();</span>
+<span class="pc bpc" id="L64" title="1 of 4 branches missed.">    if (isInitiator &amp;&amp; !isExternalJta) {</span>
+<span class="fc" id="L65">      beginJta();</span>
     }
 <span class="fc" id="L67">    boolean needsRollback = transactional.rollbackOnly();</span>
-<span class="fc" id="L68">    Object result;</span>
-<span class="fc" id="L69">    try {</span>
-<span class="pc bpc" id="L70" title="1 of 4 branches missed.">      result = ctx.proceed();</span>
+    Object result;
+    try {
+<span class="fc" id="L70">      result = ctx.proceed();</span>
 <span class="fc" id="L71">    } catch (Exception ex) {</span>
-      Exception unwrapped = unwrapException(ex);
-<span class="pc bpc" id="L73" title="2 of 4 branches missed.">      needsRollback = needsRollback || needsRollback(transactional, unwrapped);</span>
-      throw unwrapped;
-<span class="pc bpc" id="L75" title="1 of 4 branches missed.">    } finally {</span>
-<span class="pc" id="L76">      if (isInitiator) {</span>
+<span class="fc" id="L72">      Exception unwrapped = unwrapException(ex);</span>
+<span class="pc bpc" id="L73" title="1 of 4 branches missed.">      needsRollback = needsRollback || needsRollback(transactional, unwrapped);</span>
+<span class="fc" id="L74">      throw unwrapped;</span>
+    } finally {
+<span class="pc bpc" id="L76" title="2 of 4 branches missed.">      if (isInitiator) {</span>
         try {
-<span class="fc" id="L78">          if (needsRollback) {</span>
-            rollback(transactional);
+<span class="pc bpc" id="L78" title="1 of 4 branches missed.">          if (needsRollback) {</span>
+<span class="pc" id="L79">            rollback(transactional);</span>
           } else {
-<span class="pc" id="L81">            commit(transactional);</span>
-<span class="pc" id="L82">          }</span>
-<span class="fc" id="L83">        } finally {</span>
-          close();
-          endJta(isExternalJta, needsRollback);
-<span class="fc" id="L86">        }</span>
+<span class="fc" id="L81">            commit(transactional);</span>
+          }
+        } finally {
+<span class="pc" id="L84">          close();</span>
+<span class="pc" id="L85">          endJta(isExternalJta, needsRollback);</span>
+<span class="pc" id="L86">        }</span>
       }
-    }
-    return result;
-<span class="fc" id="L90">  }</span>
+<span class="fc" id="L88">    }</span>
+<span class="fc" id="L89">    return result;</span>
+  }
 
   protected boolean isTransactionActive() throws SystemException {
-    return false;
-  }
-<span class="fc" id="L95"></span>
-  protected void beginJta() throws NotSupportedException, SystemException {
-    // nothing to do
+<span class="fc" id="L93">    return false;</span>
   }
 
-<span class="fc" id="L100">  protected void endJta(boolean isExternaTransaction, boolean commit)</span>
+  protected void beginJta() throws NotSupportedException, SystemException {
+    // nothing to do
+<span class="fc" id="L98">  }</span>
+
+  protected void endJta(boolean isExternaTransaction, boolean commit)
       throws SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
     // nothing to do
-<span class="fc bfc" id="L103" title="All 2 branches covered.">  }</span>
-<span class="fc" id="L104"></span>
+<span class="fc" id="L103">  }</span>
+
   private boolean needsRollback(Transactional transactional, Throwable throwable) {
 <span class="fc bfc" id="L106" title="All 2 branches covered.">    if (RuntimeException.class.isAssignableFrom(throwable.getClass())) {</span>
-<span class="fc bfc" id="L107" title="All 2 branches covered.">      return true;</span>
-<span class="fc" id="L108">    }</span>
-    for (Class&lt;?&gt; exceptionClass : transactional.rollbackFor()) {
-      if (exceptionClass.isAssignableFrom(throwable.getClass())) {
+<span class="fc" id="L107">      return true;</span>
+    }
+<span class="fc bfc" id="L109" title="All 2 branches covered.">    for (Class&lt;?&gt; exceptionClass : transactional.rollbackFor()) {</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">      if (exceptionClass.isAssignableFrom(throwable.getClass())) {</span>
 <span class="fc" id="L111">        return true;</span>
       }
     }
-    return false;
-<span class="fc" id="L115">  }</span>
-<span class="fc bfc" id="L116" title="All 2 branches covered."></span>
-<span class="fc" id="L117">  protected Transactional getTransactionalAnnotation(InvocationContext ctx) {</span>
-    Transactional t = ctx.getMethod().getAnnotation(Transactional.class);
-<span class="fc" id="L119">    if (t == null) {</span>
-      t = ctx.getMethod().getDeclaringClass().getAnnotation(Transactional.class);
+<span class="fc" id="L114">    return false;</span>
+  }
+
+  protected Transactional getTransactionalAnnotation(InvocationContext ctx) {
+<span class="fc" id="L118">    Transactional t = ctx.getMethod().getAnnotation(Transactional.class);</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">    if (t == null) {</span>
+<span class="fc" id="L120">      t = ctx.getMethod().getDeclaringClass().getAnnotation(Transactional.class);</span>
     }
-    return t;
-<span class="fc" id="L123">  }</span>
-<span class="fc bfc" id="L124" title="All 2 branches covered."></span>
-<span class="pc bpc" id="L125" title="1 of 2 branches missed.">  private boolean start(Transactional transactional) {</span>
+<span class="fc" id="L122">    return t;</span>
+  }
+
+  private boolean start(Transactional transactional) {
 <span class="fc" id="L126">    boolean started = false;</span>
-<span class="fc" id="L127">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
-<span class="fc" id="L128">      if (!manager.isManagedSessionStarted()) {</span>
-        manager.startManagedSession(transactional.executorType(),
+<span class="fc bfc" id="L127" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">      if (!manager.isManagedSessionStarted()) {</span>
+<span class="fc" id="L129">        manager.startManagedSession(transactional.executorType(),</span>
 <span class="fc" id="L130">            transactional.isolation().getTransactionIsolationLevel());</span>
 <span class="fc" id="L131">        started = true;</span>
       }
-    }
-    return started;
-<span class="fc bfc" id="L135" title="All 2 branches covered.">  }</span>
-<span class="fc" id="L136"></span>
-<span class="fc" id="L137">  private void commit(Transactional transactional) {</span>
-<span class="fc" id="L138">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
-      manager.commit(transactional.force());
-    }
-<span class="fc bfc" id="L141" title="All 2 branches covered.">  }</span>
-<span class="fc" id="L142"></span>
-<span class="fc" id="L143">  private void rollback(Transactional transactional) {</span>
-<span class="fc" id="L144">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
-      manager.rollback(transactional.force());
-    }
-<span class="fc bfc" id="L147" title="All 2 branches covered.">  }</span>
-<span class="fc" id="L148"></span>
-<span class="fc" id="L149">  private void close() {</span>
-<span class="fc" id="L150">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
-      manager.close();
-    }
+<span class="fc" id="L133">    }</span>
+<span class="fc" id="L134">    return started;</span>
+  }
+
+  private void commit(Transactional transactional) {
+<span class="fc bfc" id="L138" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
+<span class="fc" id="L139">      manager.commit(transactional.force());</span>
+<span class="fc" id="L140">    }</span>
+<span class="fc" id="L141">  }</span>
+
+  private void rollback(Transactional transactional) {
+<span class="fc bfc" id="L144" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
+<span class="fc" id="L145">      manager.rollback(transactional.force());</span>
+<span class="fc" id="L146">    }</span>
+<span class="fc" id="L147">  }</span>
+
+  private void close() {
+<span class="fc bfc" id="L150" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
+<span class="fc" id="L151">      manager.close();</span>
+<span class="fc" id="L152">    }</span>
 <span class="fc" id="L153">  }</span>
 
-<span class="pc bpc" id="L155" title="1 of 2 branches missed.">  private Exception unwrapException(Exception wrapped) {</span>
-<span class="nc" id="L156">    Throwable unwrapped = wrapped;</span>
-<span class="pc bpc" id="L157" title="1 of 2 branches missed.">    while (true) {</span>
-<span class="nc" id="L158">      if (unwrapped instanceof InvocationTargetException) {</span>
-<span class="pc bpc" id="L159" title="1 of 2 branches missed.">        unwrapped = ((InvocationTargetException) unwrapped).getTargetException();</span>
-<span class="nc" id="L160">      } else if (unwrapped instanceof UndeclaredThrowableException) {</span>
-        unwrapped = ((UndeclaredThrowableException) unwrapped).getUndeclaredThrowable();
-<span class="fc" id="L162">      } else if (!(unwrapped instanceof Exception)) {</span>
-        return new RuntimeException(unwrapped);
+  private Exception unwrapException(Exception wrapped) {
+<span class="fc" id="L156">    Throwable unwrapped = wrapped;</span>
+    while (true) {
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">      if (unwrapped instanceof InvocationTargetException) {</span>
+<span class="nc" id="L159">        unwrapped = ((InvocationTargetException) unwrapped).getTargetException();</span>
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">      } else if (unwrapped instanceof UndeclaredThrowableException) {</span>
+<span class="nc" id="L161">        unwrapped = ((UndeclaredThrowableException) unwrapped).getUndeclaredThrowable();</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">      } else if (!(unwrapped instanceof Exception)) {</span>
+<span class="nc" id="L163">        return new RuntimeException(unwrapped);</span>
       } else {
-        return (Exception) unwrapped;
+<span class="fc" id="L165">        return (Exception) unwrapped;</span>
       }
     }
   }

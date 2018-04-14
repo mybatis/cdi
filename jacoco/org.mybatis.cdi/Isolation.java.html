@@ -20,24 +20,26 @@ import org.apache.ibatis.session.TransactionIsolationLevel;
 /**
  * Enum of isolation levels. This enum exists because Java annotations do not support null default values - so we need
  * to add the DEFAULT level which means - do not specify an isolation level.
-<span class="pc" id="L23"> *</span>
+ *
  * @author Jeff Butler
-<span class="fc" id="L25"> */</span>
-<span class="fc" id="L26">public enum Isolation {</span>
-<span class="fc" id="L27"></span>
-<span class="fc" id="L28">  DEFAULT(null), NONE(TransactionIsolationLevel.NONE), READ_COMMITTED(</span>
-      TransactionIsolationLevel.READ_COMMITTED), READ_UNCOMMITTED(
-          TransactionIsolationLevel.READ_UNCOMMITTED), REPEATABLE_READ(
-              TransactionIsolationLevel.REPEATABLE_READ), SERIALIZABLE(TransactionIsolationLevel.SERIALIZABLE);
-<span class="fc" id="L32"></span>
-<span class="fc" id="L33">  private final TransactionIsolationLevel transactionIsolationLevel;</span>
-<span class="fc" id="L34"></span>
-  private Isolation(TransactionIsolationLevel value) {
-    this.transactionIsolationLevel = value;
-<span class="fc" id="L37">  }</span>
+ */
+<span class="pc" id="L26">public enum Isolation {</span>
+
+<span class="fc" id="L28">  DEFAULT(null),</span>
+<span class="fc" id="L29">  NONE(TransactionIsolationLevel.NONE),</span>
+<span class="fc" id="L30">  READ_COMMITTED(TransactionIsolationLevel.READ_COMMITTED),</span>
+<span class="fc" id="L31">  READ_UNCOMMITTED(TransactionIsolationLevel.READ_UNCOMMITTED),</span>
+<span class="fc" id="L32">  REPEATABLE_READ(TransactionIsolationLevel.REPEATABLE_READ),</span>
+<span class="fc" id="L33">  SERIALIZABLE(TransactionIsolationLevel.SERIALIZABLE);</span>
+
+  private final TransactionIsolationLevel transactionIsolationLevel;
+
+<span class="fc" id="L37">  private Isolation(TransactionIsolationLevel value) {</span>
+<span class="fc" id="L38">    this.transactionIsolationLevel = value;</span>
+<span class="fc" id="L39">  }</span>
 
   public TransactionIsolationLevel getTransactionIsolationLevel() {
-    return this.transactionIsolationLevel;
+<span class="fc" id="L42">    return this.transactionIsolationLevel;</span>
   }
 
 }
