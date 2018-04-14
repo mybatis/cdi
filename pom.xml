@@ -197,7 +197,7 @@
         <dependency>
           <groupId>org.jboss.weld.se</groupId>
           <artifactId>weld-se</artifactId>
-          <version>2.4.6.Final</version>
+          <version>2.4.7.Final</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
