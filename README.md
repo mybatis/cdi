@@ -18,7 +18,7 @@ Compatibility
 
 | CDI API VERSION     | Oracle JDK 8 | OpenJDK 8 | OpenJDK 7 |
 | ------------------- | ------------ | --------- | --------- |
-| cdi-1.0             | Y            | Y         | Y         |
+| cdi-1.0             | N            | N         | N         |
 | cdi-1.1             | Y            | Y         | Y         |
 | cdi-1.2 (preferred) | Y            | Y         | Y         |
 | cdi-2.0             | Y            | Y         | N         |
