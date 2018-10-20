@@ -16,7 +16,6 @@
 package org.mybatis.cdi;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Set;
 import javax.enterprise.context.spi.CreationalContext;
@@ -24,9 +23,8 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.util.AnnotationLiteral;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -35,65 +33,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
  * @author Frank D. Martinez [mnesarco]
  */
 public final class CDIUtils {
-
-  private static class CDI {
-
-    private static final Method getBeanManager;
-
-    private static final Method current;
-
-    private static final String DEFAULT_JNDI_NAME = "java:comp/BeanManager";
-
-    private static final String NAME;
-
-    static {
-
-      // Portable 1.1+ CDI Lookup ----------------------------------------------
-      Method currentM, getBeanManagerM;
-      try {
-        Class c = Class.forName("javax.enterprise.inject.spi.CDI");
-        currentM = c.getMethod("current");
-        getBeanManagerM = c.getMethod("getBeanManager");
-      } catch (Exception ex) {
-        currentM = null;
-        getBeanManagerM = null;
-      }
-      current = currentM;
-      getBeanManager = getBeanManagerM;
-
-      // JNDI Based Lookup fallback --------------------------------------------
-      if (current == null) {
-        String jndiName = DEFAULT_JNDI_NAME;
-        try {
-          if (InitialContext.doLookup("java:comp/env/BeanManager") != null) {
-            jndiName = "java:comp/env/BeanManager";
-          }
-        } catch (NamingException e) {
-          // Fallback to default, do nothing
-        }
-        NAME = jndiName;
-      } else {
-        NAME = null;
-      }
-    }
-
-    static BeanManager getBeanManager() {
-      if (current != null) {
-        try {
-          Object cdi = current.invoke(null);
-          return (BeanManager) getBeanManager.invoke(cdi);
-        } catch (Exception ex) {
-          throw new RuntimeException(ex);
-        }
-      }
-      try {
-        return InitialContext.doLookup(NAME);
-      } catch (NamingException e) {
-        throw new RuntimeException(e);
-      }
-    }
-
-  }
 
   private CDIUtils() {
     // this class cannot be instantiated
@@ -105,7 +44,7 @@ public final class CDIUtils {
    * @return BeanManager instance
    */
   private static BeanManager getBeanManager() {
-    return CDI.getBeanManager();
+    return CDI.current().getBeanManager();
   }
 
   /**
