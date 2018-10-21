@@ -32,28 +32,31 @@ matrix:
       install: . ./install-jdk.sh -F 11 -L GPL
 
 # 10
-    - env:
-      - JDK='Oracle JDK 10'
-      - MAVEN_PROFILE="-Pcdi-2.0"
-      install: . ./install-jdk.sh -F 10 -L BCL
+# Oracle removed (keep in case we can get elsewhere)
+#    - env:
+#      - JDK='Oracle JDK 10'
+#      - MAVEN_PROFILE="-Pcdi-2.0"
+#      install: . ./install-jdk.sh -F 10 -L BCL
     - env:
       - JDK='OpenJDK 10'
       - MAVEN_PROFILE="-Pcdi-2.0"
       install: . ./install-jdk.sh -F 10 -L GPL
 
-    - env:
-      - JDK='Oracle JDK 10'
-      - MAVEN_PROFILE="-Pcdi-1.2"
-      install: . ./install-jdk.sh -F 10 -L BCL
+# Oracle removed (keep in case we can get elsewhere)
+#    - env:
+#      - JDK='Oracle JDK 10'
+#      - MAVEN_PROFILE="-Pcdi-1.2"
+#      install: . ./install-jdk.sh -F 10 -L BCL
     - env:
       - JDK='OpenJDK 10'
       - MAVEN_PROFILE="-Pcdi-1.2"
       install: . ./install-jdk.sh -F 10 -L GPL
 
-    - env:
-      - JDK='Oracle JDK 10'
-      - MAVEN_PROFILE="-Pcdi-1.1"
-      install: . ./install-jdk.sh -F 10 -L BCL
+# Oracle removed (keep in case we can get elsewhere)
+#    - env:
+#      - JDK='Oracle JDK 10'
+#      - MAVEN_PROFILE="-Pcdi-1.1"
+#      install: . ./install-jdk.sh -F 10 -L BCL
 
     - env:
       - JDK='OpenJDK 10'
