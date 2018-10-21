@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013-2017 the original author or authors.
+ *    Copyright 2013-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,14 +19,19 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
 import javax.inject.Inject;
 import javax.transaction.UserTransaction;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldJunit5Extension;
+import org.jboss.weld.junit5.WeldSetup;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-@RunWith(WeldJUnit4Runner.class)
+@ExtendWith(WeldJunit5Extension.class)
 public class TestingIoC {
 
   @Inject
@@ -35,20 +40,23 @@ public class TestingIoC {
   @Inject
   private SerializableFooService serFooService;
 
+  @WeldSetup
+  public WeldInitiator weld = WeldInitiator.of(new Weld());
+
   @Test
   public void shouldGetAUser() {
-    Assert.assertEquals("1-User1", this.fooService.getUserFromSqlSession(1).getName());
-    Assert.assertEquals("1-User1", this.fooService.getUser(1).getName());
-    Assert.assertEquals("2-User2", this.fooService.getUser2(2).getName());
-    Assert.assertEquals("3-User3", this.fooService.getUser3(3).getName());
-    Assert.assertEquals("4-User1", this.fooService.getUserFromUnmanagedSqlSession(1).getName());
+    Assertions.assertEquals("1-User1", this.fooService.getUserFromSqlSession(1).getName());
+    Assertions.assertEquals("1-User1", this.fooService.getUser(1).getName());
+    Assertions.assertEquals("2-User2", this.fooService.getUser2(2).getName());
+    Assertions.assertEquals("3-User3", this.fooService.getUser3(3).getName());
+    Assertions.assertEquals("4-User1", this.fooService.getUserFromUnmanagedSqlSession(1).getName());
   }
 
   @Test
   public void shouldInjectTheSameMapper() {
-    Assert.assertEquals(this.fooService.getUser2(1).getName(), this.fooService.getUserDummy(1).getName());
-    Assert.assertEquals(this.fooService.getUser2(2).getName(), this.fooService.getUserDummy(2).getName());
-    Assert.assertEquals(this.fooService.getUser2(3).getName(), this.fooService.getUserDummy(3).getName());
+    Assertions.assertEquals(this.fooService.getUser2(1).getName(), this.fooService.getUserDummy(1).getName());
+    Assertions.assertEquals(this.fooService.getUser2(2).getName(), this.fooService.getUserDummy(2).getName());
+    Assertions.assertEquals(this.fooService.getUser2(3).getName(), this.fooService.getUserDummy(3).getName());
   }
 
   @Test
@@ -57,7 +65,7 @@ public class TestingIoC {
     user.setId(20);
     user.setName("User20");
     this.fooService.insertUser(user);
-    Assert.assertEquals("User20", this.fooService.getUser(20).getName());
+    Assertions.assertEquals("User20", this.fooService.getUser(20).getName());
   }
 
   @Test
@@ -70,7 +78,7 @@ public class TestingIoC {
     } catch (Exception ignore) {
       // ignored
     }
-    Assert.assertNull(this.fooService.getUser(40));
+    Assertions.assertNull(this.fooService.getUser(40));
   }
 
   @Test
@@ -83,7 +91,7 @@ public class TestingIoC {
     } catch (Exception ignore) {
       // ignored
     }
-    Assert.assertEquals("User30", this.fooService.getUser(30).getName());
+    Assertions.assertEquals("User30", this.fooService.getUser(30).getName());
   }
 
   @Test
@@ -96,7 +104,7 @@ public class TestingIoC {
     } catch (Exception ignore) {
       // ignored
     }
-    Assert.assertNull(this.fooService.getUser(30));
+    Assertions.assertNull(this.fooService.getUser(30));
   }
 
   // TEST JTA
@@ -110,7 +118,7 @@ public class TestingIoC {
   @Test
   public void jtaShouldGetAUserWithNoTX() throws Exception {
     this.userTransaction.begin();
-    Assert.assertEquals("1-User1", this.fooServiceJTA.getUserWithNoTransaction(1).getName());
+    Assertions.assertEquals("1-User1", this.fooServiceJTA.getUserWithNoTransaction(1).getName());
     this.userTransaction.commit();
   }
 
@@ -120,7 +128,7 @@ public class TestingIoC {
     user.setId(20);
     user.setName("User20");
     this.fooServiceJTA.insertUserWithTransactional(user);
-    Assert.assertEquals(user.getName(), this.fooServiceJTA.getUserWithNoTransaction(user.getId()).getName());
+    Assertions.assertEquals(user.getName(), this.fooServiceJTA.getUserWithNoTransaction(user.getId()).getName());
   }
 
   @Test
@@ -133,7 +141,7 @@ public class TestingIoC {
     } catch (Exception ignore) {
       // ignored
     }
-    Assert.assertNull(this.fooServiceJTA.getUserWithNoTransaction(user.getId()));
+    Assertions.assertNull(this.fooServiceJTA.getUserWithNoTransaction(user.getId()));
   }
 
   @Test
@@ -144,7 +152,7 @@ public class TestingIoC {
     this.userTransaction.begin();
     this.fooServiceJTA.insertUserWithTransactional(user);
     this.userTransaction.commit();
-    Assert.assertEquals(user.getName(), this.fooServiceJTA.getUserWithNoTransaction(user.getId()).getName());
+    Assertions.assertEquals(user.getName(), this.fooServiceJTA.getUserWithNoTransaction(user.getId()).getName());
   }
 
   @Test
@@ -155,7 +163,7 @@ public class TestingIoC {
     this.userTransaction.begin();
     this.fooServiceJTA.insertUserWithTransactional(user);
     this.userTransaction.rollback();
-    Assert.assertNull(this.fooServiceJTA.getUserWithNoTransaction(user.getId()));
+    Assertions.assertNull(this.fooServiceJTA.getUserWithNoTransaction(user.getId()));
   }
 
   @Test
@@ -166,7 +174,7 @@ public class TestingIoC {
     ObjectInputStream oin = new ObjectInputStream(new FileInputStream("target/mapper.ser"));
     SerializableFooService unserialized = (SerializableFooService) oin.readObject();
     oin.close();
-    Assert.assertEquals(this.serFooService.getUser(1).getName(), unserialized.getUser(1).getName());
+    Assertions.assertEquals(this.serFooService.getUser(1).getName(), unserialized.getUser(1).getName());
   }
 
 }
