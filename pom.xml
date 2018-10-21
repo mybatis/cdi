@@ -64,7 +64,7 @@
     <osgi.dynamicImport>*</osgi.dynamicImport>
 
     <!-- Remove once updated to next mybatis-parent -->
-    <surefire.version>2.22.1</surefire.version>
+    <surefire.version>2.21.0</surefire.version> <!-- TODO: Why does everything go horribly wrong on 2.22.0+ -->
   </properties>
 
   <dependencies>
