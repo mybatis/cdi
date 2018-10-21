@@ -58,7 +58,7 @@
   </distributionManagement>
 
   <properties>
-    <clirr.comparisonVersion>1.0.0-beta1</clirr.comparisonVersion>
+    <clirr.comparisonVersion>1.0.3</clirr.comparisonVersion>
     <findbugs.onlyAnalyze>org.mybatis.cdi.*</findbugs.onlyAnalyze>
     <osgi.import>org.mybatis.*;resolution:=optional,*</osgi.import>
     <osgi.dynamicImport>*</osgi.dynamicImport>
