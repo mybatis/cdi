@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2013 - 2018 MyBatis.org</copyright>
     <item>
-      <title>File: 17,
+      <title>File: 15,
              Errors: 0,
-             Warnings: 8,
+             Warnings: 6,
              Infos: 0
       </title>
             <link>http://mybatis.org/checkstyle.html</link>
@@ -75,20 +75,6 @@ under the License.
                           <tr>
                 <td>
                   <a href="http://mybatis.org/checkstyle.html#org.mybatis.cdi.MybatisCdiConfigurationException.java">org/mybatis/cdi/MybatisCdiConfigurationException.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mybatis.org/checkstyle.html#target.test-classes.jndi.properties">target/test-classes/jndi.properties</a>
                 </td>
                 <td>
                   0
@@ -150,21 +136,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  5
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mybatis.org/checkstyle.html#src.test.resources.jndi.properties">src/test/resources/jndi.properties</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
+                  3
                 </td>
                 <td>
                   0

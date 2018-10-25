@@ -47,35 +47,35 @@ public class SerializableMapperProxy implements InvocationHandler, Serializable 
    * @param bean the bean
    * @param creationalContext the creational context
    */
-<span class="fc" id="L50">  public SerializableMapperProxy(MyBatisBean bean, CreationalContext creationalContext) {</span>
-<span class="fc" id="L51">    this.bean = bean;</span>
-<span class="fc" id="L52">    this.creationalContext = creationalContext;</span>
-<span class="fc" id="L53">    this.mapper = getMapper();</span>
-<span class="fc" id="L54">  }</span>
+<span class="nc" id="L50">  public SerializableMapperProxy(MyBatisBean bean, CreationalContext creationalContext) {</span>
+<span class="nc" id="L51">    this.bean = bean;</span>
+<span class="nc" id="L52">    this.creationalContext = creationalContext;</span>
+<span class="nc" id="L53">    this.mapper = getMapper();</span>
+<span class="nc" id="L54">  }</span>
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     try {
-<span class="fc" id="L59">      return method.invoke(this.mapper, args);</span>
+<span class="nc" id="L59">      return method.invoke(this.mapper, args);</span>
 <span class="nc" id="L60">    } catch (InvocationTargetException e) {</span>
 <span class="nc" id="L61">      throw e.getTargetException();</span>
     }
   }
 
   private Object getMapper() {
-<span class="fc" id="L66">    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.bean.sqlSessionFactoryName, this.bean.qualifiers,</span>
+<span class="nc" id="L66">    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.bean.sqlSessionFactoryName, this.bean.qualifiers,</span>
         this.creationalContext);
-<span class="fc" id="L68">    return CDIUtils.getRegistry(this.creationalContext).getManager(factory).getMapper(this.bean.type);</span>
+<span class="nc" id="L68">    return CDIUtils.getRegistry(this.creationalContext).getManager(factory).getMapper(this.bean.type);</span>
   }
 
   private void readObject(ObjectInputStream is) throws ClassNotFoundException, IOException {
-<span class="fc" id="L72">    is.defaultReadObject();</span>
-<span class="fc" id="L73">    this.mapper = getMapper();</span>
-<span class="fc" id="L74">  }</span>
+<span class="nc" id="L72">    is.defaultReadObject();</span>
+<span class="nc" id="L73">    this.mapper = getMapper();</span>
+<span class="nc" id="L74">  }</span>
 
   private void writeObject(ObjectOutputStream os) throws IOException {
-<span class="fc" id="L77">    os.defaultWriteObject();</span>
-<span class="fc" id="L78">  }</span>
+<span class="nc" id="L77">    os.defaultWriteObject();</span>
+<span class="nc" id="L78">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
