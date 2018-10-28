@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013-2017 the original author or authors.
+ *    Copyright 2013-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -53,10 +53,14 @@ public class MyBatisBean implements Bean, Serializable, PassivationCapable {
   /**
    * Instantiates a new my batis bean.
    *
-   * @param id the id
-   * @param type the type
-   * @param qualifiers the qualifiers
-   * @param sqlSessionFactoryName the sql session factory name
+   * @param id
+   *          the id
+   * @param type
+   *          the type
+   * @param qualifiers
+   *          the qualifiers
+   * @param sqlSessionFactoryName
+   *          the sql session factory name
    */
   public MyBatisBean(String id, Class<Type> type, Set<Annotation> qualifiers, String sqlSessionFactoryName) {
     this.id = id;

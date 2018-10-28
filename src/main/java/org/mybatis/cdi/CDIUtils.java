@@ -50,7 +50,8 @@ public final class CDIUtils {
   /**
    * Gets the registry.
    *
-   * @param creationalContext the creational context
+   * @param creationalContext
+   *          the creational context
    * @return the registry
    */
   public static SqlSessionManagerRegistry getRegistry(CreationalContext creationalContext) {
@@ -63,9 +64,12 @@ public final class CDIUtils {
   /**
    * Find sql session factory.
    *
-   * @param name the name
-   * @param qualifiers the qualifiers
-   * @param creationalContext the creational context
+   * @param name
+   *          the name
+   * @param qualifiers
+   *          the qualifiers
+   * @param creationalContext
+   *          the creational context
    * @return the sql session factory
    */
   public static SqlSessionFactory findSqlSessionFactory(String name, Set<Annotation> qualifiers,
