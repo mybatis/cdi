@@ -94,6 +94,13 @@
       <version>5.3.1</version>
       <scope>test</scope>
     </dependency>
+    <!-- Eclipse 4.9 bug, adding junit so eclipse works.  Fixed in 4.10 only (don't commit once working) -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.codehaus.btm</groupId>
       <artifactId>btm</artifactId>
