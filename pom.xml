@@ -62,9 +62,6 @@
     <findbugs.onlyAnalyze>org.mybatis.cdi.*</findbugs.onlyAnalyze>
     <osgi.import>org.mybatis.*;resolution:=optional,*</osgi.import>
     <osgi.dynamicImport>*</osgi.dynamicImport>
-
-    <!-- Remove once updated to next mybatis-parent -->
-    <surefire.version>2.21.0</surefire.version> <!-- TODO: Why does everything go horribly wrong on 2.22.0+ -->
   </properties>
 
   <dependencies>
@@ -152,15 +149,6 @@
   </dependencies>
 
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.jacoco</groupId>
-          <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.2</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
