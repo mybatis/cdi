@@ -24,14 +24,13 @@ import javax.inject.Inject;
 import javax.transaction.UserTransaction;
 
 import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
-import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-@ExtendWith(WeldJunit5Extension.class)
+@EnableWeld
 public class TestingIoC {
 
   @Inject
