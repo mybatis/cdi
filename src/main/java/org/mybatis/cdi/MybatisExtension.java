@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013-2017 the original author or authors.
+ *    Copyright 2013-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -62,8 +62,10 @@ public class MybatisExtension implements Extension {
   /**
    * Collect types of all mappers annotated with Mapper.
    *
-   * @param <T> the generic type
-   * @param pat the pat
+   * @param <T>
+   *          the generic type
+   * @param pat
+   *          the pat
    */
   @SuppressWarnings("UnusedDeclaration")
   protected <T> void processAnnotatedType(@Observes final ProcessAnnotatedType<T> pat) {
@@ -78,9 +80,12 @@ public class MybatisExtension implements Extension {
   /**
    * Collect all SqlSessionFactory producers annotated with SessionFactoryProvider.
    *
-   * @param <T> the generic type
-   * @param <X> the generic type
-   * @param pp the pp
+   * @param <T>
+   *          the generic type
+   * @param <X>
+   *          the generic type
+   * @param pp
+   *          the pp
    */
   @SuppressWarnings("UnusedDeclaration")
   protected <T, X> void processProducer(@Observes final ProcessProducer<T, X> pp) {
@@ -106,8 +111,10 @@ public class MybatisExtension implements Extension {
   /**
    * Collect all targets to match Mappers and Session providers dependency.
    *
-   * @param <X> the generic type
-   * @param event the event
+   * @param <X>
+   *          the generic type
+   * @param event
+   *          the event
    */
   protected <X> void processInjectionTarget(@Observes ProcessInjectionTarget<X> event) {
     final InjectionTarget<X> it = event.getInjectionTarget();
@@ -119,8 +126,10 @@ public class MybatisExtension implements Extension {
   /**
    * Register all mybatis injectable beans.
    *
-   * @param abd the abd
-   * @param bm the bm
+   * @param abd
+   *          the abd
+   * @param bm
+   *          the bm
    */
   protected void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
     LOGGER.log(Level.INFO, "MyBatis CDI Module - Activated");
