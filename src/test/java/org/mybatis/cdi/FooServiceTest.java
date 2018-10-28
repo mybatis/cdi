@@ -21,27 +21,25 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import javax.inject.Inject;
-import javax.transaction.UserTransaction;
 
 import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
-import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-@ExtendWith(WeldJunit5Extension.class)
-public class TestingIoC {
+@EnableWeld
+public class FooServiceTest {
+
+  @WeldSetup
+  public WeldInitiator weld = WeldInitiator.of(new Weld());
 
   @Inject
   private FooService fooService;
 
   @Inject
   private SerializableFooService serFooService;
-
-  @WeldSetup
-  public WeldInitiator weld = WeldInitiator.of(new Weld());
 
   @Test
   public void shouldGetAUser() {
@@ -105,65 +103,6 @@ public class TestingIoC {
       // ignored
     }
     Assertions.assertNull(this.fooService.getUser(30));
-  }
-
-  // TEST JTA
-
-  @Inject
-  private FooServiceJTA fooServiceJTA;
-
-  @Inject
-  private UserTransaction userTransaction;
-
-  @Test
-  public void jtaShouldGetAUserWithNoTX() throws Exception {
-    this.userTransaction.begin();
-    Assertions.assertEquals("1-User1", this.fooServiceJTA.getUserWithNoTransaction(1).getName());
-    this.userTransaction.commit();
-  }
-
-  @Test
-  public void jtaShouldInsertAUserAndCommit() {
-    User user = new User();
-    user.setId(20);
-    user.setName("User20");
-    this.fooServiceJTA.insertUserWithTransactional(user);
-    Assertions.assertEquals(user.getName(), this.fooServiceJTA.getUserWithNoTransaction(user.getId()).getName());
-  }
-
-  @Test
-  public void jtaShouldInsertAUserAndRollItBack() {
-    User user = new User();
-    user.setId(30);
-    user.setName("User30");
-    try {
-      this.fooServiceJTA.insertUserWithTransactionalAndFail(user);
-    } catch (Exception ignore) {
-      // ignored
-    }
-    Assertions.assertNull(this.fooServiceJTA.getUserWithNoTransaction(user.getId()));
-  }
-
-  @Test
-  public void jtaShouldInsertAUserWithExistingJtaTxAndCommit() throws Exception {
-    User user = new User();
-    user.setId(40);
-    user.setName("User40");
-    this.userTransaction.begin();
-    this.fooServiceJTA.insertUserWithTransactional(user);
-    this.userTransaction.commit();
-    Assertions.assertEquals(user.getName(), this.fooServiceJTA.getUserWithNoTransaction(user.getId()).getName());
-  }
-
-  @Test
-  public void jtaShouldInsertAUserWithExistingJtaTxAndRollItBack() throws Exception {
-    User user = new User();
-    user.setId(50);
-    user.setName("User50");
-    this.userTransaction.begin();
-    this.fooServiceJTA.insertUserWithTransactional(user);
-    this.userTransaction.rollback();
-    Assertions.assertNull(this.fooServiceJTA.getUserWithNoTransaction(user.getId()));
   }
 
   @Test
