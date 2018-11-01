@@ -20,27 +20,23 @@ import java.io.Reader;
 import java.sql.Connection;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
-import javax.inject.Named;
-
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.apache.ibatis.session.SqlSessionManager;
 
-public class ManagerProducers {
+public class ManagerProducersJta {
 
-  private SqlSessionFactory createSessionManager(int n) throws IOException {
-    Reader reader = Resources.getResourceAsReader("org/mybatis/cdi/mybatis-config_" + n + ".xml");
+  private SqlSessionFactory createSessionManagerJTA() throws IOException {
+    Reader reader = Resources.getResourceAsReader("org/mybatis/cdi/mybatis-config_jta.xml");
     SqlSessionFactory manager = new SqlSessionFactoryBuilder().build(reader);
     reader.close();
 
     SqlSession session = manager.openSession();
     Connection conn = session.getConnection();
-    reader = Resources.getResourceAsReader("org/mybatis/cdi/CreateDB_" + n + ".sql");
+    reader = Resources.getResourceAsReader("org/mybatis/cdi/CreateDB_JTA.sql");
     ScriptRunner runner = new ScriptRunner(conn);
     runner.setLogWriter(null);
     runner.runScript(reader);
@@ -51,41 +47,11 @@ public class ManagerProducers {
   }
 
   @ApplicationScoped
-  @Named("manager1")
   @Produces
+  @JtaManager
   @SessionFactoryProvider
-  public SqlSessionFactory createManager1() throws IOException {
-    return createSessionManager(1);
-  }
-
-  @ApplicationScoped
-  @Named("manager2")
-  @Produces
-  @SessionFactoryProvider
-  public SqlSessionFactory createManager2() throws IOException {
-    return createSessionManager(2);
-  }
-
-  @ApplicationScoped
-  @Produces
-  @MySpecialManager
-  @OtherQualifier
-  @SessionFactoryProvider
-  public SqlSessionFactory createManager3() throws IOException {
-    return createSessionManager(3);
-  }
-
-  @ApplicationScoped
-  @Produces
-  @Named("unmanaged")
-  public SqlSession createNonCdiManagedSession() throws IOException {
-    return SqlSessionManager.newInstance(createSessionManager(4));
-  }
-
-  @ApplicationScoped
-  @Named("unmanaged")
-  public void closeNonCdiManagedSession(@Disposes SqlSession session) {
-    session.close();
+  public SqlSessionFactory createManagerJTA() throws IOException {
+    return createSessionManagerJTA();
   }
 
 }
