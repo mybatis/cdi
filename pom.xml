@@ -162,6 +162,28 @@
             </property>
           </systemProperties>
         </configuration>
+        <executions>
+            <execution>
+              <id>default-test</id>
+              <configuration>
+                <excludes>
+                  <exclude>**/FooServiceJTATest.java</exclude>
+                </excludes>
+              </configuration>
+            </execution>
+            <execution>
+              <id>jta-test</id>
+              <configuration>
+                <excludes>
+                  <exclude>**/FooServiceTest.java</exclude>
+                  <exclude>**/MybatisExtensionTest.java</exclude>
+                </excludes>
+              </configuration>
+              <goals>
+                <goal>test</goal>
+              </goals>
+            </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
