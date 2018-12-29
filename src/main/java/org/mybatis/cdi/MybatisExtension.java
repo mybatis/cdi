@@ -38,6 +38,7 @@ import javax.enterprise.inject.spi.InjectionTarget;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.enterprise.inject.spi.ProcessInjectionTarget;
 import javax.enterprise.inject.spi.ProcessProducer;
+import javax.enterprise.inject.spi.WithAnnotations;
 import javax.inject.Named;
 import javax.inject.Qualifier;
 
@@ -68,7 +69,8 @@ public class MybatisExtension implements Extension {
    *          the pat
    */
   @SuppressWarnings("UnusedDeclaration")
-  protected <T> void processAnnotatedType(@Observes final ProcessAnnotatedType<T> pat) {
+  protected <T> void processAnnotatedType(
+      @Observes @WithAnnotations({ Mapper.class }) final ProcessAnnotatedType<T> pat) {
     final AnnotatedType<T> at = pat.getAnnotatedType();
     if (at.isAnnotationPresent(Mapper.class)) {
       LOGGER.log(Level.INFO, "MyBatis CDI Module - Found class with @Mapper-annotation: {0}",
