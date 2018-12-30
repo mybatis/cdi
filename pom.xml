@@ -121,12 +121,14 @@
       <version>2.23.4</version>
       <scope>test</scope>
     </dependency>
+    <!-- TODO: Switch to weld-junit5 once we drop cdi 1.1 support
     <dependency>
       <groupId>org.jboss.weld</groupId>
       <artifactId>weld-junit5</artifactId>
       <version>1.3.1.Final</version>
       <scope>test</scope>
     </dependency>
+    -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
