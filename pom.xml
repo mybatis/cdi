@@ -60,6 +60,7 @@
   <properties>
     <clirr.comparisonVersion>1.0.3</clirr.comparisonVersion>
     <findbugs.onlyAnalyze>org.mybatis.cdi.*</findbugs.onlyAnalyze>
+    <module.name>org.mybatis.cdi</module.name>
     <osgi.import>org.mybatis.*;resolution:=optional,*</osgi.import>
     <osgi.dynamicImport>*</osgi.dynamicImport>
   </properties>
