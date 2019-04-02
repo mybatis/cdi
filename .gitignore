@@ -8,4 +8,3 @@ nb-configuration.xml
 *.iml
 /.idea
 .mvn/wrapper/maven-wrapper.jar
-.mvn/wrapper/MavenWrapperDownloader.java
