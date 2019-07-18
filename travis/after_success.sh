@@ -33,7 +33,7 @@ echo "Current commit detected: ${commit_message}"
 
 if [ $TRAVIS_REPO_SLUG == "mybatis/cdi" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ] && [[ "$commit_message" != *"[maven-release-plugin]"* ]]; then
 
-  if [ ${TRAVIS_JDK_VERSION} == "oraclejdk8" ] && [ ${MAVEN_PROFILE} == "-Pcdi-1.2" ]; then
+  if [ ${TRAVIS_JDK_VERSION} == "openjdk8" ] && [ ${MAVEN_PROFILE} == "-Pcdi-1.2" ]; then
 
     # Deploy to sonatype
     ./mvnw clean deploy -q --settings ./travis/settings.xml
