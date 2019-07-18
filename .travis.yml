@@ -4,35 +4,35 @@ matrix:
   include:
 # 11
     - env:
-      - JDK='Oracle JDK 11'
+      - JDK='Open JDK 11'
       - MAVEN_PROFILE="-Pcdi-2.0"
-      jdk: oraclejdk11
+      jdk: openjdk11
 
     - env:
-      - JDK='Oracle JDK 11'
+      - JDK='Open JDK 11'
       - MAVEN_PROFILE="-Pcdi-1.2"
-      jdk: oraclejdk11
+      jdk: openjdk11
 
     - env:
-      - JDK='Oracle JDK 11'
+      - JDK='Open JDK 11'
       - MAVEN_PROFILE="-Pcdi-1.1"
-      jdk: oraclejdk11
+      jdk: openjdk11
 
 # 8
     - env:
-      - JDK='Oracle JDK 8'
+      - JDK='Open JDK 8'
       - MAVEN_PROFILE="-Pcdi-2.0"
-      jdk: oraclejdk8
+      jdk: openjdk8
 
     - env:
-      - JDK='Oracle JDK 8'
+      - JDK='Open JDK 8'
       - MAVEN_PROFILE="-Pcdi-1.2"
-      jdk: oraclejdk8
+      jdk: openjdk8
 
     - env:
-      - JDK='Oracle JDK 8'
+      - JDK='Open JDK 8'
       - MAVEN_PROFILE="-Pcdi-1.1"
-      jdk: oraclejdk8
+      jdk: openjdk8
       
 script:
   - ./mvnw test -B -V $MAVEN_PROFILE
