@@ -119,7 +119,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
-      <version>2.23.4</version>
+      <version>3.1.0</version>
       <scope>test</scope>
     </dependency>
     <!-- TODO: Switch to weld-junit5 once we drop cdi 1.1 support
