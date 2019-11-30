@@ -15,33 +15,31 @@
  */
 package org.mybatis.cdi;
 
+import com.atomikos.jdbc.AtomikosDataSourceBean;
+
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
 import org.apache.ibatis.datasource.DataSourceFactory;
 
-import bitronix.tm.resource.jdbc.PoolingDataSource;
-
 public class JtaDatasourceFactory implements DataSourceFactory {
 
-  PoolingDataSource ds;
+  AtomikosDataSourceBean ds;
 
   public JtaDatasourceFactory() {
-    this.ds = new PoolingDataSource();
+    this.ds = new AtomikosDataSourceBean();
   }
 
   @Override
   public void setProperties(Properties props) {
-    this.ds.setUniqueName(props.getProperty("resourceName"));
+    this.ds.setUniqueResourceName(props.getProperty("resourceName"));
     props.remove("resourceName");
-    this.ds.setClassName(props.getProperty("driver"));
+    this.ds.setXaDataSourceClassName(props.getProperty("driver"));
     props.remove("driver");
     this.ds.setMaxPoolSize(Integer.valueOf(props.getProperty("maxPoolSize")));
     props.remove("maxPoolSize");
-    this.ds.setAllowLocalTransactions(Boolean.valueOf(props.getProperty("allowLocalTransactions")));
-    props.remove("allowLocalTransactions");
-    this.ds.setDriverProperties(props);
+    this.ds.setXaProperties(props);
   }
 
   @Override
