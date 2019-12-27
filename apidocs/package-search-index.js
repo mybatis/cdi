@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"org.mybatis.cdi"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"org.mybatis.cdi"}]

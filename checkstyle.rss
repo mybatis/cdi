@@ -23,11 +23,11 @@ under the License.
     <link>http://mybatis.org</link>
     <description>mybatis-cdi - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2013 - 2018 MyBatis.org</copyright>
+    <copyright>&#169;2013 - 2019 MyBatis.org</copyright>
     <item>
       <title>File: 15,
              Errors: 0,
-             Warnings: 6,
+             Warnings: 7,
              Infos: 0
       </title>
             <link>http://mybatis.org/checkstyle.html</link>
@@ -66,7 +66,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -75,6 +75,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="http://mybatis.org/checkstyle.html#org.mybatis.cdi.MybatisCdiConfigurationException.java">org/mybatis/cdi/MybatisCdiConfigurationException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mybatis.org/checkstyle.html#target.formatter-maven-cache.properties">target/formatter-maven-cache.properties</a>
                 </td>
                 <td>
                   0
@@ -221,20 +235,6 @@ under the License.
                 </td>
                 <td>
                   1
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mybatis.org/checkstyle.html#target.maven-java-formatter-cache.properties">target/maven-java-formatter-cache.properties</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
                 </td>
                 <td>
                   0

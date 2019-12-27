@@ -34,9 +34,9 @@ import org.apache.ibatis.session.SqlSessionFactory;
  */
 public final class CDIUtils {
 
-<span class="nc" id="L37">  private CDIUtils() {</span>
+  private CDIUtils() {
     // this class cannot be instantiated
-<span class="nc" id="L39">  }</span>
+  }
 
   /**
    * Gets a CDI BeanManager instance
@@ -44,53 +44,57 @@ public final class CDIUtils {
    * @return BeanManager instance
    */
   private static BeanManager getBeanManager() {
-<span class="nc" id="L47">    return CDI.current().getBeanManager();</span>
+<span class="fc" id="L47">    return CDI.current().getBeanManager();</span>
   }
 
   /**
    * Gets the registry.
    *
-   * @param creationalContext the creational context
+   * @param creationalContext
+   *          the creational context
    * @return the registry
    */
   public static SqlSessionManagerRegistry getRegistry(CreationalContext creationalContext) {
-<span class="nc" id="L57">    final BeanManager beanManager = getBeanManager();</span>
-<span class="nc" id="L58">    Iterator&lt;Bean&lt;?&gt;&gt; beans = beanManager.getBeans(SqlSessionManagerRegistry.class).iterator();</span>
-<span class="nc" id="L59">    return (SqlSessionManagerRegistry) beanManager.getReference(beans.next(), SqlSessionManagerRegistry.class,</span>
+<span class="fc" id="L58">    final BeanManager beanManager = getBeanManager();</span>
+<span class="fc" id="L59">    Iterator&lt;Bean&lt;?&gt;&gt; beans = beanManager.getBeans(SqlSessionManagerRegistry.class).iterator();</span>
+<span class="fc" id="L60">    return (SqlSessionManagerRegistry) beanManager.getReference(beans.next(), SqlSessionManagerRegistry.class,</span>
         creationalContext);
   }
 
   /**
    * Find sql session factory.
    *
-   * @param name the name
-   * @param qualifiers the qualifiers
-   * @param creationalContext the creational context
+   * @param name
+   *          the name
+   * @param qualifiers
+   *          the qualifiers
+   * @param creationalContext
+   *          the creational context
    * @return the sql session factory
    */
   public static SqlSessionFactory findSqlSessionFactory(String name, Set&lt;Annotation&gt; qualifiers,
       CreationalContext creationalContext) {
-<span class="nc" id="L73">    final BeanManager beanManager = getBeanManager();</span>
+<span class="fc" id="L77">    final BeanManager beanManager = getBeanManager();</span>
     Set&lt;Bean&lt;?&gt;&gt; beans;
-<span class="nc bnc" id="L75" title="All 2 branches missed.">    if (name != null) {</span>
-<span class="nc" id="L76">      beans = beanManager.getBeans(name);</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">    if (name != null) {</span>
+<span class="fc" id="L80">      beans = beanManager.getBeans(name);</span>
     } else {
-<span class="nc" id="L78">      beans = beanManager.getBeans(SqlSessionFactory.class, qualifiers.toArray(new Annotation[] {}));</span>
+<span class="fc" id="L82">      beans = beanManager.getBeans(SqlSessionFactory.class, qualifiers.toArray(new Annotation[] {}));</span>
     }
-<span class="nc" id="L80">    Bean bean = beanManager.resolve(beans);</span>
-<span class="nc bnc" id="L81" title="All 2 branches missed.">    if (bean == null) {</span>
-<span class="nc" id="L82">      throw new MybatisCdiConfigurationException(&quot;There are no SqlSessionFactory producers properly configured.&quot;);</span>
+<span class="fc" id="L84">    Bean bean = beanManager.resolve(beans);</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">    if (bean == null) {</span>
+<span class="nc" id="L86">      throw new MybatisCdiConfigurationException(&quot;There are no SqlSessionFactory producers properly configured.&quot;);</span>
     }
-<span class="nc" id="L84">    return (SqlSessionFactory) beanManager.getReference(bean, SqlSessionFactory.class, creationalContext);</span>
+<span class="fc" id="L88">    return (SqlSessionFactory) beanManager.getReference(bean, SqlSessionFactory.class, creationalContext);</span>
   }
 
-<span class="nc" id="L87">  public static class SerializableDefaultAnnotationLiteral extends AnnotationLiteral&lt;Default&gt; {</span>
+<span class="fc" id="L91">  public static class SerializableDefaultAnnotationLiteral extends AnnotationLiteral&lt;Default&gt; {</span>
     private static final long serialVersionUID = 1L;
   }
 
-<span class="nc" id="L91">  public static class SerializableAnyAnnotationLiteral extends AnnotationLiteral&lt;Any&gt; {</span>
+<span class="fc" id="L95">  public static class SerializableAnyAnnotationLiteral extends AnnotationLiteral&lt;Any&gt; {</span>
     private static final long serialVersionUID = 1L;
   }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
