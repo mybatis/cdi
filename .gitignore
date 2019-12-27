@@ -8,3 +8,5 @@ nb-configuration.xml
 *.iml
 /.idea
 .mvn/wrapper/maven-wrapper.jar
+pom.xml.releaseBackup
+release.properties
