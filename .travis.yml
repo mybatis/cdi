@@ -2,6 +2,22 @@ language: java
 
 matrix:
   include:
+# 14
+    - env:
+      - JDK='Open JDK 14'
+      - MAVEN_PROFILE="-Pcdi-2.0"
+      jdk: openjdk11
+
+    - env:
+      - JDK='Open JDK 14'
+      - MAVEN_PROFILE="-Pcdi-1.2"
+      jdk: openjdk11
+
+    - env:
+      - JDK='Open JDK 14'
+      - MAVEN_PROFILE="-Pcdi-1.1"
+      jdk: openjdk11
+
 # 11
     - env:
       - JDK='Open JDK 11'
