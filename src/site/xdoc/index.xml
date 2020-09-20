@@ -30,8 +30,8 @@
  <section name="Introduction">
   <subsection name="What is MyBatis-CDI?">
       <p>
-      MyBatis-CDI extension takes care of the lifecycle of MyBatis mappers and <code>SqlSession</code>s. MyBatis components 
-      are directly injected into your CDI beans ready to be used,  there is no need to create or destroy them.  
+      MyBatis-CDI extension takes care of the lifecycle of MyBatis mappers and <code>SqlSession</code>s. MyBatis components
+      are directly injected into your CDI beans ready to be used,  there is no need to create or destroy them.
       It also provides local and JTA transaction support based on the <code>@Transactional</code> annotation.
       </p>
   </subsection>

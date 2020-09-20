@@ -21,11 +21,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
 import javax.enterprise.inject.Stereotype;
 
 /**
  * Marker interface for MyBatis mappers.
- * 
+ *
  * @author Frank David Martínez
  */
 @Stereotype

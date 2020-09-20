@@ -26,7 +26,7 @@
       <item name="Getting Started" href="getting-started.html"/>
       <item name="Injecting beans" href="injection.html"/>
       <item name="Transactions" href="transactions.html"/>
-      
+
       <item name="Breaking changes" href="changes.html"/>
     </menu>
 

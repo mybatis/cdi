@@ -16,6 +16,7 @@
 package org.mybatis.cdi;
 
 import java.io.Serializable;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 

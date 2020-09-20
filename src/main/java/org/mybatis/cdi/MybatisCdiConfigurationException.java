@@ -17,7 +17,7 @@ package org.mybatis.cdi;
 
 /**
  * Generic exception.
- * 
+ *
  * @author Frank David Martínez
  */
 public class MybatisCdiConfigurationException extends RuntimeException {
