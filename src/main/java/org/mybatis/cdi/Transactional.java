@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013-2017 the original author or authors.
+ *    Copyright 2013-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.apache.ibatis.session.ExecutorType;
 
 /**
  * Adds transaction demarcation to the annotated method.
- * 
+ *
  * @author Frank David Martínez
  */
 @InterceptorBinding
@@ -70,7 +70,7 @@ public @interface Transactional {
   /**
    * Defines zero (0) or more exception {@code Class classes}, which must be a subclass of {@code Throwable}, indicating
    * which exception types must cause a transaction rollback.
-   * 
+   *
    * @return an empty array by default, user defined otherwise.
    */
   @Nonbinding
