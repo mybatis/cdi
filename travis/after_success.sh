@@ -36,16 +36,16 @@ if [ $TRAVIS_REPO_SLUG == "mybatis/cdi" ] && [ "$TRAVIS_PULL_REQUEST" == "false"
   if [ ${TRAVIS_JDK_VERSION} == "openjdk8" ] && [ ${MAVEN_PROFILE} == "-Pcdi-1.2" ]; then
 
     # Deploy to sonatype
-    ./mvnw clean deploy -q --settings ./travis/settings.xml
+    ./mvnw clean deploy -q --settings ./mvn/settings.xml
     echo -e "Successfully deployed SNAPSHOT artifacts to Sonatype under Travis job ${TRAVIS_JOB_NUMBER}"
 
     # Deploy to coveralls
-    ./mvnw clean test jacoco:report coveralls:report -q --settings ./travis/settings.xml
+    ./mvnw clean test jacoco:report coveralls:report -q --settings ./mvn/settings.xml
     echo -e "Successfully ran coveralls under Travis job ${TRAVIS_JOB_NUMBER}"
 
     # Deploy to site
     # Cannot currently run site this way
-	# ./mvnw site site:deploy -q --settings ./travis/settings.xml
+	# ./mvnw site site:deploy -q --settings ./mvn/settings.xml
 	# echo -e "Successfully deploy site under Travis job ${TRAVIS_JOB_NUMBER}"
   else
     echo "Java Version does not support additonal activity for travis CI"
