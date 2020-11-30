@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#    Copyright 2013-2019 the original author or authors.
+#    Copyright 2013-2020 the original author or authors.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ echo "Current commit detected: ${commit_message}"
 
 if [ $TRAVIS_REPO_SLUG == "mybatis/cdi" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ] && [[ "$commit_message" != *"[maven-release-plugin]"* ]]; then
 
-  if [ ${TRAVIS_JDK_VERSION} == "openjdk8" ] && [ ${MAVEN_PROFILE} == "-Pcdi-1.2" ]; then
+  if [ $TRAVIS_JDK_VERSION == "openjdk8" ] && [ $MAVEN_PROFILE == "-Pcdi-1.2" ]; then
 
     # Deploy to coveralls
     ./mvnw clean test jacoco:report coveralls:report -q --settings ./mvn/settings.xml
