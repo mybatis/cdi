@@ -68,12 +68,3 @@ matrix:
       
 script:
   - ./mvnw test -B -V $MAVEN_PROFILE
-
-after_success:
-  - chmod -R 777 ./travis/after_success.sh
-  - "./travis/after_success.sh"
-
-env:
-  global:
-    - secure: Yt0S6+G81okW0/575CBg9pP2CcNnilyar2KKDw+4bPnFxlMS0t4y1YyX08p/Zvj5/1q7n88NrPDFdnr/qwZ0gKjmKcYMm4WTCfy+UOPtYhyQSxX6aTYOhYDMpbAQ84jB3Gh70mG52ULXxF56Hc5bNAXT0lSNfIAOndrF/LIBJAU=
-    - secure: QAeXjP+BabMYAHSivnbYaxrcr9pj6+FBEO/fpTlB4M0W5nALBoj8nVTOVYGv6zQHV1cxDv4DOLUxg/2sDcrWPyHV+8xbXbHvXK80T4wgeTc/SFEGOINMm/oXGdTGtY6lJ6i5VEDGwJDMRUt+M/W22HD0lqUZNDJ8xL5PAwKVr6g=
