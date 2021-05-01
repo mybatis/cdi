@@ -24,7 +24,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        java: [8, 11, 15, 16-ea]
+        java: [8, 11, 16, 17-ea]
+        distribution: ['adopt']
       fail-fast: false
       max-parallel: 4
     name: Test JDK ${{ matrix.java }}, ${{ matrix.os }}
@@ -35,5 +36,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
+          distribution: ${{ matrix.distribution }}
       - name: Test with Maven
         run: ./mvnw test -B -D"license.skip=true"
