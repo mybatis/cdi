@@ -26,6 +26,7 @@ jobs:
         os: [ubuntu-latest, macOS-latest, windows-latest]
         java: [8, 11, 17, 18-ea]
         distribution: ['zulu']
+        profile: [cdi-1.1, cdi-1.2, cdi-2.0]
       fail-fast: false
       max-parallel: 4
     name: Test JDK ${{ matrix.java }}, ${{ matrix.os }}
@@ -38,4 +39,4 @@ jobs:
           java-version: ${{ matrix.java }}
           distribution: ${{ matrix.distribution }}
       - name: Test with Maven
-        run: ./mvnw test -B -D"license.skip=true"
+        run: ./mvnw test -B -D"license.skip=true -P${{ matrix.profile }}"
