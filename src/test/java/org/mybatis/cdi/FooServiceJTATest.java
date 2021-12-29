@@ -29,7 +29,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 // @EnableWeld
 // TODO Remove the following once we drop cdi 1.1 support
 @ExtendWith(WeldJunit5Extension.class)
-public class FooServiceJTATest {
+class FooServiceJTATest {
 
   // TODO Add the following once we drop cdi 1.1 support
   // @WeldSetup
@@ -42,14 +42,14 @@ public class FooServiceJTATest {
   private UserTransaction userTransaction;
 
   @Test
-  public void jtaShouldGetAUserWithNoTX() throws Exception {
+  void jtaShouldGetAUserWithNoTX() throws Exception {
     this.userTransaction.begin();
     Assertions.assertEquals("1-User1", this.fooServiceJTA.getUserWithNoTransaction(1).getName());
     this.userTransaction.commit();
   }
 
   @Test
-  public void jtaShouldInsertAUserAndCommit() {
+  void jtaShouldInsertAUserAndCommit() {
     User user = new User();
     user.setId(20);
     user.setName("User20");
@@ -58,7 +58,7 @@ public class FooServiceJTATest {
   }
 
   @Test
-  public void jtaShouldInsertAUserAndRollItBack() {
+  void jtaShouldInsertAUserAndRollItBack() {
     User user = new User();
     user.setId(30);
     user.setName("User30");
@@ -71,7 +71,7 @@ public class FooServiceJTATest {
   }
 
   @Test
-  public void jtaShouldInsertAUserWithExistingJtaTxAndCommit() throws Exception {
+  void jtaShouldInsertAUserWithExistingJtaTxAndCommit() throws Exception {
     User user = new User();
     user.setId(40);
     user.setName("User40");
@@ -82,7 +82,7 @@ public class FooServiceJTATest {
   }
 
   @Test
-  public void jtaShouldInsertAUserWithExistingJtaTxAndRollItBack() throws Exception {
+  void jtaShouldInsertAUserWithExistingJtaTxAndRollItBack() throws Exception {
     User user = new User();
     user.setId(50);
     user.setName("User50");

@@ -33,7 +33,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 // @EnableWeld
 // TODO Remove the following once we drop cdi 1.1 support
 @ExtendWith(WeldJunit5Extension.class)
-public class FooServiceTest {
+class FooServiceTest {
 
   // TODO Add the following once we drop cdi 1.1 support
   // @WeldSetup
@@ -46,7 +46,7 @@ public class FooServiceTest {
   private SerializableFooService serFooService;
 
   @Test
-  public void shouldGetAUser() {
+  void shouldGetAUser() {
     Assertions.assertEquals("1-User1", this.fooService.getUserFromSqlSession(1).getName());
     Assertions.assertEquals("1-User1", this.fooService.getUser(1).getName());
     Assertions.assertEquals("2-User2", this.fooService.getUser2(2).getName());
@@ -55,14 +55,14 @@ public class FooServiceTest {
   }
 
   @Test
-  public void shouldInjectTheSameMapper() {
+  void shouldInjectTheSameMapper() {
     Assertions.assertEquals(this.fooService.getUser2(1).getName(), this.fooService.getUserDummy(1).getName());
     Assertions.assertEquals(this.fooService.getUser2(2).getName(), this.fooService.getUserDummy(2).getName());
     Assertions.assertEquals(this.fooService.getUser2(3).getName(), this.fooService.getUserDummy(3).getName());
   }
 
   @Test
-  public void shouldInsertAUserAndCommit() {
+  void shouldInsertAUserAndCommit() {
     User user = new User();
     user.setId(20);
     user.setName("User20");
@@ -71,7 +71,7 @@ public class FooServiceTest {
   }
 
   @Test
-  public void shouldInsertAUserThatFailsWithRuntimeAndRollItBack() {
+  void shouldInsertAUserThatFailsWithRuntimeAndRollItBack() {
     User user = new User();
     user.setId(30);
     user.setName("User40");
@@ -84,7 +84,7 @@ public class FooServiceTest {
   }
 
   @Test
-  public void shouldInsertAUserThatFailsWithACheckedAndCommit() {
+  void shouldInsertAUserThatFailsWithACheckedAndCommit() {
     User user = new User();
     user.setId(30);
     user.setName("User30");
@@ -97,7 +97,7 @@ public class FooServiceTest {
   }
 
   @Test
-  public void shouldInsertAUserThatFailsWithACustomExceptionMarkedToRollbackAndRollItBack() {
+  void shouldInsertAUserThatFailsWithACustomExceptionMarkedToRollbackAndRollItBack() {
     User user = new User();
     user.setId(30);
     user.setName("User30");
@@ -110,7 +110,7 @@ public class FooServiceTest {
   }
 
   @Test
-  public void injectedMappersAreSerializable() throws Exception {
+  void injectedMappersAreSerializable() throws Exception {
     ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream("target/mapper.ser"));
     oout.writeObject(this.serFooService);
     oout.close();
