@@ -19,7 +19,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,11 +53,11 @@ public class MybatisExtension implements Extension {
 
   private static final Logger LOGGER = Logger.getLogger(MybatisExtension.class.getName());
 
-  private final Set<BeanKey> sessionProducers = new HashSet<BeanKey>();
+  private final Set<BeanKey> sessionProducers = new HashSet<>();
 
-  private final Set<Type> mapperTypes = new HashSet<Type>();
+  private final Set<Type> mapperTypes = new HashSet<>();
 
-  private final Set<InjectionPoint> injectionPoints = new HashSet<InjectionPoint>();
+  private final Set<InjectionPoint> injectionPoints = new HashSet<>();
 
   /**
    * Collect types of all mappers annotated with Mapper.
@@ -95,15 +94,17 @@ public class MybatisExtension implements Extension {
     final boolean isAnnotated = am.isAnnotationPresent(SessionFactoryProvider.class);
     final boolean isSqlSessionFactory = am.getBaseType().equals(SqlSessionFactory.class);
     final Object[] logData = { am.getJavaMember().getDeclaringClass().getSimpleName(), am.getJavaMember().getName() };
-    if (isAnnotated && isSqlSessionFactory) {
-      LOGGER.log(Level.INFO, "MyBatis CDI Module - SqlSessionFactory producer {0}.{1}", logData);
-      this.sessionProducers.add(new BeanKey((Class<Type>) (Type) SqlSession.class, am.getAnnotations()));
-    } else if (isAnnotated && !isSqlSessionFactory) {
-      LOGGER.log(Level.SEVERE, "MyBatis CDI Module - Invalid return type (Must be SqlSessionFactory): {0}.{1}",
-          logData);
-      pp.addDefinitionError(new MybatisCdiConfigurationException(String
-          .format("SessionFactoryProvider producers must return SqlSessionFactory (%s.%s)", logData[0], logData[1])));
-    } else if (!isAnnotated && isSqlSessionFactory) {
+    if (isAnnotated) {
+      if (isSqlSessionFactory) {
+        LOGGER.log(Level.INFO, "MyBatis CDI Module - SqlSessionFactory producer {0}.{1}", logData);
+        this.sessionProducers.add(new BeanKey((Class<Type>) (Type) SqlSession.class, am.getAnnotations()));
+      } else {
+        LOGGER.log(Level.SEVERE, "MyBatis CDI Module - Invalid return type (Must be SqlSessionFactory): {0}.{1}",
+            logData);
+        pp.addDefinitionError(new MybatisCdiConfigurationException(String
+            .format("SessionFactoryProvider producers must return SqlSessionFactory (%s.%s)", logData[0], logData[1])));
+      }
+    } else if (isSqlSessionFactory) {
       LOGGER.log(Level.WARNING,
           "MyBatis CDI Module - Ignored SqlSessionFactory producer because it is not annotated with @SessionFactoryProvider: {0}.{1}",
           logData);
@@ -120,9 +121,7 @@ public class MybatisExtension implements Extension {
    */
   protected <X> void processInjectionTarget(@Observes ProcessInjectionTarget<X> event) {
     final InjectionTarget<X> it = event.getInjectionTarget();
-    for (final InjectionPoint ip : it.getInjectionPoints()) {
-      injectionPoints.add(ip);
-    }
+    this.injectionPoints.addAll(it.getInjectionPoints());
   }
 
   /**
@@ -136,8 +135,8 @@ public class MybatisExtension implements Extension {
   protected void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
     LOGGER.log(Level.INFO, "MyBatis CDI Module - Activated");
 
-    Set<BeanKey> mappers = new HashSet<BeanKey>();
-    Set<BeanKey> sessionTargets = new HashSet<BeanKey>();
+    Set<BeanKey> mappers = new HashSet<>();
+    Set<BeanKey> sessionTargets = new HashSet<>();
 
     for (InjectionPoint ip : injectionPoints) {
       if (this.mapperTypes.contains(ip.getAnnotated().getBaseType())) {
@@ -212,7 +211,7 @@ public class MybatisExtension implements Extension {
     }
 
     private Set<Annotation> filterQualifiers(Set<Annotation> annotations) {
-      final Set<Annotation> set = new HashSet<Annotation>();
+      final Set<Annotation> set = new HashSet<>();
       for (Annotation a : annotations) {
         if (a.annotationType().isAnnotationPresent(Qualifier.class)) {
           set.add(a);
@@ -222,13 +221,8 @@ public class MybatisExtension implements Extension {
     }
 
     private List<Annotation> sort(Set<Annotation> annotations) {
-      final List<Annotation> list = new ArrayList<Annotation>(annotations);
-      Collections.sort(list, new Comparator<Annotation>() {
-        @Override
-        public int compare(Annotation a, Annotation b) {
-          return a.getClass().getName().compareTo(b.getClass().getName());
-        }
-      });
+      final List<Annotation> list = new ArrayList<>(annotations);
+      Collections.sort(list, (a, b) -> a.getClass().getName().compareTo(b.getClass().getName()));
       return list;
     }
 
@@ -240,16 +234,12 @@ public class MybatisExtension implements Extension {
     @Override
     public int hashCode() {
       int hash = 3;
-      hash = 43 * hash + (this.key != null ? this.key.hashCode() : 0);
-      return hash;
+      return 43 * hash + (this.key != null ? this.key.hashCode() : 0);
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == null) {
-        return false;
-      }
-      if (getClass() != obj.getClass()) {
+      if (obj == null || this.getClass() != obj.getClass()) {
         return false;
       }
       final BeanKey other = (BeanKey) obj;

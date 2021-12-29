@@ -40,10 +40,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class MybatisExtensionTest {
+class MybatisExtensionTest {
 
   @Test
-  public <T> void mappersFoundAfterTheBeanUsingTheMapperInAnInjectionPointHasBeenScannedShouldBeInstantiated()
+  <T> void mappersFoundAfterTheBeanUsingTheMapperInAnInjectionPointHasBeenScannedShouldBeInstantiated()
       throws Exception {
 
     MybatisExtension extension = new MybatisExtension();
