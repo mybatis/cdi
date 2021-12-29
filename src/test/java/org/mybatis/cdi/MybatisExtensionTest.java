@@ -28,7 +28,6 @@ import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.AnnotatedType;
 import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.InjectionTarget;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
@@ -53,8 +52,7 @@ class MybatisExtensionTest {
     processAnnotatedType(extension, type);
 
     AfterBeanDiscovery afterBeanDiscovery = mock(AfterBeanDiscovery.class);
-    BeanManager beanManager = mock(BeanManager.class);
-    extension.afterBeanDiscovery(afterBeanDiscovery, beanManager);
+    extension.afterBeanDiscovery(afterBeanDiscovery);
 
     verify(afterBeanDiscovery).addBean((Bean<?>) any());
 
