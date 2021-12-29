@@ -120,9 +120,7 @@ public class MybatisExtension implements Extension {
    */
   protected <X> void processInjectionTarget(@Observes ProcessInjectionTarget<X> event) {
     final InjectionTarget<X> it = event.getInjectionTarget();
-    for (final InjectionPoint ip : it.getInjectionPoints()) {
-      injectionPoints.add(ip);
-    }
+    this.injectionPoints.addAll(it.getInjectionPoints());
   }
 
   /**
