@@ -95,15 +95,17 @@ public class MybatisExtension implements Extension {
     final boolean isAnnotated = am.isAnnotationPresent(SessionFactoryProvider.class);
     final boolean isSqlSessionFactory = am.getBaseType().equals(SqlSessionFactory.class);
     final Object[] logData = { am.getJavaMember().getDeclaringClass().getSimpleName(), am.getJavaMember().getName() };
-    if (isAnnotated && isSqlSessionFactory) {
-      LOGGER.log(Level.INFO, "MyBatis CDI Module - SqlSessionFactory producer {0}.{1}", logData);
-      this.sessionProducers.add(new BeanKey((Class<Type>) (Type) SqlSession.class, am.getAnnotations()));
-    } else if (isAnnotated && !isSqlSessionFactory) {
-      LOGGER.log(Level.SEVERE, "MyBatis CDI Module - Invalid return type (Must be SqlSessionFactory): {0}.{1}",
-          logData);
-      pp.addDefinitionError(new MybatisCdiConfigurationException(String
-          .format("SessionFactoryProvider producers must return SqlSessionFactory (%s.%s)", logData[0], logData[1])));
-    } else if (!isAnnotated && isSqlSessionFactory) {
+    if (isAnnotated) {
+      if (isSqlSessionFactory) {
+        LOGGER.log(Level.INFO, "MyBatis CDI Module - SqlSessionFactory producer {0}.{1}", logData);
+        this.sessionProducers.add(new BeanKey((Class<Type>) (Type) SqlSession.class, am.getAnnotations()));
+      } else {
+        LOGGER.log(Level.SEVERE, "MyBatis CDI Module - Invalid return type (Must be SqlSessionFactory): {0}.{1}",
+            logData);
+        pp.addDefinitionError(new MybatisCdiConfigurationException(String
+            .format("SessionFactoryProvider producers must return SqlSessionFactory (%s.%s)", logData[0], logData[1])));
+      }
+    } else if (isSqlSessionFactory) {
       LOGGER.log(Level.WARNING,
           "MyBatis CDI Module - Ignored SqlSessionFactory producer because it is not annotated with @SessionFactoryProvider: {0}.{1}",
           logData);
