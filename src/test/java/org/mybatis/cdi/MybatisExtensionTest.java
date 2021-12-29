@@ -20,7 +20,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
@@ -64,7 +63,7 @@ class MybatisExtensionTest {
   private <T> void projectInjectionTarget(MybatisExtension extension, Type type) {
     ProcessInjectionTarget<T> event = mock(ProcessInjectionTarget.class);
     InjectionTarget<T> injectTarget = mock(InjectionTarget.class);
-    Set<InjectionPoint> injectionPoints = new HashSet<InjectionPoint>();
+    Set<InjectionPoint> injectionPoints = new HashSet<>();
 
     InjectionPoint injectionPoint = mock(InjectionPoint.class);
     Annotated annotated = mock(Annotated.class);
@@ -72,7 +71,7 @@ class MybatisExtensionTest {
     when(injectionPoint.getAnnotated()).thenReturn(annotated);
 
     when(annotated.getBaseType()).thenReturn(type);
-    when(annotated.getAnnotations()).thenReturn(new HashSet<Annotation>());
+    when(annotated.getAnnotations()).thenReturn(new HashSet<>());
 
     injectionPoints.add(injectionPoint);
 
