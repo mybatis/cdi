@@ -54,11 +54,11 @@ public class MybatisExtension implements Extension {
 
   private static final Logger LOGGER = Logger.getLogger(MybatisExtension.class.getName());
 
-  private final Set<BeanKey> sessionProducers = new HashSet<BeanKey>();
+  private final Set<BeanKey> sessionProducers = new HashSet<>();
 
-  private final Set<Type> mapperTypes = new HashSet<Type>();
+  private final Set<Type> mapperTypes = new HashSet<>();
 
-  private final Set<InjectionPoint> injectionPoints = new HashSet<InjectionPoint>();
+  private final Set<InjectionPoint> injectionPoints = new HashSet<>();
 
   /**
    * Collect types of all mappers annotated with Mapper.
@@ -136,8 +136,8 @@ public class MybatisExtension implements Extension {
   protected void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
     LOGGER.log(Level.INFO, "MyBatis CDI Module - Activated");
 
-    Set<BeanKey> mappers = new HashSet<BeanKey>();
-    Set<BeanKey> sessionTargets = new HashSet<BeanKey>();
+    Set<BeanKey> mappers = new HashSet<>();
+    Set<BeanKey> sessionTargets = new HashSet<>();
 
     for (InjectionPoint ip : injectionPoints) {
       if (this.mapperTypes.contains(ip.getAnnotated().getBaseType())) {
@@ -212,7 +212,7 @@ public class MybatisExtension implements Extension {
     }
 
     private Set<Annotation> filterQualifiers(Set<Annotation> annotations) {
-      final Set<Annotation> set = new HashSet<Annotation>();
+      final Set<Annotation> set = new HashSet<>();
       for (Annotation a : annotations) {
         if (a.annotationType().isAnnotationPresent(Qualifier.class)) {
           set.add(a);

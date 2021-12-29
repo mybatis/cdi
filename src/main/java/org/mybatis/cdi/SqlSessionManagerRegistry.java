@@ -50,7 +50,7 @@ public class SqlSessionManagerRegistry {
     if (this.factories.isUnsatisfied()) {
       throw new MybatisCdiConfigurationException("There are no SqlSessionFactory producers properly configured.");
     }
-    Map<SqlSessionFactory, SqlSessionManager> m = new HashMap<SqlSessionFactory, SqlSessionManager>();
+    Map<SqlSessionFactory, SqlSessionManager> m = new HashMap<>();
     for (SqlSessionFactory factory : this.factories) {
       SqlSessionManager manager = SqlSessionManager.newInstance(factory);
       m.put(factory, manager);

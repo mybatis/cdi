@@ -67,7 +67,7 @@ public class MyBatisBean implements Bean, Serializable, PassivationCapable {
     this.type = type;
     this.sqlSessionFactoryName = sqlSessionFactoryName;
     if (qualifiers == null || qualifiers.isEmpty()) {
-      this.qualifiers = new HashSet<Annotation>();
+      this.qualifiers = new HashSet<>();
       this.qualifiers.add(new CDIUtils.SerializableDefaultAnnotationLiteral());
       this.qualifiers.add(new CDIUtils.SerializableAnyAnnotationLiteral());
     } else {
@@ -77,7 +77,7 @@ public class MyBatisBean implements Bean, Serializable, PassivationCapable {
 
   @Override
   public Set<Type> getTypes() {
-    Set<Type> types = new HashSet<Type>();
+    Set<Type> types = new HashSet<>();
     types.add(this.type);
     return types;
   }
