@@ -111,13 +111,13 @@ class FooServiceTest {
 
   @Test
   void injectedMappersAreSerializable() throws Exception {
-    ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream("target/mapper.ser"));
-    oout.writeObject(this.serFooService);
-    oout.close();
-    ObjectInputStream oin = new ObjectInputStream(new FileInputStream("target/mapper.ser"));
-    SerializableFooService unserialized = (SerializableFooService) oin.readObject();
-    oin.close();
-    Assertions.assertEquals(this.serFooService.getUser(1).getName(), unserialized.getUser(1).getName());
+    try (ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream("target/mapper.ser"))) {
+      oout.writeObject(this.serFooService);
+    }
+    try (ObjectInputStream oin = new ObjectInputStream(new FileInputStream("target/mapper.ser"))) {
+      SerializableFooService unserialized = (SerializableFooService) oin.readObject();
+      Assertions.assertEquals(this.serFooService.getUser(1).getName(), unserialized.getUser(1).getName());
+    }
   }
 
 }
