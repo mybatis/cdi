@@ -19,7 +19,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -222,13 +221,8 @@ public class MybatisExtension implements Extension {
     }
 
     private List<Annotation> sort(Set<Annotation> annotations) {
-      final List<Annotation> list = new ArrayList<Annotation>(annotations);
-      Collections.sort(list, new Comparator<Annotation>() {
-        @Override
-        public int compare(Annotation a, Annotation b) {
-          return a.getClass().getName().compareTo(b.getClass().getName());
-        }
-      });
+      final List<Annotation> list = new ArrayList<>(annotations);
+      Collections.sort(list, (a, b) -> a.getClass().getName().compareTo(b.getClass().getName()));
       return list;
     }
 
