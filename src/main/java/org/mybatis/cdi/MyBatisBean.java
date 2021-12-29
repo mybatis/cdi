@@ -26,6 +26,7 @@ import java.util.Set;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.PassivationCapable;
 
 import org.apache.ibatis.executor.ErrorContext;
@@ -98,7 +99,7 @@ public class MyBatisBean implements Bean, Serializable, PassivationCapable {
   }
 
   @Override
-  public Set<Object> getStereotypes() {
+  public Set<Class<? extends Annotation>> getStereotypes() {
     return Collections.emptySet();
   }
 
@@ -118,7 +119,7 @@ public class MyBatisBean implements Bean, Serializable, PassivationCapable {
   }
 
   @Override
-  public Set<Object> getInjectionPoints() {
+  public Set<InjectionPoint> getInjectionPoints() {
     return Collections.emptySet();
   }
 
