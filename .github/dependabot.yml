@@ -31,3 +31,9 @@ updates:
   - dependency-name: jakarta.enterprise:jakarta.enterprise.cdi-api
     versions:
     - "> 2.0.2"
+  - dependency-name: jakarta.annotation:jakarta.annotation-api
+    versions:
+    - "> 1.9.9"
+  - dependency-name: jakarta.transaction:jakarta.transaction-api
+    versions:
+    - "> 1.9.9"
