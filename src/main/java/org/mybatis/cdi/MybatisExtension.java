@@ -240,8 +240,7 @@ public class MybatisExtension implements Extension {
     @Override
     public int hashCode() {
       int hash = 3;
-      hash = 43 * hash + (this.key != null ? this.key.hashCode() : 0);
-      return hash;
+      return 43 * hash + (this.key != null ? this.key.hashCode() : 0);
     }
 
     @Override
