@@ -246,10 +246,7 @@ public class MybatisExtension implements Extension {
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == null) {
-        return false;
-      }
-      if (getClass() != obj.getClass()) {
+      if (obj == null || this.getClass() != obj.getClass()) {
         return false;
       }
       final BeanKey other = (BeanKey) obj;
