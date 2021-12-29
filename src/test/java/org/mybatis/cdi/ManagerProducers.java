@@ -34,18 +34,18 @@ import org.apache.ibatis.session.SqlSessionManager;
 public class ManagerProducers {
 
   private SqlSessionFactory createSessionManager(int n) throws IOException {
-    Reader reader = Resources.getResourceAsReader("org/mybatis/cdi/mybatis-config_" + n + ".xml");
-    SqlSessionFactory manager = new SqlSessionFactoryBuilder().build(reader);
-    reader.close();
+    SqlSessionFactory manager;
+    try (Reader reader = Resources.getResourceAsReader("org/mybatis/cdi/mybatis-config_" + n + ".xml")) {
+      manager = new SqlSessionFactoryBuilder().build(reader);
+    }
 
-    SqlSession session = manager.openSession();
-    Connection conn = session.getConnection();
-    reader = Resources.getResourceAsReader("org/mybatis/cdi/CreateDB_" + n + ".sql");
-    ScriptRunner runner = new ScriptRunner(conn);
-    runner.setLogWriter(null);
-    runner.runScript(reader);
-    reader.close();
-    session.close();
+    try (SqlSession session = manager.openSession();
+        Reader reader = Resources.getResourceAsReader("org/mybatis/cdi/CreateDB_" + n + ".sql");) {
+      Connection conn = session.getConnection();
+      ScriptRunner runner = new ScriptRunner(conn);
+      runner.setLogWriter(null);
+      runner.runScript(reader);
+    }
 
     return manager;
   }

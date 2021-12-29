@@ -31,18 +31,18 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 public class ManagerProducersJta {
 
   private SqlSessionFactory createSessionManagerJTA() throws IOException {
-    Reader reader = Resources.getResourceAsReader("org/mybatis/cdi/mybatis-config_jta.xml");
-    SqlSessionFactory manager = new SqlSessionFactoryBuilder().build(reader);
-    reader.close();
+    SqlSessionFactory manager;
+    try (Reader reader = Resources.getResourceAsReader("org/mybatis/cdi/mybatis-config_jta.xml")) {
+      manager = new SqlSessionFactoryBuilder().build(reader);
+    }
 
-    SqlSession session = manager.openSession();
-    Connection conn = session.getConnection();
-    reader = Resources.getResourceAsReader("org/mybatis/cdi/CreateDB_JTA.sql");
-    ScriptRunner runner = new ScriptRunner(conn);
-    runner.setLogWriter(null);
-    runner.runScript(reader);
-    reader.close();
-    session.close();
+    try (SqlSession session = manager.openSession();
+        Reader reader = Resources.getResourceAsReader("org/mybatis/cdi/CreateDB_JTA.sql")) {
+      Connection conn = session.getConnection();
+      ScriptRunner runner = new ScriptRunner(conn);
+      runner.setLogWriter(null);
+      runner.runScript(reader);
+    }
 
     return manager;
   }

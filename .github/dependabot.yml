@@ -25,3 +25,18 @@ updates:
   - dependency-name: org.apache.derby:derby
     versions:
     - "> 10.14.2.0"
+  - dependency-name: javax.enterprise:cdi-api
+    versions:
+    - "> 1.1"
+  - dependency-name: jakarta.enterprise:jakarta.enterprise.cdi-api
+    versions:
+    - "> 2.0.2"
+  - dependency-name: jakarta.annotation:jakarta.annotation-api
+    versions:
+    - "> 1.9.9"
+  - dependency-name: jakarta.transaction:jakarta.transaction-api
+    versions:
+    - "> 1.9.9"
+  - dependency-name: org.jboss.weld.se:weld-se-core
+    versions:
+    - "> 3.9.9"
