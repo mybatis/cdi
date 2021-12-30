@@ -31,7 +31,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
  *
  * @author Frank D. Martinez [mnesarco]
  */
-public class SerializableMapperProxy implements InvocationHandler, Serializable {
+public class SerializableMapperProxy<T> implements InvocationHandler, Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -39,7 +39,7 @@ public class SerializableMapperProxy implements InvocationHandler, Serializable 
 
   private final MyBatisBean bean;
 
-  private final CreationalContext creationalContext;
+  private final CreationalContext<T> creationalContext;
 
   /**
    * Instantiates a new serializable mapper proxy.
@@ -49,7 +49,7 @@ public class SerializableMapperProxy implements InvocationHandler, Serializable 
    * @param creationalContext
    *          the creational context
    */
-  public SerializableMapperProxy(MyBatisBean bean, CreationalContext creationalContext) {
+  public SerializableMapperProxy(MyBatisBean bean, CreationalContext<T> creationalContext) {
     this.bean = bean;
     this.creationalContext = creationalContext;
     this.mapper = getMapper();
