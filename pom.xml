@@ -63,6 +63,8 @@
     <module.name>org.mybatis.cdi</module.name>
     <osgi.import>org.mybatis.*;resolution:=optional,*</osgi.import>
     <osgi.dynamicImport>*</osgi.dynamicImport>
+
+    <argLine>--add-opens java.base/java.lang=ALL-UNNAMED</argLine>
   </properties>
 
   <dependencies>
@@ -135,6 +137,13 @@
       <artifactId>slf4j-simple</artifactId>
       <version>1.7.32</version>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.classfilewriter</groupId>
+      <artifactId>jboss-classfilewriter</artifactId>
+      <version>1.2.5.Final</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
