@@ -136,6 +136,13 @@
       <version>1.7.32</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.jboss.classfilewriter</groupId>
+      <artifactId>jboss-classfilewriter</artifactId>
+      <version>1.2.5.Final</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -208,9 +215,6 @@
     </profile>
     <profile>
       <id>cdi-1.2</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
       <dependencies>
         <dependency>
           <groupId>javax.enterprise</groupId>
@@ -242,6 +246,15 @@
           <scope>test</scope>
         </dependency>
       </dependencies>
+    </profile>
+    <profile>
+      <id>jdk17on</id>
+      <activation>
+        <jdk>[17,)</jdk>
+      </activation>
+      <properties>
+        <argLine>--add-opens java.base/java.lang=ALL-UNNAMED</argLine>
+      </properties>
     </profile>
   </profiles>
 

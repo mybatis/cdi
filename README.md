@@ -16,21 +16,40 @@ CDI beans ready to be used, there is no need to create or destroy them. It also 
 Compatibility
 -------------
 
-| CDI API VERSION     | Oracle JDK 8 | OpenJDK 8 | OpenJDK 7 |
-| ------------------- | ------------ | --------- | --------- |
-| cdi-1.0             | N            | N         | N         |
-| cdi-1.1             | Y            | Y         | Y         |
-| cdi-1.2 (preferred) | Y            | Y         | Y         |
-| cdi-2.0             | Y            | Y         | N         |
+| CDI API VERSION         | JDK 17 | JDK 11  | JDK 8  |
+| ----------------------- | ------ | ------- | ------ |
+| cdi-1.0 (not supported) | N      | N       | N      |
+| cdi-1.1                 | Y      | Y       | Y      |
+| cdi-1.2                 | Y      | Y       | Y      |
+| cdi-2.0 (preferred)     | Y      | Y       | Y      |
+| cdi-3.0 (not supported) | N      | N       | N      |
+| cdi-4.0 (not supported) | N      | N       | N      |
 
+Jakarta EE support is not yet provided by this framework.
+
+Jdk17+ requires jboss-classfilewriter to be at 1.2.5 or it will error, [classfilewriter](https://github.com/jbossas/jboss-classfilewriter/issues/24)
+
+Building
+--------
+
+Maven does not allow multiple auto activated profiles (ie activateByDefault and Jdk).  This project supports 3 different CDI support levels currently
+and was set to default to cdi-1.2.  Jdk 8 does not allow add opens and this is needed now for jdk 17.  We further are supporting jakarta EE packaging
+in addition to java EE packaging.  This results is a tricky situation.  Therefore, we have opted to no longer use activateByDefault which means a
+build without providing a profile will fail with missing classes.  Github actions is provisioned to always provide the specific cdi-api profile.
+Any localized usage must now do the same as defined below.
+
+The cdi profile can be cdi-1.1, cdi-1.2, or cdi-2.0 and required to run with any of the following.
+
+- mvn clean install -P"cdi-1.1"
+- mvn clean install -P"cdi-1.2"
+- mvn clean install -P"cdi-2.0"
 
 Essentials
 ----------
 
-* [See the docs](http://mybatis.github.io/cdi/)
+- [See the docs](http://mybatis.github.io/cdi/)
 
 Contributed Examples
 --------------------
 
-* Ready to deploy sample web app (Jee7): [https://github.com/mnesarco/mybatis-cdi-samples](https://github.com/mnesarco/mybatis-cdi-samples/)
-
+- Ready to deploy sample web app (Jee7): [https://github.com/mnesarco/mybatis-cdi-samples](https://github.com/mnesarco/mybatis-cdi-samples/)

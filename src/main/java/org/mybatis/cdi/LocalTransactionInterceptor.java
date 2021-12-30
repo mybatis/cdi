@@ -108,7 +108,7 @@ public class LocalTransactionInterceptor implements Serializable {
     if (RuntimeException.class.isAssignableFrom(throwable.getClass())) {
       return true;
     }
-    for (Class<?> exceptionClass : transactional.rollbackFor()) {
+    for (Class<? extends Throwable> exceptionClass : transactional.rollbackFor()) {
       if (exceptionClass.isAssignableFrom(throwable.getClass())) {
         return true;
       }
