@@ -55,7 +55,7 @@ public final class CDIUtils {
    *          the creational context
    * @return the registry
    */
-  public static SqlSessionManagerRegistry getRegistry(CreationalContext creationalContext) {
+  public static <T> SqlSessionManagerRegistry getRegistry(CreationalContext<T> creationalContext) {
     final BeanManager beanManager = getBeanManager();
     Iterator<Bean<? extends Object>> beans = beanManager.getBeans(SqlSessionManagerRegistry.class).iterator();
     return (SqlSessionManagerRegistry) beanManager.getReference(beans.next(), SqlSessionManagerRegistry.class,
@@ -73,8 +73,8 @@ public final class CDIUtils {
    *          the creational context
    * @return the sql session factory
    */
-  public static SqlSessionFactory findSqlSessionFactory(String name, Set<Annotation> qualifiers,
-      CreationalContext creationalContext) {
+  public static <T> SqlSessionFactory findSqlSessionFactory(String name, Set<Annotation> qualifiers,
+      CreationalContext<T> creationalContext) {
     final BeanManager beanManager = getBeanManager();
     Set<Bean<? extends Object>> beans;
     if (name != null) {
