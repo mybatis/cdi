@@ -138,7 +138,7 @@ public class MyBatisBean implements Bean, Serializable, PassivationCapable {
     creationalContext.release();
   }
 
-  private SqlSessionManager findSqlSessionManager(CreationalContext creationalContext) {
+  private <T> SqlSessionManager findSqlSessionManager(CreationalContext<T> creationalContext) {
     SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.sqlSessionFactoryName, this.qualifiers,
         creationalContext);
     return CDIUtils.getRegistry(creationalContext).getManager(factory);
