@@ -215,9 +215,6 @@
     </profile>
     <profile>
       <id>cdi-1.2</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
       <dependencies>
         <dependency>
           <groupId>javax.enterprise</groupId>
