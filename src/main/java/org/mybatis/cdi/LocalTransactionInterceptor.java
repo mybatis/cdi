@@ -91,14 +91,45 @@ public class LocalTransactionInterceptor implements Serializable {
     return result;
   }
 
+  /**
+   * Checks if is transaction active.
+   *
+   * @return true, if is transaction active
+   * @throws SystemException
+   *           used by jtaTransactionInterceptor
+   */
   protected boolean isTransactionActive() throws SystemException {
     return false;
   }
 
+  /**
+   * Begin jta.
+   *
+   * @throws NotSupportedException
+   *           used by jtaTransactionInterceptor
+   * @throws SystemException
+   *           used by jtaTransactionInterceptor
+   */
   protected void beginJta() throws NotSupportedException, SystemException {
     // nothing to do
   }
 
+  /**
+   * End jta.
+   *
+   * @param isExternaTransaction
+   *          the is externa transaction
+   * @param commit
+   *          the commit
+   * @throws SystemException
+   *           used by jtaTransactionInterceptor
+   * @throws RollbackException
+   *           used by jtaTransactionInterceptor
+   * @throws HeuristicMixedException
+   *           used by jtaTransactionInterceptor
+   * @throws HeuristicRollbackException
+   *           used by jtaTransactionInterceptor
+   */
   protected void endJta(boolean isExternaTransaction, boolean commit)
       throws SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
     // nothing to do
