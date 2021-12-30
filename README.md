@@ -16,12 +16,16 @@ CDI beans ready to be used, there is no need to create or destroy them. It also 
 Compatibility
 -------------
 
-| CDI API VERSION     | Oracle JDK 8 | OpenJDK 8 | OpenJDK 7 |
-| ------------------- | ------------ | --------- | --------- |
-| cdi-1.0             | N            | N         | N         |
-| cdi-1.1             | Y            | Y         | Y         |
-| cdi-1.2 (preferred) | Y            | Y         | Y         |
-| cdi-2.0             | Y            | Y         | N         |
+| CDI API VERSION         | JDK 17 | JDK 11  | JDK 8  |
+| ----------------------- | ------ | ------- | ------ |
+| cdi-1.0 (not supported) | N      | N       | N      |
+| cdi-1.1                 | Y      | Y       | Y      |
+| cdi-1.2                 | Y      | Y       | Y      |
+| cdi-2.0 (preferred)     | Y      | Y       | Y      |
+| cdi-3.0 (not supported) | N      | N       | N      |
+| cdi-4.0 (not supported) | N      | N       | N      |
+
+Jakarta EE support is not yet provided by this framework.
 
 Essentials
 ----------
