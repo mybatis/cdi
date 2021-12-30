@@ -23,7 +23,6 @@ Compatibility
 | cdi-1.2 (preferred) | Y            | Y         | Y         |
 | cdi-2.0             | Y            | Y         | N         |
 
-
 Essentials
 ----------
 
@@ -33,4 +32,3 @@ Contributed Examples
 --------------------
 
 * Ready to deploy sample web app (Jee7): [https://github.com/mnesarco/mybatis-cdi-samples](https://github.com/mnesarco/mybatis-cdi-samples/)
-
