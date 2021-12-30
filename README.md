@@ -32,17 +32,17 @@ Jdk17+ requires jboss-classfilewriter to be at 1.2.5 or it will error, [classfil
 Building
 --------
 
-Due to maven inability to auto activate multiple profiles from same pom, we have no default now so that jdk 17+ works while maintaining jdk 8 build support.  This means to run this project a profile must be provided or it will fail to find classes.  We are unable to simply default classes either since java EE switched to jakarta EE and we use both apis now.
+Maven does not allow multiple auto activated profiles (ie activateByDefault and Jdk).  This project supports 3 different CDI support levels currently
+and was set to default to cdi-1.2.  Jdk 8 does not allow add opens and this is needed now for jdk 17.  We further are supporting jakarta EE packaging
+in addition to java EE packaging.  This results is a tricky situation.  Therefore, we have opted to no longer use activateByDefault which means a
+build without providing a profile will fail with missing classes.  Github actions is provisioned to always provide the specific cdi-api profile.
+Any localized usage must now do the same as defined below.
 
-The cdi profile can be cdi-1.1, cdi-1.2, or cdi-2.0.
+The cdi profile can be cdi-1.1, cdi-1.2, or cdi-2.0 and required to run with any of the following.
 
-jdk 8 through 16
-
+- mvn clean install -P"cdi-1.1"
+- mvn clean install -P"cdi-1.2"
 - mvn clean install -P"cdi-2.0"
-
-jdk 17+
-
-- mvn clean install -P"jdk17on" -P"cdi-2.0"
 
 Essentials
 ----------
