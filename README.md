@@ -19,13 +19,15 @@ Compatibility
 | CDI API VERSION         | JDK 17 | JDK 11  | JDK 8  |
 | ----------------------- | ------ | ------- | ------ |
 | cdi-1.0 (not supported) | N      | N       | N      |
-| cdi-1.1                 | N      | Y       | Y      |
-| cdi-1.2                 | N      | Y       | Y      |
-| cdi-2.0 (preferred)     | N      | Y       | Y      |
+| cdi-1.1                 | Y      | Y       | Y      |
+| cdi-1.2                 | Y      | Y       | Y      |
+| cdi-2.0 (preferred)     | Y      | Y       | Y      |
 | cdi-3.0 (not supported) | N      | N       | N      |
 | cdi-4.0 (not supported) | N      | N       | N      |
 
 Jakarta EE support is not yet provided by this framework.
+
+Jdk17+ requires jboss-classfilewriter to be at 1.2.5 or it will error, [classfilewriter](https://github.com/jbossas/jboss-classfilewriter/issues/24)
 
 Essentials
 ----------
