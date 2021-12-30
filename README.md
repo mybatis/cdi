@@ -26,9 +26,9 @@ Compatibility
 Essentials
 ----------
 
-* [See the docs](http://mybatis.github.io/cdi/)
+- [See the docs](http://mybatis.github.io/cdi/)
 
 Contributed Examples
 --------------------
 
-* Ready to deploy sample web app (Jee7): [https://github.com/mnesarco/mybatis-cdi-samples](https://github.com/mnesarco/mybatis-cdi-samples/)
+- Ready to deploy sample web app (Jee7): [https://github.com/mnesarco/mybatis-cdi-samples](https://github.com/mnesarco/mybatis-cdi-samples/)
