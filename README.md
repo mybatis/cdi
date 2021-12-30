@@ -29,6 +29,21 @@ Jakarta EE support is not yet provided by this framework.
 
 Jdk17+ requires jboss-classfilewriter to be at 1.2.5 or it will error, [classfilewriter](https://github.com/jbossas/jboss-classfilewriter/issues/24)
 
+Building
+--------
+
+Due to maven inability to auto activate multiple profiles from same pom, we have no default now so that jdk 17+ works while maintaining jdk 8 build support.  This means to run this project a profile must be provided or it will fail to find classes.  We are unable to simply default classes either since java EE switched to jakarta EE and we use both apis now.
+
+The cdi profile can be cdi-1.1, cdi-1.2, or cdi-2.0.
+
+jdk 8 through 16
+
+- mvn clean install -P"cdi-2.0"
+
+jdk 17+
+
+- mvn clean install -P"jdk17on" -P"cdi-2.0"
+
 Essentials
 ----------
 
