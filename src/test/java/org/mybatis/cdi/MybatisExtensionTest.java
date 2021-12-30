@@ -41,8 +41,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class MybatisExtensionTest {
 
   @Test
-  <T> void mappersFoundAfterTheBeanUsingTheMapperInAnInjectionPointHasBeenScannedShouldBeInstantiated()
-      throws Exception {
+  void mappersFoundAfterTheBeanUsingTheMapperInAnInjectionPointHasBeenScannedShouldBeInstantiated() throws Exception {
 
     MybatisExtension extension = new MybatisExtension();
     Type type = UserMapper.class;
