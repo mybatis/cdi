@@ -251,9 +251,9 @@
       </dependencies>
     </profile>
     <profile>
-      <id>jdk17on</id>
+      <id>jdk9on</id>
       <activation>
-        <jdk>[17,)</jdk>
+        <jdk>[9,)</jdk>
       </activation>
       <properties>
         <argLine>--add-opens java.base/java.lang=ALL-UNNAMED</argLine>
