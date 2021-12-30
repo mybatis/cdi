@@ -46,8 +46,8 @@
     <url>https://github.com/mybatis/cdi/issues</url>
   </issueManagement>
   <ciManagement>
-    <system>Travis CI</system>
-    <url>https://travis-ci.org/mybatis/cdi</url>
+    <system>Github</system>
+    <url>http://github.com/mybatis/cdi/actions</url>
   </ciManagement>
   <distributionManagement>
     <site>
