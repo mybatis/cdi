@@ -82,7 +82,7 @@ public final class CDIUtils {
     } else {
       beans = beanManager.getBeans(SqlSessionFactory.class, qualifiers.toArray(new Annotation[] {}));
     }
-    Bean bean = beanManager.resolve(beans);
+    Bean<? extends Object> bean = beanManager.resolve(beans);
     if (bean == null) {
       throw new MybatisCdiConfigurationException("There are no SqlSessionFactory producers properly configured.");
     }

@@ -29,8 +29,6 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.AnnotatedMember;
 import javax.enterprise.inject.spi.AnnotatedType;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.InjectionTarget;
@@ -129,10 +127,8 @@ public class MybatisExtension implements Extension {
    *
    * @param abd
    *          the abd
-   * @param bm
-   *          the bm
    */
-  protected void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
+  protected void afterBeanDiscovery(@Observes final AfterBeanDiscovery abd) {
     LOGGER.log(Level.INFO, "MyBatis CDI Module - Activated");
 
     Set<BeanKey> mappers = new HashSet<>();
@@ -154,7 +150,7 @@ public class MybatisExtension implements Extension {
     for (BeanKey key : mappers) {
       LOGGER.log(Level.INFO, "MyBatis CDI Module - Managed Mapper dependency: {0}, {1}",
           new Object[] { key.getKey(), key.type.getName() });
-      abd.addBean(key.createBean(bm));
+      abd.addBean(key.createBean());
     }
     this.mapperTypes.clear();
 
@@ -162,7 +158,7 @@ public class MybatisExtension implements Extension {
     for (BeanKey key : this.sessionProducers) {
       LOGGER.log(Level.INFO, "MyBatis CDI Module - Managed SqlSession: {0}, {1}",
           new Object[] { key.getKey(), key.type.getName() });
-      abd.addBean(key.createBean(bm));
+      abd.addBean(key.createBean());
       sessionTargets.remove(key);
     }
     this.sessionProducers.clear();
@@ -246,8 +242,8 @@ public class MybatisExtension implements Extension {
       return !(this.key == null ? other.key != null : !this.key.equals(other.key));
     }
 
-    public Bean createBean(BeanManager bm) {
-      return new MyBatisBean(this.key, this.type, new HashSet<Annotation>(this.qualifiers), this.sqlSessionManagerName);
+    public MyBatisBean createBean() {
+      return new MyBatisBean(this.key, this.type, new HashSet<>(this.qualifiers), this.sqlSessionManagerName);
     }
 
     public String getKey() {
