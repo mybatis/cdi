@@ -34,6 +34,7 @@ public class WeldJunit5Extension implements TestInstanceFactory {
     this.container = this.weld.initialize();
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public Object createTestInstance(TestInstanceFactoryContext factoryContext, ExtensionContext extensionContext)
       throws TestInstantiationException {
