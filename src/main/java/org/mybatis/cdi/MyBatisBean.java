@@ -39,7 +39,7 @@ import org.apache.ibatis.session.SqlSessionManager;
  *
  * @author Frank D. Martinez [mnesarco]
  */
-public class MyBatisBean implements Bean, Serializable, PassivationCapable {
+public class MyBatisBean implements Bean<Object>, Serializable, PassivationCapable {
 
   private static final long serialVersionUID = 1L;
 
@@ -124,17 +124,17 @@ public class MyBatisBean implements Bean, Serializable, PassivationCapable {
   }
 
   @Override
-  public Object create(CreationalContext creationalContext) {
+  public Object create(CreationalContext<Object> creationalContext) {
     if (SqlSession.class.equals(this.type)) {
       return findSqlSessionManager(creationalContext);
     }
     ErrorContext.instance().reset();
     return Proxy.newProxyInstance(SqlSessionFactory.class.getClassLoader(), new Class[] { this.type },
-        new SerializableMapperProxy(this, creationalContext));
+        new SerializableMapperProxy<Object>(this, creationalContext));
   }
 
   @Override
-  public void destroy(Object instance, CreationalContext creationalContext) {
+  public void destroy(Object instance, CreationalContext<Object> creationalContext) {
     creationalContext.release();
   }
 
