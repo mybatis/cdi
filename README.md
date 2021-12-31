@@ -44,6 +44,11 @@ The cdi profile can be cdi-1.1, cdi-1.2, or cdi-2.0 and required to run with any
 - mvn clean install -P"cdi-1.2"
 - mvn clean install -P"cdi-2.0"
 
+Testing with Arquillian
+-----------------------
+
+In order to test with Arquillian, one class needs to be added to 'JavaArchive' in order for this to load properly.  Add 'SqlSessionManagerRegistry.class'.
+
 Essentials
 ----------
 
