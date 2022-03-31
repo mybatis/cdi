@@ -53,7 +53,7 @@ class MybatisExtensionTest {
     AfterBeanDiscovery afterBeanDiscovery = mock(AfterBeanDiscovery.class);
     extension.afterBeanDiscovery(afterBeanDiscovery);
 
-    verify(afterBeanDiscovery).addBean((Bean<?>) any());
+    verify(afterBeanDiscovery).addBean((Bean<Object>) any());
 
   }
 
