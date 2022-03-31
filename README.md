@@ -49,7 +49,7 @@ Testing with Arquillian
 
 In order to test with Arquillian, one class needs to be added to 'JavaArchive' in order for this to load properly.  Add 'SqlSessionManagerRegistry.class'.
 
-See attachment on https://github.com/mybatis/cdi/issues/86 from 2021-12-30 ArqullianMybatisExample.zip [here](https://github.com/mybatis/cdi/files/7795050/ArquillianMybatisExample.zip)
+See attachment on https://github.com/mybatis/cdi/issues/86 from 2021-12-30 ArquillianMybatisExample.zip [here](https://github.com/mybatis/cdi/files/7795050/ArquillianMybatisExample.zip).  This is to be run under jdk 8 to be error free but will run as-is under jdk 11 with an invocation error which still allows it to run.  Further updates are needed to get this code example current.
 
 Essentials
 ----------
