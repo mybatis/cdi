@@ -41,7 +41,7 @@
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
-    <system>GitHub Issue Management</system>
+    <system>GitHub</system>
     <url>https://github.com/mybatis/cdi/issues</url>
   </issueManagement>
   <ciManagement>
