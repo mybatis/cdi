@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CDIUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mybatis-cdi</a> &gt; <a href="index.source.html" class="el_package">org.mybatis.cdi</a> &gt; <span class="el_source">CDIUtils.java</span></div><h1>CDIUtils.java</h1><pre class="source lang-java linenums">/**
- *    Copyright 2013-2018 the original author or authors.
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CDIUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mybatis-cdi</a> &gt; <a href="index.source.html" class="el_package">org.mybatis.cdi</a> &gt; <span class="el_source">CDIUtils.java</span></div><h1>CDIUtils.java</h1><pre class="source lang-java linenums">/*
+ *    Copyright 2013-2022 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
  *    you may not use this file except in compliance with the License.
  *    You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *       https://www.apache.org/licenses/LICENSE-2.0
  *
  *    Unless required by applicable law or agreed to in writing, software
  *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
@@ -18,6 +18,7 @@ package org.mybatis.cdi;
 import java.lang.annotation.Annotation;
 import java.util.Iterator;
 import java.util.Set;
+
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Default;
@@ -44,7 +45,7 @@ public final class CDIUtils {
    * @return BeanManager instance
    */
   private static BeanManager getBeanManager() {
-<span class="fc" id="L47">    return CDI.current().getBeanManager();</span>
+<span class="fc" id="L48">    return CDI.current().getBeanManager();</span>
   }
 
   /**
@@ -54,10 +55,10 @@ public final class CDIUtils {
    *          the creational context
    * @return the registry
    */
-  public static SqlSessionManagerRegistry getRegistry(CreationalContext creationalContext) {
-<span class="fc" id="L58">    final BeanManager beanManager = getBeanManager();</span>
-<span class="fc" id="L59">    Iterator&lt;Bean&lt;?&gt;&gt; beans = beanManager.getBeans(SqlSessionManagerRegistry.class).iterator();</span>
-<span class="fc" id="L60">    return (SqlSessionManagerRegistry) beanManager.getReference(beans.next(), SqlSessionManagerRegistry.class,</span>
+  public static &lt;T&gt; SqlSessionManagerRegistry getRegistry(CreationalContext&lt;T&gt; creationalContext) {
+<span class="fc" id="L59">    final BeanManager beanManager = getBeanManager();</span>
+<span class="fc" id="L60">    Iterator&lt;Bean&lt;? extends Object&gt;&gt; beans = beanManager.getBeans(SqlSessionManagerRegistry.class).iterator();</span>
+<span class="fc" id="L61">    return (SqlSessionManagerRegistry) beanManager.getReference(beans.next(), SqlSessionManagerRegistry.class,</span>
         creationalContext);
   }
 
@@ -72,29 +73,29 @@ public final class CDIUtils {
    *          the creational context
    * @return the sql session factory
    */
-  public static SqlSessionFactory findSqlSessionFactory(String name, Set&lt;Annotation&gt; qualifiers,
-      CreationalContext creationalContext) {
-<span class="fc" id="L77">    final BeanManager beanManager = getBeanManager();</span>
-    Set&lt;Bean&lt;?&gt;&gt; beans;
-<span class="fc bfc" id="L79" title="All 2 branches covered.">    if (name != null) {</span>
-<span class="fc" id="L80">      beans = beanManager.getBeans(name);</span>
+  public static &lt;T&gt; SqlSessionFactory findSqlSessionFactory(String name, Set&lt;Annotation&gt; qualifiers,
+      CreationalContext&lt;T&gt; creationalContext) {
+<span class="fc" id="L78">    final BeanManager beanManager = getBeanManager();</span>
+    Set&lt;Bean&lt;? extends Object&gt;&gt; beans;
+<span class="fc bfc" id="L80" title="All 2 branches covered.">    if (name != null) {</span>
+<span class="fc" id="L81">      beans = beanManager.getBeans(name);</span>
     } else {
-<span class="fc" id="L82">      beans = beanManager.getBeans(SqlSessionFactory.class, qualifiers.toArray(new Annotation[] {}));</span>
+<span class="fc" id="L83">      beans = beanManager.getBeans(SqlSessionFactory.class, qualifiers.toArray(new Annotation[] {}));</span>
     }
-<span class="fc" id="L84">    Bean bean = beanManager.resolve(beans);</span>
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">    if (bean == null) {</span>
-<span class="nc" id="L86">      throw new MybatisCdiConfigurationException(&quot;There are no SqlSessionFactory producers properly configured.&quot;);</span>
+<span class="fc" id="L85">    Bean&lt;? extends Object&gt; bean = beanManager.resolve(beans);</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">    if (bean == null) {</span>
+<span class="nc" id="L87">      throw new MybatisCdiConfigurationException(&quot;There are no SqlSessionFactory producers properly configured.&quot;);</span>
     }
-<span class="fc" id="L88">    return (SqlSessionFactory) beanManager.getReference(bean, SqlSessionFactory.class, creationalContext);</span>
+<span class="fc" id="L89">    return (SqlSessionFactory) beanManager.getReference(bean, SqlSessionFactory.class, creationalContext);</span>
   }
 
-<span class="fc" id="L91">  public static class SerializableDefaultAnnotationLiteral extends AnnotationLiteral&lt;Default&gt; {</span>
+<span class="fc" id="L92">  public static class SerializableDefaultAnnotationLiteral extends AnnotationLiteral&lt;Default&gt; {</span>
     private static final long serialVersionUID = 1L;
   }
 
-<span class="fc" id="L95">  public static class SerializableAnyAnnotationLiteral extends AnnotationLiteral&lt;Any&gt; {</span>
+<span class="fc" id="L96">  public static class SerializableAnyAnnotationLiteral extends AnnotationLiteral&lt;Any&gt; {</span>
     private static final long serialVersionUID = 1L;
   }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

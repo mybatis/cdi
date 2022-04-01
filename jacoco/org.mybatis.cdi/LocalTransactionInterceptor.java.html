@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LocalTransactionInterceptor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mybatis-cdi</a> &gt; <a href="index.source.html" class="el_package">org.mybatis.cdi</a> &gt; <span class="el_source">LocalTransactionInterceptor.java</span></div><h1>LocalTransactionInterceptor.java</h1><pre class="source lang-java linenums">/**
- *    Copyright 2013-2018 the original author or authors.
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LocalTransactionInterceptor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mybatis-cdi</a> &gt; <a href="index.source.html" class="el_package">org.mybatis.cdi</a> &gt; <span class="el_source">LocalTransactionInterceptor.java</span></div><h1>LocalTransactionInterceptor.java</h1><pre class="source lang-java linenums">/*
+ *    Copyright 2013-2022 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
  *    you may not use this file except in compliance with the License.
  *    You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *       https://www.apache.org/licenses/LICENSE-2.0
  *
  *    Unless required by applicable law or agreed to in writing, software
  *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
@@ -91,83 +91,114 @@ import org.apache.ibatis.session.SqlSessionManager;
 <span class="fc" id="L91">    return result;</span>
   }
 
+  /**
+   * Checks if is transaction active.
+   *
+   * @return true, if is transaction active
+   * @throws SystemException
+   *           used by jtaTransactionInterceptor
+   */
   protected boolean isTransactionActive() throws SystemException {
-<span class="fc" id="L95">    return false;</span>
+<span class="fc" id="L102">    return false;</span>
   }
 
+  /**
+   * Begin jta.
+   *
+   * @throws NotSupportedException
+   *           used by jtaTransactionInterceptor
+   * @throws SystemException
+   *           used by jtaTransactionInterceptor
+   */
   protected void beginJta() throws NotSupportedException, SystemException {
     // nothing to do
-<span class="fc" id="L100">  }</span>
+<span class="fc" id="L115">  }</span>
 
+  /**
+   * End jta.
+   *
+   * @param isExternaTransaction
+   *          the is externa transaction
+   * @param commit
+   *          the commit
+   * @throws SystemException
+   *           used by jtaTransactionInterceptor
+   * @throws RollbackException
+   *           used by jtaTransactionInterceptor
+   * @throws HeuristicMixedException
+   *           used by jtaTransactionInterceptor
+   * @throws HeuristicRollbackException
+   *           used by jtaTransactionInterceptor
+   */
   protected void endJta(boolean isExternaTransaction, boolean commit)
       throws SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
     // nothing to do
-<span class="fc" id="L105">  }</span>
+<span class="fc" id="L136">  }</span>
 
   private boolean needsRollback(Transactional transactional, Throwable throwable) {
-<span class="fc bfc" id="L108" title="All 2 branches covered.">    if (RuntimeException.class.isAssignableFrom(throwable.getClass())) {</span>
-<span class="fc" id="L109">      return true;</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">    if (RuntimeException.class.isAssignableFrom(throwable.getClass())) {</span>
+<span class="fc" id="L140">      return true;</span>
     }
-<span class="fc bfc" id="L111" title="All 2 branches covered.">    for (Class&lt;?&gt; exceptionClass : transactional.rollbackFor()) {</span>
-<span class="fc bfc" id="L112" title="All 2 branches covered.">      if (exceptionClass.isAssignableFrom(throwable.getClass())) {</span>
-<span class="fc" id="L113">        return true;</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">    for (Class&lt;? extends Throwable&gt; exceptionClass : transactional.rollbackFor()) {</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">      if (exceptionClass.isAssignableFrom(throwable.getClass())) {</span>
+<span class="fc" id="L144">        return true;</span>
       }
     }
-<span class="fc" id="L116">    return false;</span>
+<span class="fc" id="L147">    return false;</span>
   }
 
   protected Transactional getTransactionalAnnotation(InvocationContext ctx) {
-<span class="fc" id="L120">    Transactional t = ctx.getMethod().getAnnotation(Transactional.class);</span>
-<span class="fc bfc" id="L121" title="All 2 branches covered.">    if (t == null) {</span>
-<span class="fc" id="L122">      t = ctx.getMethod().getDeclaringClass().getAnnotation(Transactional.class);</span>
+<span class="fc" id="L151">    Transactional t = ctx.getMethod().getAnnotation(Transactional.class);</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">    if (t == null) {</span>
+<span class="fc" id="L153">      t = ctx.getMethod().getDeclaringClass().getAnnotation(Transactional.class);</span>
     }
-<span class="fc" id="L124">    return t;</span>
+<span class="fc" id="L155">    return t;</span>
   }
 
   private boolean start(Transactional transactional) {
-<span class="fc" id="L128">    boolean started = false;</span>
-<span class="fc bfc" id="L129" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
-<span class="pc bpc" id="L130" title="1 of 2 branches missed.">      if (!manager.isManagedSessionStarted()) {</span>
-<span class="fc" id="L131">        manager.startManagedSession(transactional.executorType(),</span>
-<span class="fc" id="L132">            transactional.isolation().getTransactionIsolationLevel());</span>
-<span class="fc" id="L133">        started = true;</span>
+<span class="fc" id="L159">    boolean started = false;</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">      if (!manager.isManagedSessionStarted()) {</span>
+<span class="fc" id="L162">        manager.startManagedSession(transactional.executorType(),</span>
+<span class="fc" id="L163">            transactional.isolation().getTransactionIsolationLevel());</span>
+<span class="fc" id="L164">        started = true;</span>
       }
-<span class="fc" id="L135">    }</span>
-<span class="fc" id="L136">    return started;</span>
+<span class="fc" id="L166">    }</span>
+<span class="fc" id="L167">    return started;</span>
   }
 
   private void commit(Transactional transactional) {
-<span class="fc bfc" id="L140" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
-<span class="fc" id="L141">      manager.commit(transactional.force());</span>
-<span class="fc" id="L142">    }</span>
-<span class="fc" id="L143">  }</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
+<span class="fc" id="L172">      manager.commit(transactional.force());</span>
+<span class="fc" id="L173">    }</span>
+<span class="fc" id="L174">  }</span>
 
   private void rollback(Transactional transactional) {
-<span class="fc bfc" id="L146" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
-<span class="fc" id="L147">      manager.rollback(transactional.force());</span>
-<span class="fc" id="L148">    }</span>
-<span class="fc" id="L149">  }</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
+<span class="fc" id="L178">      manager.rollback(transactional.force());</span>
+<span class="fc" id="L179">    }</span>
+<span class="fc" id="L180">  }</span>
 
   private void close() {
-<span class="fc bfc" id="L152" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
-<span class="fc" id="L153">      manager.close();</span>
-<span class="fc" id="L154">    }</span>
-<span class="fc" id="L155">  }</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">    for (SqlSessionManager manager : this.registry.getManagers()) {</span>
+<span class="fc" id="L184">      manager.close();</span>
+<span class="fc" id="L185">    }</span>
+<span class="fc" id="L186">  }</span>
 
   private Exception unwrapException(Exception wrapped) {
-<span class="fc" id="L158">    Throwable unwrapped = wrapped;</span>
+<span class="fc" id="L189">    Throwable unwrapped = wrapped;</span>
     while (true) {
-<span class="pc bpc" id="L160" title="1 of 2 branches missed.">      if (unwrapped instanceof InvocationTargetException) {</span>
-<span class="nc" id="L161">        unwrapped = ((InvocationTargetException) unwrapped).getTargetException();</span>
-<span class="pc bpc" id="L162" title="1 of 2 branches missed.">      } else if (unwrapped instanceof UndeclaredThrowableException) {</span>
-<span class="nc" id="L163">        unwrapped = ((UndeclaredThrowableException) unwrapped).getUndeclaredThrowable();</span>
-<span class="pc bpc" id="L164" title="1 of 2 branches missed.">      } else if (!(unwrapped instanceof Exception)) {</span>
-<span class="nc" id="L165">        return new RuntimeException(unwrapped);</span>
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">      if (unwrapped instanceof InvocationTargetException) {</span>
+<span class="nc" id="L192">        unwrapped = ((InvocationTargetException) unwrapped).getTargetException();</span>
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">      } else if (unwrapped instanceof UndeclaredThrowableException) {</span>
+<span class="nc" id="L194">        unwrapped = ((UndeclaredThrowableException) unwrapped).getUndeclaredThrowable();</span>
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">      } else if (!(unwrapped instanceof Exception)) {</span>
+<span class="nc" id="L196">        return new RuntimeException(unwrapped);</span>
       } else {
-<span class="fc" id="L167">        return (Exception) unwrapped;</span>
+<span class="fc" id="L198">        return (Exception) unwrapped;</span>
       }
     }
   }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
