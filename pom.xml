@@ -27,7 +27,7 @@
   </parent>
 
   <artifactId>mybatis-cdi</artifactId>
-  <version>1.1.2-SNAPSHOT</version>
+  <version>1.1.2</version>
 
   <name>mybatis-cdi</name>
   <url>http://mybatis.org</url>
@@ -38,7 +38,7 @@
     <url>http://github.com/mybatis/cdi</url>
     <connection>scm:git:ssh://github.com/mybatis/cdi.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/mybatis/cdi.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>mybatis-cdi-1.1.2</tag>
   </scm>
   <issueManagement>
     <system>GitHub</system>
@@ -62,7 +62,7 @@
     <module.name>org.mybatis.cdi</module.name>
     <osgi.import>org.mybatis.*;resolution:=optional,*</osgi.import>
     <osgi.dynamicImport>*</osgi.dynamicImport>
-    <project.build.outputTimestamp>1645112687</project.build.outputTimestamp>
+    <project.build.outputTimestamp>1648773926</project.build.outputTimestamp>
   </properties>
 
   <dependencies>
