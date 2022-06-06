@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2013-2022 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          https://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>MyBatis-CDI | 入门</title>
+    <author email="mnesarco@gmail.com">Frank Martinez</author>
+    <author email="eduardo.macarron@gmail.com">Eduardo Macarron</author>
+    <author email="awxiaoxian2020@163.com">Xavi Lee</author>
+  </properties>
+
+  <body>
+    <section name="Getting Started">
+      <p>
+        这一章节将向你展示 MyBatis-CDI 的安装步骤。
+      </p>
+
+    <subsection name="Installation">
+      <p>
+        要使用 MyBatis-CDI 模块，你只需要将 <code>mybatis-cdi-${project.version}.jar</code> 
+        文件和它的依赖置于类路径中。
+      </p>
+      <p>
+        如果你使用 Maven, 只需要将以下依赖添加到你的 pom.xml 中：
+      </p>
+        <source><![CDATA[
+<dependency>
+  <groupId>org.mybatis</groupId>
+  <artifactId>mybatis-cdi</artifactId>
+  <version>${project.version}</version>
+</dependency>]]></source>
+    </subsection>
+
+    <subsection name="Quick Setup">
+    
+      <p>
+        首先，开启 MyBatis-CDI 需要向你的 <code>META-INF</code> 文件夹中添加 <code>beans.xml</code> 文件。
+      </p>
+    
+      <p>
+        接下来，使用 MyBatis-CDI 至少需要两样东西： 
+        <code>SqlSessionFactory</code> 和用于注入 Mybatis mapper 的 CDI 组件(bean).
+      </p>
+
+      <p>
+        创建一个生成器(producer)方法，返回一个应用域(application scoped)的 <code>SqlSessionFactory</code> 并带有 <code>@SessionFactoryProvider</code> 注解：
+      </p>
+
+        <source><![CDATA[
+import javax.enterprise.inject.Produces;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.cdi.SessionFactoryProvider;
+        
+public class SqlSessionFactoryProvider {
+
+  @Produces
+  @ApplicationScoped
+  @SessionFactoryProvider
+  public SqlSessionFactory produceFactory() {
+    SqlSessionFactory factory = create the factory instance ....
+    return factory;
+  }
+
+}]]></source>
+
+      <p>
+        假定你有一个像下面这样的 mapper 接口（注意：必须在 mapper 上添加 <code>@Mapper</code> 注解）：
+      </p>
+        <source><![CDATA[
+@Mapper
+public interface UserMapper {
+  @Select("SELECT * FROM users WHERE id = #{userId}")
+  User getUser(@Param("userId") String userId);
+} 
+
+]]></source>
+
+      <p>
+        你可以使用 <code>@Inject</code> 将任意的依赖注入到 CDI 组件中去：
+      </p>
+
+        <source><![CDATA[
+import javax.inject.Inject;
+        
+public class FooServiceImpl implements FooService {
+
+@Inject UserMapper userMapper;
+
+public User doSomeStuff(String userId) {
+  return this.userMapper.getUser(userId);
+}
+
+]]></source>
+      </subsection>
+    </section>
+  </body>
+</document>
