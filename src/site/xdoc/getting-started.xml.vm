@@ -37,7 +37,7 @@
         file and its dependencies in the classpath.
       </p>
       <p>
-        If you are using Maven just add the following dependency to your pom.xml:
+        If you are using Maven just add the following dependency to your <code>pom.xml<code>:
       </p>
         <source><![CDATA[
 <dependency>
@@ -92,7 +92,7 @@ public interface UserMapper {
 ]]></source>
 
       <p>
-        You can inject it into a CDI bean just as any other dependency using @Inject. :
+        You can inject it into a CDI bean just as any other dependency using <code>@Inject</code> :
       </p>
 
         <source><![CDATA[
