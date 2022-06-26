@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2013-2022 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          https://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>MyBatis-CDI | 事务</title>
+    <author email="mnesarco@gmail.com">Frank Martinez</author>
+    <author email="eduardo.macarron@gmail.com">Eduardo Macarron</author>
+    <author email="awxiaoxian2020@163.com">Xavi Lee</author>
+  </properties>
+
+  <body>
+    <section name="Transactions">
+      <p>
+        正如所料，MyBatis-CDI 提供了基于注解的事务支持。
+      </p>
+
+      <p>
+        默认情况下，每个方法调用都将使用一个孤立的 session，但如果你希望在事务中包含许多方法调用，请使用 <code>@Transactional</code>。
+      </p>
+
+        <source><![CDATA[@Transactional
+public void doSomethingInATransaction() {
+  ...
+  mapper.insertMyBean(...);
+  mapper.updateMyBean(...);
+  ...
+}]]></source>
+
+      <p><span class="label important">NOTE</span>
+       批处理语句保存在事务环境中，因此必须使用 <code>@Transactional</code> 属性才能使用批处理执行器。</p>
+
+      <p>
+      要启用事务，你需要在中激活本地事务拦截器 beans.xml:
+      </p>
+
+      <source><![CDATA[<beans
+   xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="
+      http://java.sun.com/xml/ns/javaee
+      http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+   <interceptors>
+      <class>org.mybatis.cdi.LocalTransactionInterceptor</class>
+   </interceptors>
+</beans>]]></source>
+
+      <p>
+       在这种设置下，MyBatis-CDI 将在进入事务方法之前启动事务，如果事务结束时没有异常，或任何非 <code>RuntimeException</code> 的异常，或注解属性 <code>rollbackFor</code> 中明确指示的异常，则将提交该事务, 且属性 <code>rollbackOnly</code> 为 false。
+      </p>
+
+      <p>
+       如果一个事务方法有对其他嵌套事务方法的调用，则内部方法注解将被忽略，事务将在调用外部方法之前开始，事务将在它结束后结束。
+      </p>
+
+      <p><span class="label important">NOTE</span>
+       本地事务拦截器使用“尽力而为”的策略。如果有多个 <code>SqlSessionFactory</code>，它将尝试逐个提交或回滚它们。<code>LocalTransactionInterceptor</code> 无法保证此场景下的数据一致性，仅建议在有 no-XA 数据源时使用。否则，你应该改用<code>JtaTransactionInterceptor</code>。有关详细信息，请参阅以下部分。
+      </p>
+
+    <subsection name="JTA Transactions">
+      <p>
+       如果你使用多个数据源，则应通过如下配置 bean.xml 文件来使用 JTA 事务拦截器：
+      </p>
+        <source><![CDATA[<beans
+   xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="
+      http://java.sun.com/xml/ns/javaee
+      http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+   <interceptors>
+      <class>org.mybatis.cdi.JtaTransactionInterceptor</class>
+   </interceptors>
+</beans>]]></source>
+
+      <p>
+        并将 MyBatis-config.xml 文件中的事务管理器设置为 MANAGED。
+      </p>
+
+      <source><![CDATA[<transactionManager type="MANAGED" />]]></source>
+
+    </subsection>
+
+    <subsection name="The @Transactional annotation">
+        <p>
+            <code>@Transactional</code> 注解支持以下参数：</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>属性</th>
+                        <th>默认值</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>executorType</td>
+                        <td>ExecutorType.SIMPLE</td>
+                        <td>The MyBatis executor type</td>
+                    </tr>
+                    <tr>
+                        <td>isolation</td>
+                        <td>Isolation.DEFAULT</td>
+                        <td>事务隔离级别。默认值将使 MyBatis 使用与数据源的默认隔离级别。</td>
+                    </tr>
+                    <tr>
+                        <td>force</td>
+                        <td>false</td>
+                        <td>表示 MyBatis 强制使用 <code>commit()</code> 提交事务。</td>
+                    </tr>
+                    <tr>
+                        <td>rollbackOnly</td>
+                        <td>false</td>
+                        <td>如果为 true，则永远不会提交事务，而是强制回滚。该配置对于测试目的很有用。</td>
+                    </tr>
+                    <tr>
+                        <td>rollbackFor</td>
+                        <td>未配置</td>
+                        <td>指示哪些异常类型必须导致事务回滚。除了指示的异常之外，任何 <code>RuntimeException</code> 也将导致回滚。</td>
+                    </tr>
+                </tbody>
+            </table>
+
+      </subsection>
+    </section>
+  </body>
+</document>

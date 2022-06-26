@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2013-2022 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          https://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>MyBatis-CDI | 注入 MyBatis 组件</title>
+    <author email="mnesarco@gmail.com">Frank Martinez</author>
+    <author email="eduardo.macarron@gmail.com">Eduardo Macarron</author>
+    <author email="awxiaoxian2020@163.com">Xavi Lee</author>
+  </properties>
+
+  <body>
+    <section name="Injecting MyBatis beans">
+
+      <p>
+        本节将带你详细了解发现和注入的过程。
+      </p>
+
+    <subsection name="Producing a Factory">
+      <p>
+        <code>SqlSessionFactory</code> 是 MyBatis 组件的开始，因此首先需要创建它，
+        并让容器知道它的存在。 要做到这一点，请使用 producer 方法创建一个组件，并确保添加了 <code>@ApplicationScoped</code> 注解。因为我们只希望在整个应用程序中拥有一个工厂的实例。
+      </p>
+      <p>
+        为了让容器标识要使用的生产者，你必须用 <code>@SessionFactoryProvider</code>：
+      </p>
+
+      <source><![CDATA[
+public class MyProducers {
+
+  @Produces
+  @ApplicationScoped
+  @SessionFactoryProvider
+  public SqlSessionFactory produceFactory() {
+    String resource = "org/mybatis/example/mybatis-config.xml";
+    InputStream inputStream = Resources.getResourceAsStream(resource);
+    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+    return sqlSessionFactory;
+  }
+
+}]]></source>
+
+      <p><span class="label important">NOTE</span>
+        如果你忘记添加 <code>@ApplicationScoped</code>，工厂将在每次注入时创建，这意味着将解析和加载所有的 MyBatis xml 文件。你的应用程序不会有问题，但速度会非常慢。
+      </p>
+
+      <p><span class="label important">NOTE</span>
+       如果你忘记了 <code>@SessionFactoryProvider</code>，该工厂将被 mybatis-cdi 忽略。
+      </p>
+
+    </subsection>
+    <subsection name="Disvovering and injecting Mappers">
+
+      <p>
+        没有什么比将映射器作为 CDI 依赖注入更特别的了：
+      </p>
+
+        <source><![CDATA[
+public class FooService {
+
+  @Inject UserMapper userMapper;
+
+  public User doSomeStuff(String userId) {
+    return this.userMapper.getUser(userId);
+  }
+
+}
+]]></source>
+
+      <p>
+        然后，它将从 CDI 容器中注册的 <code>SqlSessionFactory</code> 中获取该映射器的实例（实际上是代理） ，并将其注入到组件中。这个代理不是一个普通的映射器，而是一个线程安全的单例，所以你不需要担心它的作用域。
+      </p>
+
+      <p>
+       在初始化过程中可能发生的任何配置问题都会使模块抛出
+        <code>MyBatisCdiConfiurationException</code>。考虑到没有太多需要配置的东西，只有当 <code>SqlSessionFactory</code> 找不到或配置错误时，才会抛出此异常。
+      </p> 
+
+    </subsection>
+
+    <subsection name="Resolving ambiguities">
+
+      <p>
+       如果有多个 <code>SqlSessionFactory</code>，则可以使用以下方法选择要在任何注入点中使用的一个：
+      </p>
+
+      <ul>
+        <li>使用一个或多个限定符（由你定义）</li>
+        <li>为 <code>SqlSessionFactory</code> 命名（使用 <code>@Named</code> 注解）</li>
+        <li>还可以将它们组合使用</li>
+      </ul>
+
+      <p>
+       下面是一个代码段，该代码段创建了两个 <code>SqlSessionFactory</code> 的 producer。限定符用于区分它们，就像处理任何其他 CDI 组件一样:
+      </p>
+
+        <source><![CDATA[
+@ApplicationScoped
+@Produces
+@FooQualifier
+@SessionFactoryProvider
+public SqlSessionFactory createManagerFoo() throws IOException {
+  ...
+}
+
+@ApplicationScoped
+@Produces
+@BarQualifier
+@SessionFactoryProvider
+public SqlSessionFactory createManagerBar() throws IOException {
+  ...
+}]]></source>
+
+      <p>
+       现在没有歧义了，你可以通过向其添加限定符来选择要注入的工厂：
+      </p>
+
+        <source><![CDATA[
+@Inject @FooQualifier UserMapper userMapper;
+]]></source>
+
+      <p>
+        你还可以为 <code>SqlSessionFactory</code> 命名：
+      </p>
+
+        <source><![CDATA[
+@ApplicationScoped
+@Produces
+@Named("fooManager")
+@SessionFactoryProvider
+public SqlSessionFactory createManager() throws IOException {
+  ...
+}]]></source>
+
+      <p>
+        在注入点中用它的名字来代替它：
+      </p>
+
+        <source><![CDATA[
+@Inject @Named("fooManager") UserMapper userMapper;
+]]></source>
+
+    </subsection>
+
+    <subsection name="Injecting an SqlSession">
+
+      <p>你可以通过请求注入线程安全的 <code>SqlSession</code>，如下所示：</p>
+
+        <source><![CDATA[
+@Inject SqlSession sqlSession;
+]]></source>
+
+      <p>我们看到的映射器的工厂选择标准也适用于 <code>SqlSession</code> 注入。</p>
+
+      <p><span class="label important">NOTE</span>
+       MyBatis-CDI 控制注入的 <code>SqlSession</code> 的生命周期，因此你不能调用任何事务方法，如 <code>commit()</code> 或 <code>rollback()</code>。也没有像 <code>close()</code> 这样的生命周期方法。
+      </p>
+
+    </subsection>
+    </section>
+  </body>
+</document>
