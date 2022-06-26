@@ -28,7 +28,7 @@
   </properties>
 
   <body>
-    <section name="Transactions">
+    <section name="事务">
       <p>
         正如所料，MyBatis-CDI 提供了基于注解的事务支持。
       </p>
@@ -75,7 +75,7 @@ public void doSomethingInATransaction() {
        本地事务拦截器使用“尽力而为”的策略。如果有多个 <code>SqlSessionFactory</code>，它将尝试逐个提交或回滚它们。<code>LocalTransactionInterceptor</code> 无法保证此场景下的数据一致性，仅建议在有 no-XA 数据源时使用。否则，你应该改用<code>JtaTransactionInterceptor</code>。有关详细信息，请参阅以下部分。
       </p>
 
-    <subsection name="JTA Transactions">
+    <subsection name="JTA 事务">
       <p>
        如果你使用多个数据源，则应通过如下配置 bean.xml 文件来使用 JTA 事务拦截器：
       </p>
@@ -98,7 +98,7 @@ public void doSomethingInATransaction() {
 
     </subsection>
 
-    <subsection name="The @Transactional annotation">
+    <subsection name="@Transactional 注解">
         <p>
             <code>@Transactional</code> 注解支持以下参数：</p>
             <table>
@@ -113,7 +113,7 @@ public void doSomethingInATransaction() {
                     <tr>
                         <td>executorType</td>
                         <td>ExecutorType.SIMPLE</td>
-                        <td>The MyBatis executor type</td>
+                        <td>The MyBatis 执行器类型</td>
                     </tr>
                     <tr>
                         <td>isolation</td>

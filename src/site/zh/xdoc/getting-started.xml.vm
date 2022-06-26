@@ -27,12 +27,12 @@
   </properties>
 
   <body>
-    <section name="Getting Started">
+    <section name="入门">
       <p>
         这一章节将向你展示 MyBatis-CDI 的安装步骤。
       </p>
 
-    <subsection name="Installation">
+    <subsection name="安装">
       <p>
         要使用 MyBatis-CDI 模块，你只需要将 <code>mybatis-cdi-${project.version}.jar</code> 
         文件和它的依赖置于类路径中。
@@ -48,7 +48,7 @@
 </dependency>]]></source>
     </subsection>
 
-    <subsection name="Quick Setup">
+    <subsection name="快速搭建环境">
     
       <p>
         首先，开启 MyBatis-CDI 需要向你的 <code>META-INF</code> 文件夹中添加 <code>beans.xml</code> 文件。
