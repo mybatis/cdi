@@ -21,20 +21,20 @@
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
   <properties>
-    <title>MyBatis-CDI | Transactions</title>
+    <title>MyBatis-CDI | 事务</title>
     <author email="mnesarco@gmail.com">Frank Martinez</author>
     <author email="eduardo.macarron@gmail.com">Eduardo Macarron</author>
+    <author email="awxiaoxian2020@163.com">Xavi Lee</author>
   </properties>
 
   <body>
     <section name="Transactions">
       <p>
-        As you may have expected, MyBatis-CDI provides annotation based transaction support.
+        正如所料，MyBatis-CDI 提供了基于注解的事务支持。
       </p>
 
       <p>
-        By default, each method call will use an isolated session but if you want to enclose many method calls in a transaction,
-        annotate the method with <code>@Transactional</code>.
+        默认情况下，每个方法调用都将使用一个孤立的 session，但如果你希望在事务中包含许多方法调用，请使用 <code>@Transactional</code>。
       </p>
 
         <source><![CDATA[@Transactional
@@ -46,11 +46,10 @@ public void doSomethingInATransaction() {
 }]]></source>
 
       <p><span class="label important">NOTE</span>
-        Batch statements are held in the transactional context so you must use the <code>@Transactional</code> attribute to use the batch executor.
-      </p>
+       批处理语句保存在事务环境中，因此必须使用 <code>@Transactional</code> 属性才能使用批处理执行器。</p>
 
       <p>
-        To enable transactions you need to activate the local transaction interceptor in beans.xml:
+      要启用事务，你需要在中激活本地事务拦截器 beans.xml:
       </p>
 
       <source><![CDATA[<beans
@@ -65,26 +64,20 @@ public void doSomethingInATransaction() {
 </beans>]]></source>
 
       <p>
-        With this setting, MyBatis-CDI will start a transaction before entering the transactional method and will commit it if it
-        ends with no exception or any exception that is not a <code>RuntimeException</code> or explicitly indicated in the
-        annotation property <code>rollbackFor</code> and the annotation property <code>rollbackOnly</code> is false.
+       在这种设置下，MyBatis-CDI 将在进入事务方法之前启动事务，如果事务结束时没有异常，或任何非 <code>RuntimeException</code> 的异常，或注解属性 <code>rollbackFor</code> 中明确指示的异常，则将提交该事务, 且属性 <code>rollbackOnly</code> 为 false。
       </p>
 
       <p>
-        If a transactional method has calls to other nested transactional methods, inner method annotations will be ignored, transaction
-        will begin before calling the outer method and will end after it ends.
+       如果一个事务方法有对其他嵌套事务方法的调用，则内部方法注解将被忽略，事务将在调用外部方法之前开始，事务将在它结束后结束。
       </p>
 
       <p><span class="label important">NOTE</span>
-        The local transaction interceptor uses a best-effort strategy. In case there are more than one <code>SqlSessionFactory</code>s
-        it will try to commit or roll them all back one by one. <code>LocalTransactionInterceptor</code> cannot guarantee data consistency
-        in this scenario, and it is only recommended when you are using at least one no-XA datasource.
-        Otherwise you should use the <code>JtaTransactionInterceptor</code> instead. See the following section for the details.
+       本地事务拦截器使用“尽力而为”的策略。如果有多个 <code>SqlSessionFactory</code>，它将尝试逐个提交或回滚它们。<code>LocalTransactionInterceptor</code> 无法保证此场景下的数据一致性，仅建议在有 no-XA 数据源时使用。否则，你应该改用<code>JtaTransactionInterceptor</code>。有关详细信息，请参阅以下部分。
       </p>
 
     <subsection name="JTA Transactions">
       <p>
-        In case you are using more than one datasource you should use the JTA transaction interceptor by configuring the beans.xml file as follows:
+       如果你使用多个数据源，则应通过如下配置 bean.xml 文件来使用 JTA 事务拦截器：
       </p>
         <source><![CDATA[<beans
    xmlns="http://java.sun.com/xml/ns/javaee"
@@ -98,7 +91,7 @@ public void doSomethingInATransaction() {
 </beans>]]></source>
 
       <p>
-        And configure MyBatis to to use the MANAGED transaction manager in mybatis-config.xml file.
+        并将 MyBatis-config.xml 文件中的事务管理器设置为 MANAGED。
       </p>
 
       <source><![CDATA[<transactionManager type="MANAGED" />]]></source>
@@ -107,13 +100,13 @@ public void doSomethingInATransaction() {
 
     <subsection name="The @Transactional annotation">
         <p>
-            The <code>@Transactional</code> annotation supports the following parameters:</p>
+            <code>@Transactional</code> 注解支持以下参数：</p>
             <table>
                 <thead>
                     <tr>
-                        <th>Property</th>
-                        <th>Default</th>
-                        <th>Description</th>
+                        <th>属性</th>
+                        <th>默认值</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -125,27 +118,22 @@ public void doSomethingInATransaction() {
                     <tr>
                         <td>isolation</td>
                         <td>Isolation.DEFAULT</td>
-                        <td>The transaction isolation level.  The default value will
-                          cause MyBatis to use the default isolation level from the
-                          data source.</td>
+                        <td>事务隔离级别。默认值将使 MyBatis 使用与数据源的默认隔离级别。</td>
                     </tr>
                     <tr>
                         <td>force</td>
                         <td>false</td>
-                        <td>Flag to indicate that MyBatis has to force the
-                        transaction <code>commit()</code></td>
+                        <td>表示 MyBatis 强制使用 <code>commit()</code> 提交事务。</td>
                     </tr>
                     <tr>
                         <td>rollbackOnly</td>
                         <td>false</td>
-                        <td>If true, the transaction will never be committed, but rather the rollback will be forced.
-                        That configuration is useful for testing purposes.</td>
+                        <td>如果为 true，则永远不会提交事务，而是强制回滚。该配置对于测试目的很有用。</td>
                     </tr>
                     <tr>
                         <td>rollbackFor</td>
-                        <td>not set</td>
-                        <td>Indicates which exception types must cause a transaction rollback. In addition
-                        to the indicated exceptions, any <code>RuntimeException</code> will also cause a rollback.</td>
+                        <td>未配置</td>
+                        <td>指示哪些异常类型必须导致事务回滚。除了指示的异常之外，任何 <code>RuntimeException</code> 也将导致回滚。</td>
                     </tr>
                 </tbody>
             </table>
