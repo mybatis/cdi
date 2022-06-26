@@ -27,13 +27,13 @@
   </properties>
 
   <body>
-    <section name="Injecting MyBatis beans">
+    <section name="注入 MyBatis 组件">
 
       <p>
         本节将带你详细了解发现和注入的过程。
       </p>
 
-    <subsection name="Producing a Factory">
+    <subsection name="创建一个工厂">
       <p>
         <code>SqlSessionFactory</code> 是 MyBatis 组件的开始，因此首先需要创建它，
         并让容器知道它的存在。 要做到这一点，请使用 producer 方法创建一个组件，并确保添加了 <code>@ApplicationScoped</code> 注解。因为我们只希望在整个应用程序中拥有一个工厂的实例。
@@ -66,7 +66,7 @@ public class MyProducers {
       </p>
 
     </subsection>
-    <subsection name="Disvovering and injecting Mappers">
+    <subsection name="发现和注入映射器">
 
       <p>
         没有什么比将映射器作为 CDI 依赖注入更特别的了：
@@ -95,7 +95,7 @@ public class FooService {
 
     </subsection>
 
-    <subsection name="Resolving ambiguities">
+    <subsection name="解决歧义">
 
       <p>
        如果有多个 <code>SqlSessionFactory</code>，则可以使用以下方法选择要在任何注入点中使用的一个：
@@ -159,7 +159,7 @@ public SqlSessionFactory createManager() throws IOException {
 
     </subsection>
 
-    <subsection name="Injecting an SqlSession">
+    <subsection name="注入 SqlSession">
 
       <p>你可以通过请求注入线程安全的 <code>SqlSession</code>，如下所示：</p>
 

@@ -55,6 +55,7 @@ Essentials
 ----------
 
 - [See the docs](http://mybatis.github.io/cdi/)
+<!-- - [See the docs(简体中文)](http://mybatis.github.io/cdi/zh/index.html) -->
 
 Contributed Examples
 --------------------

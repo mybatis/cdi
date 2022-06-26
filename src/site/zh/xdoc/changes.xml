@@ -27,7 +27,7 @@
   </properties>
 
   <body>
-    <section name="Breaking changes since beta4">
+    <section name="beta4 以来的重大变化">
       <p>
        为了使该模块更加友好， <code>@Mapper</code> 接口被移动到 Mapper 接口本身，现在 SqlSessionFactory 生产者必须使用新的注jie<code>@SessionFactoryProvider</code>。
       </p>
