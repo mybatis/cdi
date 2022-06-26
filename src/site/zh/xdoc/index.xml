@@ -21,47 +21,41 @@
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
   <properties>
-    <title>MyBatis-CDI | Introduction</title>
+    <title>MyBatis-CDI | 简介</title>
     <author email="eduardo.macarron@gmail.com">Eduardo Macarron</author>
     <author email="mnesarco@gmail.com">Frank Martinez</author>
+    <author email="awxiaoxian2020@163.com">Xavi Lee</author>
   </properties>
 
  <body>
  <section name="Introduction">
   <subsection name="What is MyBatis-CDI?">
       <p>
-      MyBatis-CDI extension takes care of the lifecycle of MyBatis mappers and <code>SqlSession</code>s. MyBatis components
-      are directly injected into your CDI beans ready to be used,  there is no need to create or destroy them.
-      It also provides local and JTA transaction support based on the <code>@Transactional</code> annotation.
+      MyBatis-CDI 扩展负责 MyBatis 映射器和 <code>SqlSession</code> 的生命周期。 MyBatis 组件直接注入 CDI 组件即可使用，无需创建或销毁它们。
+     它还提供本地和 JTA 事务支持，基于 <code>@Transactional</code> 注解。
       </p>
   </subsection>
 
   <subsection name="Requirements">
     <p>
-      Before starting with MyBatis-CDI integration, it is very important
-      that you are familiar with both MyBatis and CDI terminology. This
-      document does not attempt to provide background information or basic
-      setup and configuration tutorials for either MyBatis or CDI.
+     在开始使用 MyBatis 与 CDI 的集成框架之前，必须熟悉 MyBatis 和 CDI 的术语。本文档不提供 MyBatis 或 CDI 的背景信息或基本设置和配置教程。
     </p>
     <p>
-      MyBatis-CDI requires Java EE 6 or higher and any MyBatis version.
+      MyBatis - CDI 需要 Java EE 6 或更高版本以及任意的 MyBatis 版本。
     </p>
   </subsection>
 
   <subsection name="Help make this documentation better…">
     <p>
-      If you find this documentation lacking in any way, or missing
-      documentation for a feature, then the best thing to do is learn
-      about it and then write the documentation yourself!
+      如果你发现此文档在任何方面有所欠缺，或者缺少某个功能的文档，那么最好的做法是了解它，然后自己编写文档！
     </p>
     <p>
-      Sources of this manual are available in xdoc format at
-      <a href="https://github.com/mybatis/cdi/tree/master/src/site">project's Git </a>
-      Fork the repository, update them and send a pull request.
+      本手册的源文件以 xdoc 格式提供，网址为：
+      <a href="https://github.com/mybatis/cdi/tree/master/src/site">项目的 Git 仓库</a>
+      Fork 这个仓库，更新它们，并提交 Pull Request 吧！
     </p>
     <p>
-      You’re the best author of this documentation, people like you have
-      to read it!
+      你是本文档的最佳作者，开始阅读它吧！
     </p>
   </subsection>
 
