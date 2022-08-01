@@ -30,7 +30,6 @@ import javax.enterprise.util.AnnotationLiteral;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 /**
- *
  * @author Frank D. Martinez [mnesarco]
  */
 public final class CDIUtils {
@@ -53,6 +52,7 @@ public final class CDIUtils {
    *
    * @param creationalContext
    *          the creational context
+   *
    * @return the registry
    */
   public static <T> SqlSessionManagerRegistry getRegistry(CreationalContext<T> creationalContext) {
@@ -71,6 +71,7 @@ public final class CDIUtils {
    *          the qualifiers
    * @param creationalContext
    *          the creational context
+   *
    * @return the sql session factory
    */
   public static <T> SqlSessionFactory findSqlSessionFactory(String name, Set<Annotation> qualifiers,

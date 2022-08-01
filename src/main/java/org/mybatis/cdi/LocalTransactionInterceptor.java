@@ -54,7 +54,9 @@ public class LocalTransactionInterceptor implements Serializable {
    *
    * @param ctx
    *          the ctx
+   *
    * @return the object
+   *
    * @throws Exception
    *           the exception
    */
@@ -95,6 +97,7 @@ public class LocalTransactionInterceptor implements Serializable {
    * Checks if is transaction active.
    *
    * @return true, if is transaction active
+   *
    * @throws SystemException
    *           used by jtaTransactionInterceptor
    */
@@ -121,6 +124,7 @@ public class LocalTransactionInterceptor implements Serializable {
    *          the is externa transaction
    * @param commit
    *          the commit
+   *
    * @throws SystemException
    *           used by jtaTransactionInterceptor
    * @throws RollbackException
