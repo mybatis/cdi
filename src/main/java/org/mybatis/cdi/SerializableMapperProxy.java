@@ -28,7 +28,6 @@ import javax.enterprise.context.spi.CreationalContext;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 /**
- *
  * @author Frank D. Martinez [mnesarco]
  */
 public class SerializableMapperProxy<T> implements InvocationHandler, Serializable {

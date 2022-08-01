@@ -21,7 +21,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
- *
  * @author Frank D. Martinez [mnesarco]
  */
 public class SerializableFooService implements Serializable {

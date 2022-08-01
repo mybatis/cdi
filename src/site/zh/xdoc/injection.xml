@@ -91,7 +91,7 @@ public class FooService {
       <p>
        在初始化过程中可能发生的任何配置问题都会使模块抛出
         <code>MyBatisCdiConfiurationException</code>。考虑到没有太多需要配置的东西，只有当 <code>SqlSessionFactory</code> 找不到或配置错误时，才会抛出此异常。
-      </p> 
+      </p>
 
     </subsection>
 
