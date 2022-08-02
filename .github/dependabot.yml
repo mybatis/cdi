@@ -28,7 +28,13 @@ updates:
   ignore:
   - dependency-name: org.apache.derby:derby
     versions:
-    - "> 10.14.2.0"
+    - "> 10.15.2.0"
+  - dependency-name: org.apache.derby:derbyoptionaltools
+    versions:
+    - "> 10.15.2.0"
+  - dependency-name: org.apache.derby:derbyshared
+    versions:
+    - "> 10.15.2.0"
   - dependency-name: javax.enterprise:cdi-api
     versions:
     - "> 1.1"

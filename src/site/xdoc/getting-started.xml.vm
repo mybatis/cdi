@@ -37,7 +37,7 @@
         file and its dependencies in the classpath.
       </p>
       <p>
-        If you are using Maven just add the following dependency to your <code>pom.xml<code>:
+        If you are using Maven just add the following dependency to your <code>pom.xml</code>:
       </p>
         <source><![CDATA[
 <dependency>
