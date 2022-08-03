@@ -114,11 +114,6 @@ public class MyBatisBean implements Bean<Object>, Serializable, PassivationCapab
   }
 
   @Override
-  public boolean isNullable() {
-    return false;
-  }
-
-  @Override
   public Set<InjectionPoint> getInjectionPoints() {
     return Collections.emptySet();
   }
