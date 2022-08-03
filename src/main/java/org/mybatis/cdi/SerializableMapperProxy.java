@@ -23,9 +23,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import javax.enterprise.context.spi.CreationalContext;
-
 import org.apache.ibatis.session.SqlSessionFactory;
+
+import jakarta.enterprise.context.spi.CreationalContext;
 
 /**
  * @author Frank D. Martinez [mnesarco]

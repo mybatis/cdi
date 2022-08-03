@@ -17,9 +17,9 @@ package org.mybatis.cdi;
 
 import com.atomikos.icatch.jta.UserTransactionManager;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-import javax.transaction.UserTransaction;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
+import jakarta.transaction.UserTransaction;
 
 public class UserTransactionProvider {
 

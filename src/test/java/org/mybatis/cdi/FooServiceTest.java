@@ -20,13 +20,13 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import jakarta.inject.Inject;
 
 @TestInstance(Lifecycle.PER_CLASS)
 // TODO Add the following once we drop cdi 1.1 support

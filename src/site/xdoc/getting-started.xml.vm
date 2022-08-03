@@ -63,7 +63,7 @@
       </p>
 
         <source><![CDATA[
-import javax.enterprise.inject.Produces;
+import jakarta.enterprise.inject.Produces;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.cdi.SessionFactoryProvider;
         
@@ -96,7 +96,7 @@ public interface UserMapper {
       </p>
 
         <source><![CDATA[
-import javax.inject.Inject;
+import jakarta.inject.Inject;
         
 public class FooServiceImpl implements FooService {
 

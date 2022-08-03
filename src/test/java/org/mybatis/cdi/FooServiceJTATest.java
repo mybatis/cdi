@@ -15,14 +15,14 @@
  */
 package org.mybatis.cdi;
 
-import javax.inject.Inject;
-import javax.transaction.UserTransaction;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import jakarta.inject.Inject;
+import jakarta.transaction.UserTransaction;
 
 @TestInstance(Lifecycle.PER_CLASS)
 // TODO Add the following once we drop cdi 1.1 support
