@@ -26,7 +26,7 @@ public class UserTransactionProvider {
   @Produces
   @ApplicationScoped
   public UserTransaction initTX() {
-    return new UserTransactionManager();
+    return (UserTransaction) new UserTransactionManager();
   }
 
 }
