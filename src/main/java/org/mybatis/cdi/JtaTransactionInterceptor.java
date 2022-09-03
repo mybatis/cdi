@@ -57,12 +57,10 @@ public class JtaTransactionInterceptor extends LocalTransactionInterceptor {
       if (needsRollback) {
         this.userTransaction.get().setRollbackOnly();
       }
+    } else if (needsRollback) {
+      this.userTransaction.get().rollback();
     } else {
-      if (needsRollback) {
-        this.userTransaction.get().rollback();
-      } else {
-        this.userTransaction.get().commit();
-      }
+      this.userTransaction.get().commit();
     }
   }
 

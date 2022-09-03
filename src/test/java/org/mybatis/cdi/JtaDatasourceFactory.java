@@ -37,7 +37,7 @@ public class JtaDatasourceFactory implements DataSourceFactory {
     props.remove("resourceName");
     this.ds.setXaDataSourceClassName(props.getProperty("driver"));
     props.remove("driver");
-    this.ds.setMaxPoolSize(Integer.valueOf(props.getProperty("maxPoolSize")));
+    this.ds.setMaxPoolSize(Integer.parseInt(props.getProperty("maxPoolSize")));
     props.remove("maxPoolSize");
     this.ds.setXaProperties(props);
   }
