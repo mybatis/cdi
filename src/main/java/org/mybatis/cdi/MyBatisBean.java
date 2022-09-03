@@ -130,7 +130,7 @@ public class MyBatisBean implements Bean<Object>, Serializable, PassivationCapab
     }
     ErrorContext.instance().reset();
     return Proxy.newProxyInstance(SqlSessionFactory.class.getClassLoader(), new Class[] { this.type },
-        new SerializableMapperProxy<Object>(this, creationalContext));
+        new SerializableMapperProxy<>(this, creationalContext));
   }
 
   @Override

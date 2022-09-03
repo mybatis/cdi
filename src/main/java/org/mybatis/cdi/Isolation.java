@@ -39,7 +39,7 @@ public enum Isolation {
 
   private final TransactionIsolationLevel transactionIsolationLevel;
 
-  private Isolation(TransactionIsolationLevel value) {
+  Isolation(TransactionIsolationLevel value) {
     this.transactionIsolationLevel = value;
   }
 
