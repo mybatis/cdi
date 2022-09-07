@@ -25,7 +25,7 @@ Compatibility
 | cdi-3.0 (not supported) | N      | N       | N      |
 | cdi-4.0 (not supported) | N      | N       | N      |
 
-Jakarta EE support is not yet provided by this framework.
+Jakarta EE support is provided by the 'jakarta' branch on this project (skip tests when running as transaction testing framework doesn't support jakarta yet).
 
 Jdk17+ requires jboss-classfilewriter to be at 1.2.5 or it will error, [classfilewriter](https://github.com/jbossas/jboss-classfilewriter/issues/24)
 
