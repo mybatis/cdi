@@ -7,7 +7,7 @@ MyBatis CDI Extension
 [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.mybatis/mybatis-cdi.svg)](https://oss.sonatype.org/content/repositories/snapshots/org/mybatis/mybatis-cdi/)
 [![License](https://img.shields.io/:license-apache-brightgreen.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-![mybatis-logo](http://mybatis.github.io/images/mybatis-logo.png)
+![mybatis-logo](https://mybatis.org/images/mybatis-logo.png)
 
 MyBatis-CDI extension takes care of the lifecycle of MyBatis mappers and SqlSessions. MyBatis components are directly injected into your
 CDI beans ready to be used, there is no need to create or destroy them. It also provides local and JTA transaction support based on the
@@ -54,10 +54,10 @@ See attachment on https://github.com/mybatis/cdi/issues/86 from 2021-12-30 Arqui
 Essentials
 ----------
 
-- [See the docs](http://mybatis.github.io/cdi/)
-<!-- - [See the docs(简体中文)](http://mybatis.github.io/cdi/zh/index.html) -->
+- [See the docs](https://mybatis.org/cdi/)
+<!-- - [See the docs(简体中文)](https://mybatis.org/cdi/zh/index.html) -->
 
 Contributed Examples
 --------------------
 
-- Ready to deploy sample web app (Jee7): [https://github.com/mnesarco/mybatis-cdi-samples](https://github.com/mnesarco/mybatis-cdi-samples/)
+- Ready to deploy sample web app (Jee7): [samples](https://github.com/mnesarco/mybatis-cdi-samples/)

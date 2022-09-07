@@ -16,9 +16,8 @@
        limitations under the License.
 
 -->
-<document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 https://maven.apache.org/xsd/xdoc-2.0.xsd">
 
   <properties>
     <title>MyBatis-CDI | 事务</title>
@@ -52,12 +51,9 @@ public void doSomethingInATransaction() {
       要启用事务，你需要在中激活本地事务拦截器 beans.xml:
       </p>
 
-      <source><![CDATA[<beans
-   xmlns="http://java.sun.com/xml/ns/javaee"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="
-      http://java.sun.com/xml/ns/javaee
-      http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+      <source><![CDATA[
+<beans xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee https://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd">
    <interceptors>
       <class>org.mybatis.cdi.LocalTransactionInterceptor</class>
    </interceptors>
@@ -79,12 +75,9 @@ public void doSomethingInATransaction() {
       <p>
        如果你使用多个数据源，则应通过如下配置 bean.xml 文件来使用 JTA 事务拦截器：
       </p>
-        <source><![CDATA[<beans
-   xmlns="http://java.sun.com/xml/ns/javaee"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="
-      http://java.sun.com/xml/ns/javaee
-      http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+        <source><![CDATA[
+<beans xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee https://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd">
    <interceptors>
       <class>org.mybatis.cdi.JtaTransactionInterceptor</class>
    </interceptors>
