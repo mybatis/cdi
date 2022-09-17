@@ -63,7 +63,9 @@
     <module.name>org.mybatis.cdi</module.name>
     <osgi.import>org.mybatis.*;resolution:=optional,*</osgi.import>
     <osgi.dynamicImport>*</osgi.dynamicImport>
-    <project.build.outputTimestamp>1648773991</project.build.outputTimestamp>
+
+    <!-- Reproducible Builds -->
+    <project.build.outputTimestamp>1757561022</project.build.outputTimestamp>
   </properties>
 
   <dependencies>
