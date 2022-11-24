@@ -138,7 +138,7 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>     }
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>     ErrorContext.instance().reset();
 <a class="jxr_linenumber" name="L132" href="#L132">132</a>     <strong class="jxr_keyword">return</strong> Proxy.newProxyInstance(SqlSessionFactory.<strong class="jxr_keyword">class</strong>.getClassLoader(), <strong class="jxr_keyword">new</strong> Class[] { <strong class="jxr_keyword">this</strong>.type },
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>         <strong class="jxr_keyword">new</strong> SerializableMapperProxy&lt;Object&gt;(<strong class="jxr_keyword">this</strong>, creationalContext));
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>         <strong class="jxr_keyword">new</strong> SerializableMapperProxy&lt;&gt;(<strong class="jxr_keyword">this</strong>, creationalContext));
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>   }
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
 <a class="jxr_linenumber" name="L136" href="#L136">136</a>   @Override

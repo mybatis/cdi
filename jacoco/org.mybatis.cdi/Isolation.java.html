@@ -26,21 +26,26 @@ import org.apache.ibatis.session.TransactionIsolationLevel;
 <span class="fc" id="L26">public enum Isolation {</span>
 
 <span class="fc" id="L28">  DEFAULT(null),</span>
-<span class="fc" id="L29">  NONE(TransactionIsolationLevel.NONE),</span>
-<span class="fc" id="L30">  READ_COMMITTED(TransactionIsolationLevel.READ_COMMITTED),</span>
-<span class="fc" id="L31">  READ_UNCOMMITTED(TransactionIsolationLevel.READ_UNCOMMITTED),</span>
-<span class="fc" id="L32">  REPEATABLE_READ(TransactionIsolationLevel.REPEATABLE_READ),</span>
-<span class="fc" id="L33">  SERIALIZABLE(TransactionIsolationLevel.SERIALIZABLE);</span>
+
+<span class="fc" id="L30">  NONE(TransactionIsolationLevel.NONE),</span>
+
+<span class="fc" id="L32">  READ_COMMITTED(TransactionIsolationLevel.READ_COMMITTED),</span>
+
+<span class="fc" id="L34">  READ_UNCOMMITTED(TransactionIsolationLevel.READ_UNCOMMITTED),</span>
+
+<span class="fc" id="L36">  REPEATABLE_READ(TransactionIsolationLevel.REPEATABLE_READ),</span>
+
+<span class="fc" id="L38">  SERIALIZABLE(TransactionIsolationLevel.SERIALIZABLE);</span>
 
   private final TransactionIsolationLevel transactionIsolationLevel;
 
-<span class="fc" id="L37">  private Isolation(TransactionIsolationLevel value) {</span>
-<span class="fc" id="L38">    this.transactionIsolationLevel = value;</span>
-<span class="fc" id="L39">  }</span>
+<span class="fc" id="L42">  Isolation(TransactionIsolationLevel value) {</span>
+<span class="fc" id="L43">    this.transactionIsolationLevel = value;</span>
+<span class="fc" id="L44">  }</span>
 
   public TransactionIsolationLevel getTransactionIsolationLevel() {
-<span class="fc" id="L42">    return this.transactionIsolationLevel;</span>
+<span class="fc" id="L47">    return this.transactionIsolationLevel;</span>
   }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

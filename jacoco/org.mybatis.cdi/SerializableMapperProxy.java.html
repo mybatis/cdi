@@ -28,7 +28,6 @@ import javax.enterprise.context.spi.CreationalContext;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 /**
- *
  * @author Frank D. Martinez [mnesarco]
  */
 public class SerializableMapperProxy&lt;T&gt; implements InvocationHandler, Serializable {
@@ -49,35 +48,35 @@ public class SerializableMapperProxy&lt;T&gt; implements InvocationHandler, Seri
    * @param creationalContext
    *          the creational context
    */
-<span class="fc" id="L52">  public SerializableMapperProxy(MyBatisBean bean, CreationalContext&lt;T&gt; creationalContext) {</span>
-<span class="fc" id="L53">    this.bean = bean;</span>
-<span class="fc" id="L54">    this.creationalContext = creationalContext;</span>
-<span class="fc" id="L55">    this.mapper = getMapper();</span>
-<span class="fc" id="L56">  }</span>
+<span class="fc" id="L51">  public SerializableMapperProxy(MyBatisBean bean, CreationalContext&lt;T&gt; creationalContext) {</span>
+<span class="fc" id="L52">    this.bean = bean;</span>
+<span class="fc" id="L53">    this.creationalContext = creationalContext;</span>
+<span class="fc" id="L54">    this.mapper = getMapper();</span>
+<span class="fc" id="L55">  }</span>
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     try {
-<span class="fc" id="L61">      return method.invoke(this.mapper, args);</span>
-<span class="nc" id="L62">    } catch (InvocationTargetException e) {</span>
-<span class="nc" id="L63">      throw e.getTargetException();</span>
+<span class="fc" id="L60">      return method.invoke(this.mapper, args);</span>
+<span class="nc" id="L61">    } catch (InvocationTargetException e) {</span>
+<span class="nc" id="L62">      throw e.getTargetException();</span>
     }
   }
 
   private Object getMapper() {
-<span class="fc" id="L68">    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.bean.sqlSessionFactoryName, this.bean.qualifiers,</span>
+<span class="fc" id="L67">    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.bean.sqlSessionFactoryName, this.bean.qualifiers,</span>
         this.creationalContext);
-<span class="fc" id="L70">    return CDIUtils.getRegistry(this.creationalContext).getManager(factory).getMapper(this.bean.type);</span>
+<span class="fc" id="L69">    return CDIUtils.getRegistry(this.creationalContext).getManager(factory).getMapper(this.bean.type);</span>
   }
 
   private void readObject(ObjectInputStream is) throws ClassNotFoundException, IOException {
-<span class="fc" id="L74">    is.defaultReadObject();</span>
-<span class="fc" id="L75">    this.mapper = getMapper();</span>
-<span class="fc" id="L76">  }</span>
+<span class="fc" id="L73">    is.defaultReadObject();</span>
+<span class="fc" id="L74">    this.mapper = getMapper();</span>
+<span class="fc" id="L75">  }</span>
 
   private void writeObject(ObjectOutputStream os) throws IOException {
-<span class="fc" id="L79">    os.defaultWriteObject();</span>
-<span class="fc" id="L80">  }</span>
+<span class="fc" id="L78">    os.defaultWriteObject();</span>
+<span class="fc" id="L79">  }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

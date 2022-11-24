@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MyBatisBean.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mybatis-cdi</a> &gt; <a href="index.source.html" class="el_package">org.mybatis.cdi</a> &gt; <span class="el_source">MyBatisBean.java</span></div><h1>MyBatisBean.java</h1><pre class="source lang-java linenums">/*
+ *    Copyright 2013-2022 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.mybatis.cdi;
+
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.enterprise.context.Dependent;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.InjectionPoint;
+import javax.enterprise.inject.spi.PassivationCapable;
+
+import org.apache.ibatis.executor.ErrorContext;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionManager;
+
+/**
+ * Internal CDI metadata for a mapper bean.
+ *
+ * @author Frank D. Martinez [mnesarco]
+ */
+public class MyBatisBean implements Bean&lt;Object&gt;, Serializable, PassivationCapable {
+
+  private static final long serialVersionUID = 1L;
+
+  protected final Class&lt;Type&gt; type;
+
+  protected final Set&lt;Annotation&gt; qualifiers;
+
+  protected final String sqlSessionFactoryName;
+
+  protected final String id;
+
+  /**
+   * Instantiates a new my batis bean.
+   *
+   * @param id
+   *          the id
+   * @param type
+   *          the type
+   * @param qualifiers
+   *          the qualifiers
+   * @param sqlSessionFactoryName
+   *          the sql session factory name
+   */
+<span class="fc" id="L66">  public MyBatisBean(String id, Class&lt;Type&gt; type, Set&lt;Annotation&gt; qualifiers, String sqlSessionFactoryName) {</span>
+<span class="fc" id="L67">    this.id = id;</span>
+<span class="fc" id="L68">    this.type = type;</span>
+<span class="fc" id="L69">    this.sqlSessionFactoryName = sqlSessionFactoryName;</span>
+<span class="pc bpc" id="L70" title="1 of 4 branches missed.">    if (qualifiers == null || qualifiers.isEmpty()) {</span>
+<span class="fc" id="L71">      this.qualifiers = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L72">      this.qualifiers.add(new CDIUtils.SerializableDefaultAnnotationLiteral());</span>
+<span class="fc" id="L73">      this.qualifiers.add(new CDIUtils.SerializableAnyAnnotationLiteral());</span>
+    } else {
+<span class="fc" id="L75">      this.qualifiers = qualifiers;</span>
+    }
+<span class="fc" id="L77">  }</span>
+
+  @Override
+  public Set&lt;Type&gt; getTypes() {
+<span class="fc" id="L81">    Set&lt;Type&gt; types = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L82">    types.add(this.type);</span>
+<span class="fc" id="L83">    return types;</span>
+  }
+
+  @Override
+  public Set&lt;Annotation&gt; getQualifiers() {
+<span class="fc" id="L88">    return this.qualifiers;</span>
+  }
+
+  @Override
+  public Class&lt;Dependent&gt; getScope() {
+<span class="fc" id="L93">    return Dependent.class;</span>
+  }
+
+  @Override
+  public String getName() {
+<span class="fc" id="L98">    return null;</span>
+  }
+
+  @Override
+  public Set&lt;Class&lt;? extends Annotation&gt;&gt; getStereotypes() {
+<span class="fc" id="L103">    return Collections.emptySet();</span>
+  }
+
+  @Override
+  public Class&lt;Type&gt; getBeanClass() {
+<span class="fc" id="L108">    return this.type;</span>
+  }
+
+  @Override
+  public boolean isAlternative() {
+<span class="fc" id="L113">    return false;</span>
+  }
+
+  @Override
+  public boolean isNullable() {
+<span class="nc" id="L118">    return false;</span>
+  }
+
+  @Override
+  public Set&lt;InjectionPoint&gt; getInjectionPoints() {
+<span class="fc" id="L123">    return Collections.emptySet();</span>
+  }
+
+  @Override
+  public Object create(CreationalContext&lt;Object&gt; creationalContext) {
+<span class="fc bfc" id="L128" title="All 2 branches covered.">    if (SqlSession.class.equals(this.type)) {</span>
+<span class="fc" id="L129">      return findSqlSessionManager(creationalContext);</span>
+    }
+<span class="fc" id="L131">    ErrorContext.instance().reset();</span>
+<span class="fc" id="L132">    return Proxy.newProxyInstance(SqlSessionFactory.class.getClassLoader(), new Class[] { this.type },</span>
+        new SerializableMapperProxy&lt;&gt;(this, creationalContext));
+  }
+
+  @Override
+  public void destroy(Object instance, CreationalContext&lt;Object&gt; creationalContext) {
+<span class="fc" id="L138">    creationalContext.release();</span>
+<span class="fc" id="L139">  }</span>
+
+  private &lt;T&gt; SqlSessionManager findSqlSessionManager(CreationalContext&lt;T&gt; creationalContext) {
+<span class="fc" id="L142">    SqlSessionFactory factory = CDIUtils.findSqlSessionFactory(this.sqlSessionFactoryName, this.qualifiers,</span>
+        creationalContext);
+<span class="fc" id="L144">    return CDIUtils.getRegistry(creationalContext).getManager(factory);</span>
+  }
+
+  @Override
+  public String getId() {
+<span class="fc" id="L149">    return this.id;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

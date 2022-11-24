@@ -30,11 +30,10 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionManager;
 
 /**
- *
  * @author Frank D. Martinez [mnesarco]
  */
 @ApplicationScoped
-<span class="fc" id="L37">public class SqlSessionManagerRegistry {</span>
+<span class="fc" id="L36">public class SqlSessionManagerRegistry {</span>
 
   private Map&lt;SqlSessionFactory, SqlSessionManager&gt; managers;
 
@@ -47,24 +46,24 @@ import org.apache.ibatis.session.SqlSessionManager;
    */
   @PostConstruct
   public void init() {
-<span class="pc bpc" id="L50" title="1 of 2 branches missed.">    if (this.factories.isUnsatisfied()) {</span>
-<span class="nc" id="L51">      throw new MybatisCdiConfigurationException(&quot;There are no SqlSessionFactory producers properly configured.&quot;);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">    if (this.factories.isUnsatisfied()) {</span>
+<span class="nc" id="L50">      throw new MybatisCdiConfigurationException(&quot;There are no SqlSessionFactory producers properly configured.&quot;);</span>
     }
-<span class="fc" id="L53">    Map&lt;SqlSessionFactory, SqlSessionManager&gt; m = new HashMap&lt;&gt;();</span>
-<span class="fc bfc" id="L54" title="All 2 branches covered.">    for (SqlSessionFactory factory : this.factories) {</span>
-<span class="fc" id="L55">      SqlSessionManager manager = SqlSessionManager.newInstance(factory);</span>
-<span class="fc" id="L56">      m.put(factory, manager);</span>
-<span class="fc" id="L57">    }</span>
-<span class="fc" id="L58">    this.managers = Collections.unmodifiableMap(m);</span>
-<span class="fc" id="L59">  }</span>
+<span class="fc" id="L52">    Map&lt;SqlSessionFactory, SqlSessionManager&gt; m = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">    for (SqlSessionFactory factory : this.factories) {</span>
+<span class="fc" id="L54">      SqlSessionManager manager = SqlSessionManager.newInstance(factory);</span>
+<span class="fc" id="L55">      m.put(factory, manager);</span>
+<span class="fc" id="L56">    }</span>
+<span class="fc" id="L57">    this.managers = Collections.unmodifiableMap(m);</span>
+<span class="fc" id="L58">  }</span>
 
   public SqlSessionManager getManager(SqlSessionFactory factory) {
-<span class="fc" id="L62">    return this.managers.get(factory);</span>
+<span class="fc" id="L61">    return this.managers.get(factory);</span>
   }
 
   public Collection&lt;SqlSessionManager&gt; getManagers() {
-<span class="fc" id="L66">    return this.managers.values();</span>
+<span class="fc" id="L65">    return this.managers.values();</span>
   }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
