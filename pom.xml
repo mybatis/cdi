@@ -268,7 +268,7 @@
         <jdk>[17,)</jdk>
       </activation>
       <properties>
-        <argLine>--add-opens java.base/java.lang=ALL-UNNAMED</argLine>
+        <argLine>-Djdk.attach.allowAttachSelf --add-opens java.base/java.lang=ALL-UNNAMED</argLine>
       </properties>
     </profile>
     <profile>
