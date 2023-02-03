@@ -1,5 +1,5 @@
 /*
- *    Copyright 2013-2022 the original author or authors.
+ *    Copyright 2013-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,36 +15,32 @@
  */
 package org.mybatis.cdi;
 
-import com.atomikos.jdbc.AtomikosDataSourceBean;
-
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.apache.derby.jdbc.EmbeddedXADataSource;
 import org.apache.ibatis.datasource.DataSourceFactory;
 
 public class JtaDatasourceFactory implements DataSourceFactory {
-
-  AtomikosDataSourceBean ds;
+  private final DataSource dataSource;
+  private final EmbeddedXADataSource embeddedXADataSource;
 
   public JtaDatasourceFactory() {
-    this.ds = new AtomikosDataSourceBean();
-  }
-
-  @Override
-  public void setProperties(Properties props) {
-    this.ds.setUniqueResourceName(props.getProperty("resourceName"));
-    props.remove("resourceName");
-    this.ds.setXaDataSourceClassName(props.getProperty("driver"));
-    props.remove("driver");
-    this.ds.setMaxPoolSize(Integer.parseInt(props.getProperty("maxPoolSize")));
-    props.remove("maxPoolSize");
-    this.ds.setXaProperties(props);
+    this.embeddedXADataSource = new EmbeddedXADataSource();
+    this.dataSource = new NarayanaDataSourceWrapper(embeddedXADataSource);
   }
 
   @Override
   public DataSource getDataSource() {
-    return this.ds;
+    return this.dataSource;
+  }
+
+  @Override
+  public void setProperties(final Properties properties) {
+    this.embeddedXADataSource.setCreateDatabase(properties.getProperty("createDatabase"));
+    this.embeddedXADataSource.setDatabaseName(properties.getProperty("databaseName"));
+    this.embeddedXADataSource.setDataSourceName(properties.getProperty("resourceName"));
   }
 
 }

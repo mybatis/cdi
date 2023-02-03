@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
-       Copyright 2013-2022 the original author or authors.
+       Copyright 2013-2023 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -26,11 +26,9 @@
                 <property name="" value="" />
             </transactionManager>
             <dataSource type="org.mybatis.cdi.JtaDatasourceFactory">
-                <property name="driver" value="org.apache.derby.jdbc.EmbeddedXADataSource" />
-                <property name="resourceName" value="unique" />
-                <property name="maxPoolSize" value="1" />
                 <property name="databaseName" value="memory:dbJTA" />
                 <property name="createDatabase" value="create" />
+                <property name="resourceName" value="unique" />
             </dataSource>
         </environment>
     </environments>

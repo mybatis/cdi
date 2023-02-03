@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2013-2022 the original author or authors.
+       Copyright 2013-2023 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -95,10 +95,12 @@
       <version>5.9.2</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- Database -->
     <dependency>
-      <groupId>com.atomikos</groupId>
-      <artifactId>transactions-jdbc</artifactId>
-      <version>5.0.9</version>
+      <groupId>org.jboss.narayana.jta</groupId>
+      <artifactId>narayana-jta</artifactId>
+      <version>5.13.1.Final</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -170,10 +172,6 @@
             <property>
               <name>derby.stream.error.file</name>
               <value>${project.build.directory}/derby.log</value>
-            </property>
-            <property>
-              <name>com.atomikos.icatch.log_base_dir</name>
-              <value>${project.build.directory}</value>
             </property>
           </systemProperties>
         </configuration>
