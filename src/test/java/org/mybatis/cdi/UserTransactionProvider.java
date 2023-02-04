@@ -1,5 +1,5 @@
 /*
- *    Copyright 2013-2022 the original author or authors.
+ *    Copyright 2013-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package org.mybatis.cdi;
 
-import com.atomikos.icatch.jta.UserTransactionManager;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.transaction.UserTransaction;
@@ -26,7 +24,7 @@ public class UserTransactionProvider {
   @Produces
   @ApplicationScoped
   public UserTransaction initTX() {
-    return new UserTransactionManager();
+    return com.arjuna.ats.jta.UserTransaction.userTransaction();
   }
 
 }
