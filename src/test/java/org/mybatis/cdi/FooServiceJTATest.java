@@ -15,25 +15,24 @@
  */
 package org.mybatis.cdi;
 
-import javax.inject.Inject;
-import javax.transaction.UserTransaction;
-
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.junit5.EnableWeld;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.junit.jupiter.api.extension.ExtendWith;
+
+import jakarta.inject.Inject;
+import jakarta.transaction.UserTransaction;
 
 @TestInstance(Lifecycle.PER_CLASS)
-// TODO Add the following once we drop cdi 1.1 support
-// @EnableWeld
-// TODO Remove the following once we drop cdi 1.1 support
-@ExtendWith(WeldJunit5Extension.class)
+@EnableWeld
 class FooServiceJTATest {
 
-  // TODO Add the following once we drop cdi 1.1 support
-  // @WeldSetup
-  // public WeldInitiator weld = WeldInitiator.of(new Weld());
+  @WeldSetup
+  public WeldInitiator weld = WeldInitiator.of(new Weld());
 
   @Inject
   private FooServiceJTA fooServiceJTA;

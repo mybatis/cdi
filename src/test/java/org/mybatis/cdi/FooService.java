@@ -15,11 +15,11 @@
  */
 package org.mybatis.cdi;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.interceptor.Interceptors;
-
 import org.apache.ibatis.session.SqlSession;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.interceptor.Interceptors;
 
 @Interceptors(LocalTransactionInterceptor.class)
 @Transactional(rollbackFor = RollbackException.class)

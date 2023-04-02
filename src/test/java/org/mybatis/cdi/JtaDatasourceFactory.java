@@ -33,14 +33,13 @@ public class JtaDatasourceFactory implements DataSourceFactory {
 
   @Override
   public DataSource getDataSource() {
-    return this.dataSource;
+    return dataSource;
   }
 
   @Override
   public void setProperties(final Properties properties) {
-    this.embeddedXADataSource.setCreateDatabase(properties.getProperty("createDatabase"));
-    this.embeddedXADataSource.setDatabaseName(properties.getProperty("databaseName"));
-    this.embeddedXADataSource.setDataSourceName(properties.getProperty("resourceName"));
+    embeddedXADataSource.setCreateDatabase(properties.getProperty("createDatabase"));
+    embeddedXADataSource.setDatabaseName(properties.getProperty("databaseName"));
+    embeddedXADataSource.setDataSourceName(properties.getProperty("resourceName"));
   }
-
 }

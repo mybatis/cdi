@@ -15,8 +15,8 @@
  */
 package org.mybatis.cdi;
 
-import javax.inject.Inject;
-import javax.interceptor.Interceptors;
+import jakarta.inject.Inject;
+import jakarta.interceptor.Interceptors;
 
 public class FooServiceJTA {
 
