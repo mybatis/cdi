@@ -1,5 +1,5 @@
 /*
- *    Copyright 2013-2022 the original author or authors.
+ *    Copyright 2013-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ package org.mybatis.cdi;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import jakarta.enterprise.inject.Stereotype;
+
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-
-import jakarta.enterprise.inject.Stereotype;
 
 /**
  * Marker interface for MyBatis mappers.

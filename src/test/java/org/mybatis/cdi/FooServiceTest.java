@@ -1,5 +1,5 @@
 /*
- *    Copyright 2013-2022 the original author or authors.
+ *    Copyright 2013-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package org.mybatis.cdi;
 
+import jakarta.inject.Inject;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -28,8 +30,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-
-import jakarta.inject.Inject;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @EnableWeld

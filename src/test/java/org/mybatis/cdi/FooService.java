@@ -1,5 +1,5 @@
 /*
- *    Copyright 2013-2022 the original author or authors.
+ *    Copyright 2013-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 package org.mybatis.cdi;
 
-import org.apache.ibatis.session.SqlSession;
-
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.interceptor.Interceptors;
+
+import org.apache.ibatis.session.SqlSession;
 
 @Interceptors(LocalTransactionInterceptor.class)
 @Transactional(rollbackFor = RollbackException.class)

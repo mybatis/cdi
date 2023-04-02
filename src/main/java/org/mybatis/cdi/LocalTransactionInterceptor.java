@@ -1,5 +1,5 @@
 /*
- *    Copyright 2013-2022 the original author or authors.
+ *    Copyright 2013-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,12 +15,6 @@
  */
 package org.mybatis.cdi;
 
-import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.UndeclaredThrowableException;
-
-import org.apache.ibatis.session.SqlSessionManager;
-
 import jakarta.inject.Inject;
 import jakarta.interceptor.AroundInvoke;
 import jakarta.interceptor.Interceptor;
@@ -30,6 +24,12 @@ import jakarta.transaction.HeuristicRollbackException;
 import jakarta.transaction.NotSupportedException;
 import jakarta.transaction.RollbackException;
 import jakarta.transaction.SystemException;
+
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.UndeclaredThrowableException;
+
+import org.apache.ibatis.session.SqlSessionManager;
 
 /**
  * Best-effort interceptor for local transactions. It locates all the instances of {@code SqlSssionManager} and starts

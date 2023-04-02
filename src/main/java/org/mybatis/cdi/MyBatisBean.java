@@ -1,5 +1,5 @@
 /*
- *    Copyright 2013-2022 the original author or authors.
+ *    Copyright 2013-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,6 +15,12 @@
  */
 package org.mybatis.cdi;
 
+import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.context.spi.CreationalContext;
+import jakarta.enterprise.inject.spi.Bean;
+import jakarta.enterprise.inject.spi.InjectionPoint;
+import jakarta.enterprise.inject.spi.PassivationCapable;
+
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Proxy;
@@ -27,12 +33,6 @@ import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionManager;
-
-import jakarta.enterprise.context.Dependent;
-import jakarta.enterprise.context.spi.CreationalContext;
-import jakarta.enterprise.inject.spi.Bean;
-import jakarta.enterprise.inject.spi.InjectionPoint;
-import jakarta.enterprise.inject.spi.PassivationCapable;
 
 /**
  * Internal CDI metadata for a mapper bean.
