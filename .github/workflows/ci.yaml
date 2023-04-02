@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        java: [11, 17, 19, 20-ea]
+        java: [11, 17, 20, 21-ea]
         distribution: ['zulu']
         profile: [cdi-1.1, cdi-1.2, cdi-2.0]
       fail-fast: false
