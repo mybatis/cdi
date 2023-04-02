@@ -15,9 +15,9 @@
  */
 package org.mybatis.cdi;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-import javax.transaction.UserTransaction;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
+import jakarta.transaction.UserTransaction;
 
 public class UserTransactionProvider {
 
@@ -26,5 +26,4 @@ public class UserTransactionProvider {
   public UserTransaction initTX() {
     return com.arjuna.ats.jta.UserTransaction.userTransaction();
   }
-
 }

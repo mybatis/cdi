@@ -18,6 +18,8 @@ package org.mybatis.cdi;
 import com.arjuna.ats.internal.jdbc.ConnectionManager;
 import com.arjuna.ats.jdbc.TransactionalDriver;
 
+import jakarta.annotation.Nonnull;
+
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -31,7 +33,7 @@ import javax.sql.XADataSource;
 public class NarayanaDataSourceWrapper implements DataSource {
   private final XADataSource xaDataSource;
 
-  public NarayanaDataSourceWrapper(final XADataSource xaDataSource) {
+  public NarayanaDataSourceWrapper(@Nonnull final XADataSource xaDataSource) {
     this.xaDataSource = xaDataSource;
   }
 

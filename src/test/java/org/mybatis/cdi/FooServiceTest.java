@@ -1,5 +1,5 @@
 /*
- *    Copyright 2013-2022 the original author or authors.
+ *    Copyright 2013-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,29 +15,28 @@
  */
 package org.mybatis.cdi;
 
+import jakarta.inject.Inject;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import javax.inject.Inject;
-
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.junit5.EnableWeld;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 @TestInstance(Lifecycle.PER_CLASS)
-// TODO Add the following once we drop cdi 1.1 support
-// @EnableWeld
-// TODO Remove the following once we drop cdi 1.1 support
-@ExtendWith(WeldJunit5Extension.class)
+@EnableWeld
 class FooServiceTest {
 
-  // TODO Add the following once we drop cdi 1.1 support
-  // @WeldSetup
-  // public WeldInitiator weld = WeldInitiator.of(new Weld());
+  @WeldSetup
+  public WeldInitiator weld = WeldInitiator.of(new Weld());
 
   @Inject
   private FooService fooService;
