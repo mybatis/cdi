@@ -39,7 +39,7 @@
     <url>https://github.com/mybatis/cdi</url>
     <connection>scm:git:ssh://github.com/mybatis/cdi.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/mybatis/cdi.git</developerConnection>
-    <tag>mybatis-cdi-1.1.4</tag>
+    <tag>HEAD</tag>
   </scm>
   <issueManagement>
     <system>GitHub</system>
