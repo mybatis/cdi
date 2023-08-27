@@ -21,16 +21,18 @@ Compatibility
 | cdi-1.0 (not supported) | N      | N       | N      |
 | cdi-1.1                 | Y      | Y       | Y      |
 | cdi-1.2                 | Y      | Y       | Y      |
-| cdi-2.0 (preferred)     | Y      | Y       | Y      |
-| cdi-3.0 (not supported) | N      | N       | N      |
-| cdi-4.0 (not supported) | N      | N       | N      |
+| cdi-2.0                 | Y      | Y       | Y      |
+| cdi-3.0                 | Y      | Y       | N      |
+| cdi-4.0                 | Y      | Y       | N      |
 
-Jakarta EE support is provided by the 'jakarta' branch on this project (skip tests when running as transaction testing framework doesn't support jakarta yet).
+JavaEE is 1.1.4 and is now no longer our focus
+
+JakartaEE is 2.0.0 and is the main focus
 
 Jdk17+ requires jboss-classfilewriter to be at 1.2.5 or it will error, [classfilewriter](https://github.com/jbossas/jboss-classfilewriter/issues/24)
 
-Building
---------
+Building from commit d76df7eb5d6085e4d38bbd7a5107d8903c3e0956
+-------------------------------------------------------------
 
 Maven does not allow multiple auto activated profiles (ie activateByDefault and Jdk).  This project supports 3 different CDI support levels currently
 and was set to default to cdi-1.2.  Jdk 8 does not allow add opens and this is needed now for jdk 17.  We further are supporting jakarta EE packaging
@@ -44,8 +46,13 @@ The cdi profile can be cdi-1.1, cdi-1.2, or cdi-2.0 and required to run with any
 - mvn clean install -P"cdi-1.2"
 - mvn clean install -P"cdi-2.0"
 
-Testing with Arquillian
------------------------
+Building from master
+--------------------
+
+Normal maven build without any special profiles necessary.  This line is Jakarta.
+
+Testing with Arquillian (for javaEE, has not been checked with jakarta)
+-----------------------------------------------------------------------
 
 In order to test with Arquillian, one class needs to be added to 'JavaArchive' in order for this to load properly.  Add 'SqlSessionManagerRegistry.class'.
 
