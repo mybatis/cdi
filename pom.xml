@@ -109,7 +109,7 @@
     <dependency>
       <groupId>org.jboss.weld.se</groupId>
       <artifactId>weld-se-core</artifactId>
-      <version>5.1.1.SP2</version>
+      <version>5.1.2.Final</version>
       <scope>test</scope>
     </dependency>
 
