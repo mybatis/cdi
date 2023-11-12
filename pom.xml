@@ -62,6 +62,7 @@
     <java.version>11</java.version>
     <java.release.version>11</java.release.version>
     <clirr.comparisonVersion>1.1.4</clirr.comparisonVersion>
+    <derby.version>10.17.1.0</derby.version>
     <findbugs.onlyAnalyze>org.mybatis.cdi.*</findbugs.onlyAnalyze>
     <module.name>org.mybatis.cdi</module.name>
     <osgi.import>org.mybatis.*;resolution:=optional,*</osgi.import>
@@ -150,19 +151,19 @@
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
-      <version>10.16.1.1</version>
+      <version>${derby.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derbyshared</artifactId>
-      <version>10.16.1.1</version>
+      <version>${derby.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derbyoptionaltools</artifactId>
-      <version>10.16.1.1</version>
+      <version>${derby.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -226,5 +227,35 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>pre16</id>
+      <activation>
+        <jdk>(,16)</jdk>
+      </activation>
+      <properties>
+          <derby.version>10.15.2.0</derby.version>
+      </properties>
+    </profile>
+    <profile>
+      <id>17</id>
+      <activation>
+        <jdk>[17,)</jdk>
+      </activation>
+      <properties>
+          <derby.version>10.16.1.1</derby.version>
+      </properties>
+    </profile>
+    <profile>
+      <id>19</id>
+      <activation>
+        <jdk>[19,)</jdk>
+      </activation>
+      <properties>
+          <derby.version>10.17.1.0</derby.version>
+      </properties>
+    </profile>
+  </profiles>
 
 </project>
