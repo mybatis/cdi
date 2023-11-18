@@ -1,7 +1,7 @@
 MyBatis CDI Extension
 =====================
 
-[![Java CI](https://github.com/mybatis/cdi/workflows/Java%20CI/badge.svg)](https://github.com/mybatis/cdo/actions?query=workflow%3A%22Java+CI%22)
+[![Java CI](https://github.com/mybatis/cdi/workflows/Java%20CI/badge.svg)](https://github.com/mybatis/cdi/actions?query=workflow%3A%22Java+CI%22)
 [![Coverage Status](https://coveralls.io/repos/mybatis/cdi/badge.svg?branch=master&service=github)](https://coveralls.io/github/mybatis/cdi?branch=master)
 [![Maven central](https://maven-badges.herokuapp.com/maven-central/org.mybatis/mybatis-cdi/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.mybatis/mybatis-cdi)
 [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.mybatis/mybatis-cdi.svg)](https://oss.sonatype.org/content/repositories/snapshots/org/mybatis/mybatis-cdi/)
