@@ -59,12 +59,21 @@
   </distributionManagement>
 
   <properties>
+    <!-- Java Usage -->
     <java.version>11</java.version>
     <java.release.version>11</java.release.version>
+
+    <!-- Versions -->
     <clirr.comparisonVersion>1.1.4</clirr.comparisonVersion>
     <derby.version>10.17.1.0</derby.version>
+
+    <!-- Analysis -->
     <findbugs.onlyAnalyze>org.mybatis.cdi.*</findbugs.onlyAnalyze>
+
+    <!-- Automatic Module Name -->
     <module.name>org.mybatis.cdi</module.name>
+
+    <!-- OSGI Headers -->
     <osgi.import>org.mybatis.*;resolution:=optional,*</osgi.import>
     <osgi.dynamicImport>*</osgi.dynamicImport>
 

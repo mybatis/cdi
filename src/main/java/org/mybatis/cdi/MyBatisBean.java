@@ -45,7 +45,7 @@ public class MyBatisBean implements Bean<Object>, Serializable, PassivationCapab
 
   protected final Class<Type> type;
 
-  protected final Set<Annotation> qualifiers;
+  protected final transient Set<Annotation> qualifiers;
 
   protected final String sqlSessionFactoryName;
 

@@ -65,7 +65,6 @@ public class MybatisExtension implements Extension {
    * @param pat
    *          the pat
    */
-  @SuppressWarnings("UnusedDeclaration")
   protected <T> void processAnnotatedType(
       @Observes @WithAnnotations({ Mapper.class }) final ProcessAnnotatedType<T> pat) {
     final AnnotatedType<T> at = pat.getAnnotatedType();
@@ -85,7 +84,7 @@ public class MybatisExtension implements Extension {
    * @param pp
    *          the pp
    */
-  @SuppressWarnings("UnusedDeclaration")
+  @SuppressWarnings("unchecked")
   protected <T, X> void processProducer(@Observes final ProcessProducer<T, X> pp) {
     final AnnotatedMember<T> am = pp.getAnnotatedMember();
     final boolean isAnnotated = am.isAnnotationPresent(SessionFactoryProvider.class);
@@ -127,6 +126,7 @@ public class MybatisExtension implements Extension {
    * @param abd
    *          the abd
    */
+  @SuppressWarnings("unchecked")
   protected void afterBeanDiscovery(@Observes final AfterBeanDiscovery abd) {
     LOGGER.info("MyBatis CDI Module - Activated");
 

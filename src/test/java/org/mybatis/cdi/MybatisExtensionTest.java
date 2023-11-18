@@ -40,6 +40,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class MybatisExtensionTest {
 
+  @SuppressWarnings("unchecked")
   @Test
   void mappersFoundAfterTheBeanUsingTheMapperInAnInjectionPointHasBeenScannedShouldBeInstantiated() throws Exception {
 
@@ -78,6 +79,7 @@ class MybatisExtensionTest {
     extension.processInjectionTarget(event);
   }
 
+  @SuppressWarnings("unchecked")
   private <T> void processAnnotatedType(MybatisExtension extension, Type type) {
     ProcessAnnotatedType<T> pat = mock(ProcessAnnotatedType.class);
     AnnotatedType<T> annotatedType = mock(AnnotatedType.class);
