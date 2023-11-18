@@ -31,8 +31,8 @@ JakartaEE is 2.0.0 and is the main focus
 
 Jdk17+ requires jboss-classfilewriter to be at 1.2.5 or it will error, [classfilewriter](https://github.com/jbossas/jboss-classfilewriter/issues/24)
 
-Building from commit d76df7eb5d6085e4d38bbd7a5107d8903c3e0956
--------------------------------------------------------------
+Building from [tag](https://github.com/mybatis/cdi/tree/mybatis-cdi-1.1.4) for javax namespace
+----------------------------------------------------------------------------------------------
 
 Maven does not allow multiple auto activated profiles (ie activateByDefault and Jdk).  This project supports 3 different CDI support levels currently
 and was set to default to cdi-1.2.  Jdk 8 does not allow add opens and this is needed now for jdk 17.  We further are supporting jakarta EE packaging
