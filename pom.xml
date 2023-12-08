@@ -232,6 +232,7 @@
         <artifactId>maven-site-plugin</artifactId>
         <configuration>
           <locales>default,zh_CN</locales>
+          <topSiteURL>${project.distributionManagement.site.url}</topSiteURL>
         </configuration>
       </plugin>
     </plugins>
