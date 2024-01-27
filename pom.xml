@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2013-2023 the original author or authors.
+       Copyright 2013-2024 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@
   <version>2.0.2-SNAPSHOT</version>
 
   <name>mybatis-cdi</name>
-  <url>https://www.mybatis.org/cdi</url>
+  <url>https://github.com/mybatis/cdi</url>
 
   <inceptionYear>2013</inceptionYear>
 
@@ -232,7 +232,6 @@
         <artifactId>maven-site-plugin</artifactId>
         <configuration>
           <locales>default,zh_CN</locales>
-          <topSiteURL>${project.distributionManagement.site.url}</topSiteURL>
         </configuration>
       </plugin>
     </plugins>
