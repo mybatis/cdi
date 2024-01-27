@@ -263,6 +263,7 @@
         <artifactId>maven-site-plugin</artifactId>
         <configuration>
           <locales>default,zh_CN</locales>
+          <!-- Hack for single site builds so site:staging works as expected. Do not use with multi module! -->
           <topSiteURL>${project.distributionManagement.site.url}</topSiteURL>
         </configuration>
       </plugin>
