@@ -32,7 +32,7 @@
   <version>2.0.2-SNAPSHOT</version>
 
   <name>mybatis-cdi</name>
-  <url>https://github.com/mybatis/cdi</url>
+  <url>https://github.com/mybatis/cdi/</url>
 
   <inceptionYear>2013</inceptionYear>
 
@@ -40,7 +40,7 @@
     <connection>scm:git:ssh://git@github.com/mybatis/cdi.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/mybatis/cdi.git</developerConnection>
     <tag>HEAD</tag>
-    <url>https://github.com/mybatis/cdi</url>
+    <url>https://github.com/mybatis/cdi/</url>
   </scm>
   <issueManagement>
     <system>GitHub</system>
