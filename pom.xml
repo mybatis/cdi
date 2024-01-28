@@ -32,7 +32,7 @@
   <version>2.0.2-SNAPSHOT</version>
 
   <name>mybatis-cdi</name>
-  <url>https://github.com/mybatis/cdi/</url>
+  <url>https://www.mybatis.org/cdi/</url>
 
   <inceptionYear>2013</inceptionYear>
 
