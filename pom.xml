@@ -269,6 +269,7 @@
     </plugins>
   </build>
 
+  <!-- NOTE: Do not add back 'cdi-2.0', clirr needs it defined to look back to old poms.  That is javax namespace.  It is not intended to be present now. -->
   <profiles>
     <profile>
       <id>pre16</id>
