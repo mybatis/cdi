@@ -261,9 +261,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <configuration>
+          <!-- Note: Maven bug resulted in default not being set correctly, assumption english on default, so 'en' was switched to 'default' to get original behaviour. -->
           <locales>default,zh_CN</locales>
-          <!-- Hack for single site builds so site:staging works as expected. Do not use with multi module! -->
-          <topSiteURL>${project.distributionManagement.site.url}</topSiteURL>
         </configuration>
       </plugin>
     </plugins>
