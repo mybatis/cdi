@@ -77,7 +77,6 @@
     <module.name>org.mybatis.cdi</module.name>
 
     <!-- OSGI Headers -->
-    <osgi.import>org.mybatis.*;resolution:=optional,*</osgi.import>
     <osgi.dynamicImport>*</osgi.dynamicImport>
 
     <!-- Reproducible Builds -->
