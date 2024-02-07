@@ -68,7 +68,7 @@
     <clirr.comparisonVersion>1.1.4</clirr.comparisonVersion>
     <derby.version>10.17.1.0</derby.version>
     <mockito.version>5.10.0</mockito.version>
-    <slf4j.version>2.0.11</slf4j.version>
+    <slf4j.version>2.0.12</slf4j.version>
 
     <!-- Analysis -->
     <findbugs.onlyAnalyze>org.mybatis.cdi.*</findbugs.onlyAnalyze>
