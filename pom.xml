@@ -64,7 +64,7 @@
     <java.release.version>11</java.release.version>
 
     <!-- Versions -->
-    <byte-buddy.version>1.14.11</byte-buddy.version>
+    <byte-buddy.version>1.14.12</byte-buddy.version>
     <clirr.comparisonVersion>1.1.4</clirr.comparisonVersion>
     <derby.version>10.17.1.0</derby.version>
     <mockito.version>5.10.0</mockito.version>
