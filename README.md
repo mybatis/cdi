@@ -24,6 +24,7 @@ Compatibility
 | cdi-2.0                 | Y      | Y       | Y      |
 | cdi-3.0                 | Y      | Y       | N      |
 | cdi-4.0                 | Y      | Y       | N      |
+| cdi-4.1                 | Y      | N       | N      |
 
 JavaEE is 1.1.4 and is now no longer our focus
 
