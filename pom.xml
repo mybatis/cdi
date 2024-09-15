@@ -271,15 +271,6 @@
   <!-- NOTE: Do not add back 'cdi-2.0', clirr needs it defined to look back to old poms.  That is javax namespace.  It is not intended to be present now. -->
   <profiles>
     <profile>
-      <id>pre16</id>
-      <activation>
-        <jdk>(,16)</jdk>
-      </activation>
-      <properties>
-        <derby.version>10.15.2.0</derby.version>
-      </properties>
-    </profile>
-    <profile>
       <id>17</id>
       <activation>
         <jdk>[17,)</jdk>
