@@ -1,5 +1,5 @@
 /*
- *    Copyright 2013-2023 the original author or authors.
+ *    Copyright 2013-2025 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,10 +17,12 @@ package org.mybatis.cdi;
 
 import jakarta.inject.Inject;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.junit5.EnableWeld;
@@ -110,10 +112,12 @@ class FooServiceTest {
 
   @Test
   void injectedMappersAreSerializable() throws Exception {
-    try (ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream("target/mapper.ser"))) {
+    try (OutputStream outputStream = Files.newOutputStream(Path.of("target/mapper.ser"));
+        ObjectOutputStream oout = new ObjectOutputStream(outputStream)) {
       oout.writeObject(this.serFooService);
     }
-    try (ObjectInputStream oin = new ObjectInputStream(new FileInputStream("target/mapper.ser"))) {
+    try (InputStream inputStream = Files.newInputStream(Path.of("target/mapper.ser"));
+        ObjectInputStream oin = new ObjectInputStream(inputStream)) {
       SerializableFooService unserialized = (SerializableFooService) oin.readObject();
       Assertions.assertEquals(this.serFooService.getUser(1).getName(), unserialized.getUser(1).getName());
     }
