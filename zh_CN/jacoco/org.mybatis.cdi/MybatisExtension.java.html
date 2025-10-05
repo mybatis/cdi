@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MybatisExtension.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mybatis-cdi</a> &gt; <a href="index.source.html" class="el_package">org.mybatis.cdi</a> &gt; <span class="el_source">MybatisExtension.java</span></div><h1>MybatisExtension.java</h1><pre class="source lang-java linenums">/*
+ *    Copyright 2013-2023 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.mybatis.cdi;
+
+import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.inject.spi.AfterBeanDiscovery;
+import jakarta.enterprise.inject.spi.AnnotatedMember;
+import jakarta.enterprise.inject.spi.AnnotatedType;
+import jakarta.enterprise.inject.spi.Extension;
+import jakarta.enterprise.inject.spi.InjectionPoint;
+import jakarta.enterprise.inject.spi.InjectionTarget;
+import jakarta.enterprise.inject.spi.ProcessAnnotatedType;
+import jakarta.enterprise.inject.spi.ProcessInjectionTarget;
+import jakarta.enterprise.inject.spi.ProcessProducer;
+import jakarta.enterprise.inject.spi.WithAnnotations;
+import jakarta.inject.Named;
+import jakarta.inject.Qualifier;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * MyBatis CDI extension.
+ *
+ * @author Frank D. Martinez [mnesarco]
+ */
+<span class="fc" id="L50">public class MybatisExtension implements Extension {</span>
+
+<span class="fc" id="L52">  private static final Logger LOGGER = LoggerFactory.getLogger(MybatisExtension.class.getName());</span>
+
+<span class="fc" id="L54">  private final Set&lt;BeanKey&gt; sessionProducers = new HashSet&lt;&gt;();</span>
+
+<span class="fc" id="L56">  private final Set&lt;Type&gt; mapperTypes = new HashSet&lt;&gt;();</span>
+
+<span class="fc" id="L58">  private final Set&lt;InjectionPoint&gt; injectionPoints = new HashSet&lt;&gt;();</span>
+
+  /**
+   * Collect types of all mappers annotated with Mapper.
+   *
+   * @param &lt;T&gt;
+   *          the generic type
+   * @param pat
+   *          the pat
+   */
+  protected &lt;T&gt; void processAnnotatedType(
+      @Observes @WithAnnotations({ Mapper.class }) final ProcessAnnotatedType&lt;T&gt; pat) {
+<span class="fc" id="L70">    final AnnotatedType&lt;T&gt; at = pat.getAnnotatedType();</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">    if (at.isAnnotationPresent(Mapper.class)) {</span>
+<span class="fc" id="L72">      LOGGER.info(&quot;MyBatis CDI Module - Found class with @Mapper-annotation: {}&quot;, at.getJavaClass().getSimpleName());</span>
+<span class="fc" id="L73">      this.mapperTypes.add(at.getBaseType());</span>
+    }
+<span class="fc" id="L75">  }</span>
+
+  /**
+   * Collect all SqlSessionFactory producers annotated with SessionFactoryProvider.
+   *
+   * @param &lt;T&gt;
+   *          the generic type
+   * @param &lt;X&gt;
+   *          the generic type
+   * @param pp
+   *          the pp
+   */
+  @SuppressWarnings(&quot;unchecked&quot;)
+  protected &lt;T, X&gt; void processProducer(@Observes final ProcessProducer&lt;T, X&gt; pp) {
+<span class="fc" id="L89">    final AnnotatedMember&lt;T&gt; am = pp.getAnnotatedMember();</span>
+<span class="fc" id="L90">    final boolean isAnnotated = am.isAnnotationPresent(SessionFactoryProvider.class);</span>
+<span class="fc" id="L91">    final boolean isSqlSessionFactory = am.getBaseType().equals(SqlSessionFactory.class);</span>
+<span class="fc" id="L92">    final String logData = String.join(&quot;.&quot;, am.getJavaMember().getDeclaringClass().getSimpleName(),</span>
+<span class="fc" id="L93">        am.getJavaMember().getName());</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">    if (isAnnotated) {</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">      if (isSqlSessionFactory) {</span>
+<span class="fc" id="L96">        LOGGER.info(&quot;MyBatis CDI Module - SqlSessionFactory producer {}&quot;, logData);</span>
+<span class="fc" id="L97">        this.sessionProducers.add(new BeanKey((Class&lt;Type&gt;) (Type) SqlSession.class, am.getAnnotations()));</span>
+      } else {
+<span class="nc" id="L99">        LOGGER.error(&quot;MyBatis CDI Module - Invalid return type (Must be SqlSessionFactory): {}&quot;, logData);</span>
+<span class="nc" id="L100">        pp.addDefinitionError(new MybatisCdiConfigurationException(</span>
+<span class="nc" id="L101">            String.format(&quot;SessionFactoryProvider producers must return SqlSessionFactory (%s)&quot;, logData)));</span>
+      }
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">    } else if (isSqlSessionFactory) {</span>
+<span class="nc" id="L104">      LOGGER.warn(</span>
+          &quot;MyBatis CDI Module - Ignored SqlSessionFactory producer because it is not annotated with @SessionFactoryProvider: {}&quot;,
+          logData);
+    }
+<span class="fc" id="L108">  }</span>
+
+  /**
+   * Collect all targets to match Mappers and Session providers dependency.
+   *
+   * @param &lt;X&gt;
+   *          the generic type
+   * @param event
+   *          the event
+   */
+  protected &lt;X&gt; void processInjectionTarget(@Observes ProcessInjectionTarget&lt;X&gt; event) {
+<span class="fc" id="L119">    final InjectionTarget&lt;X&gt; it = event.getInjectionTarget();</span>
+<span class="fc" id="L120">    this.injectionPoints.addAll(it.getInjectionPoints());</span>
+<span class="fc" id="L121">  }</span>
+
+  /**
+   * Register all mybatis injectable beans.
+   *
+   * @param abd
+   *          the abd
+   */
+  @SuppressWarnings(&quot;unchecked&quot;)
+  protected void afterBeanDiscovery(@Observes final AfterBeanDiscovery abd) {
+<span class="fc" id="L131">    LOGGER.info(&quot;MyBatis CDI Module - Activated&quot;);</span>
+
+<span class="fc" id="L133">    Set&lt;BeanKey&gt; mappers = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L134">    Set&lt;BeanKey&gt; sessionTargets = new HashSet&lt;&gt;();</span>
+
+<span class="fc bfc" id="L136" title="All 2 branches covered.">    for (InjectionPoint ip : injectionPoints) {</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">      if (this.mapperTypes.contains(ip.getAnnotated().getBaseType())) {</span>
+<span class="fc" id="L138">        LOGGER.info(&quot;MyBatis CDI Module - Found a bean, which needs a Mapper {}&quot;, ip.getAnnotated().getBaseType());</span>
+<span class="fc" id="L139">        mappers.add(new BeanKey((Class&lt;Type&gt;) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">      } else if (SqlSession.class.equals(ip.getAnnotated().getBaseType())) {</span>
+<span class="fc" id="L141">        sessionTargets</span>
+<span class="fc" id="L142">            .add(new BeanKey((Class&lt;Type&gt;) ip.getAnnotated().getBaseType(), ip.getAnnotated().getAnnotations()));</span>
+      }
+<span class="fc" id="L144">    }</span>
+<span class="fc" id="L145">    this.injectionPoints.clear();</span>
+
+    // Mappers -----------------------------------------------------------------
+<span class="fc bfc" id="L148" title="All 2 branches covered.">    for (BeanKey key : mappers) {</span>
+<span class="fc" id="L149">      LOGGER.info(&quot;MyBatis CDI Module - Managed Mapper dependency: {}, {}&quot;, key.getKey(), key.type.getName());</span>
+<span class="fc" id="L150">      abd.addBean(key.createBean());</span>
+<span class="fc" id="L151">    }</span>
+<span class="fc" id="L152">    this.mapperTypes.clear();</span>
+
+    // SqlSessionFactories -----------------------------------------------------
+<span class="fc bfc" id="L155" title="All 2 branches covered.">    for (BeanKey key : this.sessionProducers) {</span>
+<span class="fc" id="L156">      LOGGER.info(&quot;MyBatis CDI Module - Managed SqlSession: {}, {}&quot;, key.getKey(), key.type.getName());</span>
+<span class="fc" id="L157">      abd.addBean(key.createBean());</span>
+<span class="fc" id="L158">      sessionTargets.remove(key);</span>
+<span class="fc" id="L159">    }</span>
+<span class="fc" id="L160">    this.sessionProducers.clear();</span>
+
+    // Unmanaged SqlSession targets --------------------------------------------
+<span class="fc bfc" id="L163" title="All 2 branches covered.">    for (BeanKey key : sessionTargets) {</span>
+<span class="fc" id="L164">      LOGGER.warn(&quot;MyBatis CDI Module - Unmanaged SqlSession: {}, {}&quot;, key.getKey(), key.type.getName());</span>
+<span class="fc" id="L165">    }</span>
+
+<span class="fc" id="L167">  }</span>
+
+  /**
+   * Unique key for fully qualified Mappers and Sessions.
+   */
+  private static final class BeanKey implements Comparable&lt;BeanKey&gt; {
+
+    private final String key;
+
+    private final List&lt;Annotation&gt; qualifiers;
+
+    private final Class&lt;Type&gt; type;
+
+    private final String sqlSessionManagerName;
+
+<span class="fc" id="L182">    public BeanKey(Class&lt;Type&gt; type, Set&lt;Annotation&gt; annotations) {</span>
+<span class="fc" id="L183">      this.type = type;</span>
+<span class="fc" id="L184">      this.qualifiers = sort(filterQualifiers(annotations));</span>
+
+      // Create key = type(.qualifier)*(.name)?
+<span class="fc" id="L187">      final StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L188">      String name = null;</span>
+<span class="fc" id="L189">      sb.append(type.getName());</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">      for (Annotation q : this.qualifiers) {</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        if (q instanceof Named) {</span>
+<span class="fc" id="L192">          name = ((Named) q).value();</span>
+        } else {
+<span class="fc" id="L194">          sb.append(&quot;.&quot;).append(q.annotationType().getSimpleName());</span>
+        }
+<span class="fc" id="L196">      }</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">      if (name != null) {</span>
+<span class="fc" id="L198">        sb.append(&quot;_&quot;).append(name);</span>
+      }
+<span class="fc" id="L200">      this.key = sb.toString();</span>
+<span class="fc" id="L201">      this.sqlSessionManagerName = name;</span>
+<span class="fc" id="L202">    }</span>
+
+    private Set&lt;Annotation&gt; filterQualifiers(Set&lt;Annotation&gt; annotations) {
+<span class="fc" id="L205">      final Set&lt;Annotation&gt; set = new HashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">      for (Annotation a : annotations) {</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        if (a.annotationType().isAnnotationPresent(Qualifier.class)) {</span>
+<span class="fc" id="L208">          set.add(a);</span>
+        }
+<span class="fc" id="L210">      }</span>
+<span class="fc" id="L211">      return set;</span>
+    }
+
+    private List&lt;Annotation&gt; sort(Set&lt;Annotation&gt; annotations) {
+<span class="fc" id="L215">      final List&lt;Annotation&gt; list = new ArrayList&lt;&gt;(annotations);</span>
+<span class="fc" id="L216">      Collections.sort(list, (a, b) -&gt; a.getClass().getName().compareTo(b.getClass().getName()));</span>
+<span class="fc" id="L217">      return list;</span>
+    }
+
+    @Override
+    public int compareTo(BeanKey o) {
+<span class="nc" id="L222">      return this.key.compareTo(o.key);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L227">      int hash = 3;</span>
+<span class="pc bpc" id="L228" title="1 of 2 branches missed.">      return 43 * hash + (this.key != null ? this.key.hashCode() : 0);</span>
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+<span class="pc bpc" id="L233" title="2 of 4 branches missed.">      if (obj == null || this.getClass() != obj.getClass()) {</span>
+<span class="nc" id="L234">        return false;</span>
+      }
+<span class="fc" id="L236">      final BeanKey other = (BeanKey) obj;</span>
+<span class="pc bpc" id="L237" title="4 of 6 branches missed.">      return !(this.key == null ? other.key != null : !this.key.equals(other.key));</span>
+    }
+
+    public MyBatisBean createBean() {
+<span class="fc" id="L241">      return new MyBatisBean(this.key, this.type, new HashSet&lt;&gt;(this.qualifiers), this.sqlSessionManagerName);</span>
+    }
+
+    public String getKey() {
+<span class="fc" id="L245">      return this.key;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L250">      return this.key;</span>
+    }
+
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
