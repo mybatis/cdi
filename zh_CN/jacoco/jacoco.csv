@@ -1,0 +1,13 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+mybatis-cdi,org.mybatis.cdi,MybatisExtension.BeanKey,5,177,4,18,0,35,3,18,0,10
+mybatis-cdi,org.mybatis.cdi,Isolation,0,56,0,0,0,11,0,3,0,3
+mybatis-cdi,org.mybatis.cdi,MyBatisBean,0,113,1,5,0,29,1,15,0,13
+mybatis-cdi,org.mybatis.cdi,CDIUtils.SerializableDefaultAnnotationLiteral,0,3,0,0,0,1,0,1,0,1
+mybatis-cdi,org.mybatis.cdi,CDIUtils,0,57,0,4,0,12,0,5,0,3
+mybatis-cdi,org.mybatis.cdi,JtaTransactionInterceptor,6,38,1,7,1,10,1,7,0,4
+mybatis-cdi,org.mybatis.cdi,MybatisCdiConfigurationException,0,4,0,0,0,2,0,1,0,1
+mybatis-cdi,org.mybatis.cdi,SqlSessionManagerRegistry,0,51,0,4,0,12,0,6,0,4
+mybatis-cdi,org.mybatis.cdi,CDIUtils.SerializableAnyAnnotationLiteral,0,3,0,0,0,1,0,1,0,1
+mybatis-cdi,org.mybatis.cdi,LocalTransactionInterceptor,15,212,7,29,3,57,7,23,0,12
+mybatis-cdi,org.mybatis.cdi,MybatisExtension,0,277,0,20,0,55,0,16,0,6
+mybatis-cdi,org.mybatis.cdi,SerializableMapperProxy,0,53,0,0,0,15,0,5,0,5
