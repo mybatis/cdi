@@ -50,7 +50,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -92,7 +91,7 @@ class CoverageImprovementTest {
   @SuppressWarnings("unchecked")
   @Test
   void myBatisBeanShouldAddDefaultQualifiersWhenNoQualifiersProvided() {
-    MyBatisBean bean = new MyBatisBean("id", (Class<Type>) (Type) UserMapper.class, Collections.emptySet(), null);
+    MyBatisBean bean = new MyBatisBean("id", (Class<Type>) (Type) UserMapper.class, Set.of(), null);
 
     assertTrue(bean.getQualifiers().stream().anyMatch(a -> a.annotationType() == Default.class));
     assertTrue(bean.getQualifiers().stream().anyMatch(a -> a.annotationType() == Any.class));
@@ -101,7 +100,7 @@ class CoverageImprovementTest {
   @SuppressWarnings("unchecked")
   @Test
   void serializableMapperProxyShouldUnwrapInvocationTargetException() throws Throwable {
-    MyBatisBean bean = new MyBatisBean("id", (Class<Type>) (Type) ThrowingMapper.class, Collections.emptySet(), null);
+    MyBatisBean bean = new MyBatisBean("id", (Class<Type>) (Type) ThrowingMapper.class, Set.of(), null);
     CreationalContext<Object> creationalContext = mock(CreationalContext.class);
     SqlSessionFactory sessionFactory = mock(SqlSessionFactory.class);
     SqlSessionManagerRegistry registry = mock(SqlSessionManagerRegistry.class);
@@ -130,14 +129,14 @@ class CoverageImprovementTest {
     CDI<Object> cdi = mock(CDI.class);
     CreationalContext<Object> creationalContext = mock(CreationalContext.class);
     when(cdi.getBeanManager()).thenReturn(beanManager);
-    when(beanManager.getBeans(eq(SqlSessionFactory.class), any(Annotation[].class))).thenReturn(Collections.emptySet());
+    when(beanManager.getBeans(eq(SqlSessionFactory.class), any(Annotation[].class))).thenReturn(Set.of());
     when(beanManager.resolve(anySet())).thenReturn(null);
 
     try (MockedStatic<CDI> cdiStatic = mockStatic(CDI.class)) {
       cdiStatic.when(CDI::current).thenReturn(cdi);
 
       assertThrows(MybatisCdiConfigurationException.class,
-          () -> CDIUtils.findSqlSessionFactory(null, Collections.emptySet(), creationalContext));
+          () -> CDIUtils.findSqlSessionFactory(null, Set.of(), creationalContext));
     }
   }
 
@@ -198,7 +197,7 @@ class CoverageImprovementTest {
     Annotated annotated = mock(Annotated.class);
     when(injectionPoint.getAnnotated()).thenReturn(annotated);
     when(annotated.getBaseType()).thenReturn(UserMapper.class);
-    when(annotated.getAnnotations()).thenReturn(Collections.emptySet());
+    when(annotated.getAnnotations()).thenReturn(Set.of());
     when(injectionTarget.getInjectionPoints()).thenReturn(Set.of(injectionPoint));
     when(pit.getInjectionTarget()).thenReturn(injectionTarget);
     extension.processInjectionTarget(pit);
