@@ -1,5 +1,5 @@
 /*
- *    Copyright 2013-2023 the original author or authors.
+ *    Copyright 2013-2026 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -32,7 +32,6 @@ import jakarta.inject.Qualifier;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -98,7 +97,7 @@ public class MybatisExtension implements Extension {
       } else {
         LOGGER.error("MyBatis CDI Module - Invalid return type (Must be SqlSessionFactory): {}", logData);
         pp.addDefinitionError(new MybatisCdiConfigurationException(
-            String.format("SessionFactoryProvider producers must return SqlSessionFactory (%s)", logData)));
+            "SessionFactoryProvider producers must return SqlSessionFactory (%s)".formatted(logData)));
       }
     } else if (isSqlSessionFactory) {
       LOGGER.warn(
@@ -213,7 +212,7 @@ public class MybatisExtension implements Extension {
 
     private List<Annotation> sort(Set<Annotation> annotations) {
       final List<Annotation> list = new ArrayList<>(annotations);
-      Collections.sort(list, (a, b) -> a.getClass().getName().compareTo(b.getClass().getName()));
+      list.sort((a, b) -> a.getClass().getName().compareTo(b.getClass().getName()));
       return list;
     }
 
