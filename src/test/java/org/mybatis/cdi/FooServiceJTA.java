@@ -18,6 +18,9 @@ package org.mybatis.cdi;
 import jakarta.inject.Inject;
 import jakarta.interceptor.Interceptors;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.UndeclaredThrowableException;
+
 public class FooServiceJTA {
 
   @Inject
@@ -45,9 +48,26 @@ public class FooServiceJTA {
 
   @Interceptors(JtaTransactionInterceptor.class)
   @Transactional(rollbackOnly = true)
-  public void insertUserWithTransactionalAndRollback(User user) {
+  public void insertUserWithTransactionalAndRollbackInvocationError(User user) throws InvocationTargetException {
     this.userMapper.insertUser(user);
-    throw new RuntimeException("fail");
+    // Wrap it so unwrapException hits the InvocationTargetException branch
+    throw new InvocationTargetException(new RuntimeException("underlying fail"));
+  }
+
+  @Interceptors(JtaTransactionInterceptor.class)
+  @Transactional(rollbackOnly = true)
+  public void insertUserWithTransactionalAndRollbackUndeclaredError(User user) {
+    this.userMapper.insertUser(user);
+    // Wrap it so unwrapException hits the UndeclaredThrowableException branch
+    throw new UndeclaredThrowableException(new RuntimeException("undeclared fail"));
+  }
+
+  @Interceptors(JtaTransactionInterceptor.class)
+  @Transactional(rollbackOnly = true)
+  public void insertUserWithTransactionalAndRollbackWrappedException(User user) {
+    this.userMapper.insertUser(user);
+    // Wrap it so unwrapException hits the non Exception branch
+    throw new UndeclaredThrowableException(new AssertionError("hit non-exception branch"));
   }
 
 }

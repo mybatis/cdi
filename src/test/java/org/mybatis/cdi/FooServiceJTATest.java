@@ -70,17 +70,42 @@ class FooServiceJTATest {
   }
 
   @Test
-  void jtaShouldInsertAUserAndRollBack() throws Exception {
-    this.userTransaction.begin();
+  void jtaShouldInsertAUserAndRollBackInvocationError() throws Exception {
     User user = new User();
     user.setId(30);
-    user.setName("User30");
+    user.setName("User31");
     try {
-      this.fooServiceJTA.insertUserWithTransactionalAndRollback(user);
-    } catch (Exception ignore) {
-      // ignored
+      this.userTransaction.begin();
+      this.fooServiceJTA.insertUserWithTransactionalAndRollbackInvocationError(user);
+    } catch (RuntimeException ignore) {
+      this.userTransaction.rollback();
     }
-    this.userTransaction.rollback();
+  }
+
+  @Test
+  void jtaShouldInsertAUserAndRollBackUndeclaredError() throws Exception {
+    User user = new User();
+    user.setId(30);
+    user.setName("User32");
+    try {
+      this.userTransaction.begin();
+      this.fooServiceJTA.insertUserWithTransactionalAndRollbackUndeclaredError(user);
+    } catch (RuntimeException ignore) {
+      this.userTransaction.rollback();
+    }
+  }
+
+  @Test
+  void jtaShouldInsertAUserAndRollBackWrappedException() throws Exception {
+    User user = new User();
+    user.setId(30);
+    user.setName("User33");
+    try {
+      this.userTransaction.begin();
+      this.fooServiceJTA.insertUserWithTransactionalAndRollbackWrappedException(user);
+    } catch (RuntimeException ignore) {
+      this.userTransaction.rollback();
+    }
   }
 
   @Test
