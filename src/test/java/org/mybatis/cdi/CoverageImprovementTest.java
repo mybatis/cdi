@@ -100,6 +100,15 @@ class CoverageImprovementTest {
 
   @SuppressWarnings("unchecked")
   @Test
+  void myBatisBeanShouldAddDefaultQualifiersWhenNullQualifiersProvided() {
+    MyBatisBean bean = new MyBatisBean("id", (Class<Type>) (Type) UserMapper.class, null, null);
+
+    assertTrue(bean.getQualifiers().stream().anyMatch(a -> a.annotationType() == Default.class));
+    assertTrue(bean.getQualifiers().stream().anyMatch(a -> a.annotationType() == Any.class));
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
   void serializableMapperProxyShouldUnwrapInvocationTargetException() throws Throwable {
     MyBatisBean bean = new MyBatisBean("id", (Class<Type>) (Type) ThrowingMapper.class, Set.of(), null);
     CreationalContext<Object> creationalContext = mock(CreationalContext.class);
