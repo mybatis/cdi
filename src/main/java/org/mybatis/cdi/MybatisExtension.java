@@ -43,8 +43,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * MyBatis CDI extension.
- *
- * @author Frank D. Martinez [mnesarco]
  */
 public class MybatisExtension implements Extension {
 

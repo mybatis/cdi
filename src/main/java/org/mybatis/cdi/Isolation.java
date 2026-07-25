@@ -1,5 +1,5 @@
 /*
- *    Copyright 2013-2022 the original author or authors.
+ *    Copyright 2013-2026 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import org.apache.ibatis.session.TransactionIsolationLevel;
 /**
  * Enum of isolation levels. This enum exists because Java annotations do not support null default values - so we need
  * to add the DEFAULT level which means - do not specify an isolation level.
- *
- * @author Jeff Butler
  */
 public enum Isolation {
 
