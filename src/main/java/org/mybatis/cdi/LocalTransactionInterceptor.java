@@ -1,5 +1,5 @@
 /*
- *    Copyright 2013-2023 the original author or authors.
+ *    Copyright 2013-2026 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -37,8 +37,6 @@ import org.apache.ibatis.session.SqlSessionManager;
  * drivers, a JTA container and the {@link JtaTransactionInterceptor} in that case.
  *
  * @see JtaTransactionInterceptor
- *
- * @author Frank David Martínez
  */
 @Transactional
 @Interceptor
@@ -192,14 +190,14 @@ public class LocalTransactionInterceptor implements Serializable {
   private Exception unwrapException(Exception wrapped) {
     Throwable unwrapped = wrapped;
     while (true) {
-      if (unwrapped instanceof InvocationTargetException) {
-        unwrapped = ((InvocationTargetException) unwrapped).getTargetException();
-      } else if (unwrapped instanceof UndeclaredThrowableException) {
-        unwrapped = ((UndeclaredThrowableException) unwrapped).getUndeclaredThrowable();
-      } else if (!(unwrapped instanceof Exception)) {
+      if (unwrapped instanceof InvocationTargetException invocationTargetException) {
+        unwrapped = invocationTargetException.getTargetException();
+      } else if (unwrapped instanceof UndeclaredThrowableException undeclaredThrowableException) {
+        unwrapped = undeclaredThrowableException.getUndeclaredThrowable();
+      } else if (!(unwrapped instanceof Exception exception)) {
         return new RuntimeException(unwrapped);
       } else {
-        return (Exception) unwrapped;
+        return exception;
       }
     }
   }

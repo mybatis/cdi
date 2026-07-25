@@ -32,9 +32,12 @@ import jakarta.inject.Qualifier;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -43,8 +46,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * MyBatis CDI extension.
- *
- * @author Frank D. Martinez [mnesarco]
  */
 public class MybatisExtension implements Extension {
 
@@ -184,11 +185,11 @@ public class MybatisExtension implements Extension {
 
       // Create key = type(.qualifier)*(.name)?
       final StringBuilder sb = new StringBuilder();
-      String name = null;
       sb.append(type.getName());
+      String name = null;
       for (Annotation q : this.qualifiers) {
-        if (q instanceof Named) {
-          name = ((Named) q).value();
+        if (q instanceof Named named) {
+          name = named.value();
         } else {
           sb.append(".").append(q.annotationType().getSimpleName());
         }
@@ -201,18 +202,13 @@ public class MybatisExtension implements Extension {
     }
 
     private Set<Annotation> filterQualifiers(Set<Annotation> annotations) {
-      final Set<Annotation> set = new HashSet<>();
-      for (Annotation a : annotations) {
-        if (a.annotationType().isAnnotationPresent(Qualifier.class)) {
-          set.add(a);
-        }
-      }
-      return set;
+      return annotations.stream().filter(a -> a.annotationType().isAnnotationPresent(Qualifier.class))
+          .collect(Collectors.toSet());
     }
 
     private List<Annotation> sort(Set<Annotation> annotations) {
       final List<Annotation> list = new ArrayList<>(annotations);
-      list.sort((a, b) -> a.getClass().getName().compareTo(b.getClass().getName()));
+      list.sort(Comparator.comparing(a -> a.getClass().getName()));
       return list;
     }
 
@@ -223,17 +219,19 @@ public class MybatisExtension implements Extension {
 
     @Override
     public int hashCode() {
-      int hash = 3;
-      return 43 * hash + (this.key != null ? this.key.hashCode() : 0);
+      return Objects.hash(this.key);
     }
 
     @Override
     public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
       if (obj == null || this.getClass() != obj.getClass()) {
         return false;
       }
       final BeanKey other = (BeanKey) obj;
-      return !(this.key == null ? other.key != null : !this.key.equals(other.key));
+      return Objects.equals(this.key, other.key);
     }
 
     public MyBatisBean createBean() {

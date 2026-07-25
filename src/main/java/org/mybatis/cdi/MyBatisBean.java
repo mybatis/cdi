@@ -35,8 +35,6 @@ import org.apache.ibatis.session.SqlSessionManager;
 
 /**
  * Internal CDI metadata for a mapper bean.
- *
- * @author Frank D. Martinez [mnesarco]
  */
 public class MyBatisBean implements Bean<Object>, Serializable, PassivationCapable {
 

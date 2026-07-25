@@ -17,6 +17,7 @@ package org.mybatis.cdi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -92,6 +93,15 @@ class CoverageImprovementTest {
   @Test
   void myBatisBeanShouldAddDefaultQualifiersWhenNoQualifiersProvided() {
     MyBatisBean bean = new MyBatisBean("id", (Class<Type>) (Type) UserMapper.class, Set.of(), null);
+
+    assertTrue(bean.getQualifiers().stream().anyMatch(a -> a.annotationType() == Default.class));
+    assertTrue(bean.getQualifiers().stream().anyMatch(a -> a.annotationType() == Any.class));
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
+  void myBatisBeanShouldAddDefaultQualifiersWhenNullQualifiersProvided() {
+    MyBatisBean bean = new MyBatisBean("id", (Class<Type>) (Type) UserMapper.class, null, null);
 
     assertTrue(bean.getQualifiers().stream().anyMatch(a -> a.annotationType() == Default.class));
     assertTrue(bean.getQualifiers().stream().anyMatch(a -> a.annotationType() == Any.class));
@@ -239,10 +249,22 @@ class CoverageImprovementTest {
     assertNotEquals(0, compareTo.invoke(manager1Key, manager2Key));
     assertEquals(manager1Key, manager1KeyCopy);
     assertNotEquals(manager1Key, manager2Key);
-    assertNotEquals(manager1Key, null);
-    assertNotEquals(manager1Key, "other");
+    assertNotNull(manager1Key);
+    assertNotEquals("other", manager1Key);
     assertEquals(manager1Key.hashCode(), manager1KeyCopy.hashCode());
     assertEquals(getKey.invoke(manager1Key), manager1Key.toString());
+
+    // Directly exercise BeanKey#equals branches (self, null, wrong type, mismatched key)
+    // since assertEquals/assertNotEquals/assertNotNull above do not invoke BeanKey.equals
+    // in every direction (e.g. "other".equals(manager1Key) calls String's equals, not BeanKey's).
+    Method equalsMethod = beanKeyClass.getDeclaredMethod("equals", Object.class);
+    equalsMethod.setAccessible(true);
+
+    assertEquals(Boolean.TRUE, equalsMethod.invoke(manager1Key, manager1Key));
+    assertEquals(Boolean.FALSE, equalsMethod.invoke(manager1Key, (Object) null));
+    assertEquals(Boolean.FALSE, equalsMethod.invoke(manager1Key, "not a BeanKey"));
+    assertEquals(Boolean.FALSE, equalsMethod.invoke(manager1Key, manager2Key));
+    assertEquals(Boolean.TRUE, equalsMethod.invoke(manager1Key, manager1KeyCopy));
   }
 
   private static void setField(Object target, String fieldName, Object value) throws Exception {
