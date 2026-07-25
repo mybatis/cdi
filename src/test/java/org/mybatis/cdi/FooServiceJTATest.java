@@ -70,6 +70,20 @@ class FooServiceJTATest {
   }
 
   @Test
+  void jtaShouldInsertAUserAndRollBack() throws Exception {
+    this.userTransaction.begin();
+    User user = new User();
+    user.setId(30);
+    user.setName("User30");
+    try {
+      this.fooServiceJTA.insertUserWithTransactionalAndRollback(user);
+    } catch (Exception ignore) {
+      // ignored
+    }
+    this.userTransaction.rollback();
+  }
+
+  @Test
   void jtaShouldInsertAUserWithExistingJtaTxAndCommit() throws Exception {
     User user = new User();
     user.setId(40);
