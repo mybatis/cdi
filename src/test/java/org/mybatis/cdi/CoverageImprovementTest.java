@@ -253,6 +253,18 @@ class CoverageImprovementTest {
     assertNotEquals("other", manager1Key);
     assertEquals(manager1Key.hashCode(), manager1KeyCopy.hashCode());
     assertEquals(getKey.invoke(manager1Key), manager1Key.toString());
+
+    // Directly exercise BeanKey#equals branches (self, null, wrong type, mismatched key)
+    // since assertEquals/assertNotEquals/assertNotNull above do not invoke BeanKey.equals
+    // in every direction (e.g. "other".equals(manager1Key) calls String's equals, not BeanKey's).
+    Method equalsMethod = beanKeyClass.getDeclaredMethod("equals", Object.class);
+    equalsMethod.setAccessible(true);
+
+    assertEquals(Boolean.TRUE, equalsMethod.invoke(manager1Key, manager1Key));
+    assertEquals(Boolean.FALSE, equalsMethod.invoke(manager1Key, (Object) null));
+    assertEquals(Boolean.FALSE, equalsMethod.invoke(manager1Key, "not a BeanKey"));
+    assertEquals(Boolean.FALSE, equalsMethod.invoke(manager1Key, manager2Key));
+    assertEquals(Boolean.TRUE, equalsMethod.invoke(manager1Key, manager1KeyCopy));
   }
 
   private static void setField(Object target, String fieldName, Object value) throws Exception {
