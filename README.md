@@ -4,6 +4,7 @@ MyBatis CDI Extension
 [![Java CI](https://github.com/mybatis/cdi/workflows/Java%20CI/badge.svg)](https://github.com/mybatis/cdi/actions?query=workflow%3A%22Java+CI%22)
 [![Coverage Status](https://coveralls.io/repos/mybatis/cdi/badge.svg?branch=master&service=github)](https://coveralls.io/github/mybatis/cdi?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/org.mybatis/mybatis-cdi.svg)](https://central.sonatype.com/artifact/org.mybatis/mybatis-cdi)
+[![Docs](https://img.shields.io/badge/docs-mybatis.org-blue?logo=github)](https://mybatis.org/cdi/)
 [![License](https://img.shields.io/:license-apache-brightgreen.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 ![mybatis-logo](https://mybatis.org/images/mybatis-logo.png)
