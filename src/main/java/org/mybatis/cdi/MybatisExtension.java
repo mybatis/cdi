@@ -183,8 +183,8 @@ public class MybatisExtension implements Extension {
 
       // Create key = type(.qualifier)*(.name)?
       final StringBuilder sb = new StringBuilder();
-      String name = null;
       sb.append(type.getName());
+      String name = null;
       for (Annotation q : this.qualifiers) {
         if (q instanceof Named named) {
           name = named.value();
