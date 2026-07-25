@@ -17,6 +17,7 @@ package org.mybatis.cdi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -239,8 +240,8 @@ class CoverageImprovementTest {
     assertNotEquals(0, compareTo.invoke(manager1Key, manager2Key));
     assertEquals(manager1Key, manager1KeyCopy);
     assertNotEquals(manager1Key, manager2Key);
-    assertNotEquals(manager1Key, null);
-    assertNotEquals(manager1Key, "other");
+    assertNotNull(manager1Key);
+    assertNotEquals("other", manager1Key);
     assertEquals(manager1Key.hashCode(), manager1KeyCopy.hashCode());
     assertEquals(getKey.invoke(manager1Key), manager1Key.toString());
   }
