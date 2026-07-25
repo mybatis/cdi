@@ -230,7 +230,6 @@
             <configuration>
               <excludes>
                 <exclude>**/FooServiceTest.java</exclude>
-                <exclude>**/MybatisExtensionTest.java</exclude>
               </excludes>
             </configuration>
           </execution>

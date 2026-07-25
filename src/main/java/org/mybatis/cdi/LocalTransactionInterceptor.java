@@ -194,10 +194,10 @@ public class LocalTransactionInterceptor implements Serializable {
         unwrapped = invocationTargetException.getTargetException();
       } else if (unwrapped instanceof UndeclaredThrowableException undeclaredThrowableException) {
         unwrapped = undeclaredThrowableException.getUndeclaredThrowable();
-      } else if (!(unwrapped instanceof Exception exception)) {
-        return new RuntimeException(unwrapped);
-      } else {
+      } else if (unwrapped instanceof Exception exception) {
         return exception;
+      } else {
+        return new RuntimeException(unwrapped);
       }
     }
   }
