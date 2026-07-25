@@ -32,6 +32,7 @@ import jakarta.inject.Qualifier;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -207,7 +208,7 @@ public class MybatisExtension implements Extension {
 
     private List<Annotation> sort(Set<Annotation> annotations) {
       final List<Annotation> list = new ArrayList<>(annotations);
-      list.sort((a, b) -> a.getClass().getName().compareTo(b.getClass().getName()));
+      list.sort(Comparator.comparing(a -> a.getClass().getName()));
       return list;
     }
 
