@@ -185,8 +185,8 @@ public class MybatisExtension implements Extension {
       String name = null;
       sb.append(type.getName());
       for (Annotation q : this.qualifiers) {
-        if (q instanceof Named) {
-          name = ((Named) q).value();
+        if (q instanceof Named named) {
+          name = named.value();
         } else {
           sb.append(".").append(q.annotationType().getSimpleName());
         }
