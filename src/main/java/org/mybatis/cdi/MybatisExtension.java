@@ -34,6 +34,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.ibatis.session.SqlSession;
@@ -221,17 +222,19 @@ public class MybatisExtension implements Extension {
 
     @Override
     public int hashCode() {
-      int hash = 3;
-      return 43 * hash + (this.key != null ? this.key.hashCode() : 0);
+      return Objects.hash(this.key);
     }
 
     @Override
     public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
       if (obj == null || this.getClass() != obj.getClass()) {
         return false;
       }
       final BeanKey other = (BeanKey) obj;
-      return !(this.key == null ? other.key != null : !this.key.equals(other.key));
+      return Objects.equals(this.key, other.key);
     }
 
     public MyBatisBean createBean() {
