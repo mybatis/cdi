@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -200,13 +201,8 @@ public class MybatisExtension implements Extension {
     }
 
     private Set<Annotation> filterQualifiers(Set<Annotation> annotations) {
-      final Set<Annotation> set = new HashSet<>();
-      for (Annotation a : annotations) {
-        if (a.annotationType().isAnnotationPresent(Qualifier.class)) {
-          set.add(a);
-        }
-      }
-      return set;
+      return annotations.stream().filter(a -> a.annotationType().isAnnotationPresent(Qualifier.class))
+          .collect(Collectors.toSet());
     }
 
     private List<Annotation> sort(Set<Annotation> annotations) {
