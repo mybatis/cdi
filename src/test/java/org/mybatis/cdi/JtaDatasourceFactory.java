@@ -1,5 +1,5 @@
 /*
- *    Copyright 2013-2023 the original author or authors.
+ *    Copyright 2013-2026 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,16 +19,16 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.apache.derby.jdbc.EmbeddedXADataSource;
 import org.apache.ibatis.datasource.DataSourceFactory;
+import org.h2.jdbcx.JdbcDataSource;
 
 public class JtaDatasourceFactory implements DataSourceFactory {
   private final DataSource dataSource;
-  private final EmbeddedXADataSource embeddedXADataSource;
+  private final JdbcDataSource h2DataSource;
 
   public JtaDatasourceFactory() {
-    this.embeddedXADataSource = new EmbeddedXADataSource();
-    this.dataSource = new NarayanaDataSourceWrapper(embeddedXADataSource);
+    this.h2DataSource = new JdbcDataSource();
+    this.dataSource = new NarayanaDataSourceWrapper(h2DataSource);
   }
 
   @Override
@@ -38,8 +38,6 @@ public class JtaDatasourceFactory implements DataSourceFactory {
 
   @Override
   public void setProperties(final Properties properties) {
-    embeddedXADataSource.setCreateDatabase(properties.getProperty("createDatabase"));
-    embeddedXADataSource.setDatabaseName(properties.getProperty("databaseName"));
-    embeddedXADataSource.setDataSourceName(properties.getProperty("resourceName"));
+    h2DataSource.setURL(properties.getProperty("URL"));
   }
 }

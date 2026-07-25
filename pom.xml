@@ -65,7 +65,6 @@
 
     <!-- Versions -->
     <byte-buddy.version>1.18.11</byte-buddy.version>
-    <derby.version>10.17.1.0</derby.version>
     <mockito.version>5.23.0</mockito.version>
     <slf4j.version>2.0.18</slf4j.version>
 
@@ -175,21 +174,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.derby</groupId>
-      <artifactId>derby</artifactId>
-      <version>${derby.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.derby</groupId>
-      <artifactId>derbyshared</artifactId>
-      <version>${derby.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.derby</groupId>
-      <artifactId>derbyoptionaltools</artifactId>
-      <version>${derby.version}</version>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>2.3.232</version>
       <scope>test</scope>
     </dependency>
 
@@ -226,14 +213,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <systemPropertyVariables>
-            <property>
-              <name>derby.stream.error.file</name>
-              <value>${project.build.directory}/derby.log</value>
-            </property>
-          </systemPropertyVariables>
-        </configuration>
         <executions>
           <execution>
             <id>default-test</id>
@@ -267,17 +246,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>derby-17-18</id>
-      <activation>
-        <jdk>[17,19)</jdk>
-      </activation>
-      <properties>
-        <derby.version>10.16.1.1</derby.version>
-      </properties>
-    </profile>
-  </profiles>
 
 </project>

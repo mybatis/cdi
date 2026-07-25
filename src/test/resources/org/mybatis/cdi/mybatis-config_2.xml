@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
-       Copyright 2013-2022 the original author or authors.
+       Copyright 2013-2026 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@
                 <property name="" value="" />
             </transactionManager>
             <dataSource type="UNPOOLED">
-                <property name="driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
-                <property name="url" value="jdbc:derby:memory:cdi2;create=true" />
+                <property name="driver" value="org.h2.Driver" />
+                <property name="url" value="jdbc:h2:mem:cdi2;DB_CLOSE_DELAY=-1" />
             </dataSource>
         </environment>
     </environments>
