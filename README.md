@@ -59,12 +59,6 @@ In order to test with Arquillian, one class needs to be added to 'JavaArchive' i
 
 See attachment on https://github.com/mybatis/cdi/issues/86 from 2021-12-30 ArquillianMybatisExample.zip [here](https://github.com/mybatis/cdi/files/7795050/ArquillianMybatisExample.zip).  This is to be run under jdk 8 to be error free but will run as-is under jdk 11 with an invocation error which still allows it to run.  Further updates are needed to get this code example current.
 
-Essentials
-----------
-
-- [See the docs](https://mybatis.org/cdi/)
-<!-- - [See the docs(简体中文)](https://mybatis.org/cdi/zh/index.html) -->
-
 Contributed Examples
 --------------------
 
